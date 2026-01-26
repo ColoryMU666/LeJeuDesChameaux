@@ -21,10 +21,10 @@ let handle_input () =
       if has_key key then action ()) action_table
 
 let () =
-  register "z" (fun () -> Block.(move_player (player1()) Cst.player_v_up));
-  register "s" (fun () -> Block.(move_player (player1()) Cst.player_v_down));
-  register "q" (fun () -> Block.(move_player (player1()) Cst.player_v_left); Block.(camera_move Cst.player_v_left System_defs.(Draw_system.get_elt_list ())));
-  register "d" (fun () -> Block.(move_player (player1()) Cst.player_v_right); Block.(camera_move Cst.player_v_right System_defs.(Draw_system.get_elt_list ())));
-  register "space" (fun () -> Block.( player_jump (player1 ())));
-  register "1" (fun () -> ignore (Block.(fire_laser ())));
+  register "z" (fun () -> Player.(move (player1()) Cst.player_v_up));
+  register "s" (fun () -> Player.(move (player1()) Cst.player_v_down));
+  register "q" (fun () -> Player.(move (player1()) Cst.player_v_left); Camera.(move Cst.player_v_left System_defs.(Draw_system.get_elt_list ())));
+  register "d" (fun () -> Player.(move (player1()) Cst.player_v_right); Camera.(move Cst.player_v_right System_defs.(Draw_system.get_elt_list ())));
+  register "space" (fun () -> Player.(jump (player1 ())));
+  register "1" (fun () -> ignore (Gun_stuff.(fire_laser ())));
   register "n" (fun () -> ignore (Block.create_random ()))

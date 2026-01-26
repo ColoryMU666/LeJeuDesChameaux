@@ -9,7 +9,7 @@ let init dt =
 
 
 let update dt =
-  let () = Block.stop_players () in
+  let () = Player.stop_players () in
   let () = Input.handle_input () in
   Move_system.update dt;
   Collision_system.update dt;  
@@ -28,8 +28,8 @@ let run () =
   let window = Gfx.create  window_spec in
   let ctx = Gfx.get_context window in
   let () = Gfx.set_context_logical_size ctx 800 600 in
-  let _walls = Block.walls () in
-  let player1 = Block.players () in
+  let _walls = Wall.walls () in
+  let player1 = Player.players () in
   let global = Global.{ window; ctx; player1 } in
   Global.set global;
   let@ () = Gfx.main_loop ~limit:false init in
