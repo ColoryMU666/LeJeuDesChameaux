@@ -6,6 +6,12 @@ class position () =
     method position = r
   end
 
+class dposition () =
+  let r = Component.init Vector.zero in
+  object 
+    method dposition = r
+  end
+
 class velocity () =
   let r = Component.init Vector.zero in
   object
@@ -107,7 +113,7 @@ class type physics =
 class type drawable =
   object
     inherit Entity.t
-    inherit position
+    inherit dposition
     inherit box
     inherit texture
     inherit lifespan
@@ -119,12 +125,21 @@ class type deletable =
     inherit lifespan
   end
 
+class type displayable =
+  object
+    inherit Entity.t
+    inherit position
+    inherit dposition
+    inherit velocity
+  end
+
 (** Real objects *)
 
 class block () =
   object
     inherit Entity.t ()
     inherit position ()
+    inherit dposition ()
     inherit box ()
     inherit resolver ()
     inherit tagged ()
@@ -133,5 +148,14 @@ class block () =
     inherit forces ()
     inherit velocity ()
     inherit lifespan ()
-    inherit elasticity () 
+    inherit elasticity ()
+  end
+
+
+class camera () =
+  object
+    inherit Entity.t ()
+    inherit position ()
+    inherit velocity ()
+    inherit forces ()
   end

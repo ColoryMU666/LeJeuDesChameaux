@@ -8,6 +8,7 @@ let create (x, y, v, txt, width, height, mass, default_forces, life, elasticity,
   let e = new block () in
   e#texture#set txt;
   e#position#set Vector.{x=float x;y = float y};
+  e#dposition#set e#position#get;
   e#velocity#set v;
   e#box#set Rect.{width;height};
   e#mass#set mass;
@@ -27,6 +28,7 @@ let create (x, y, v, txt, width, height, mass, default_forces, life, elasticity,
   e#elasticity#set elasticity;
   Collision_system.(register (e:>t));
   Move_system.(register (e:>t));
+  Display_system.(register (e :> t));
   Draw_system.(register (e:>t));
   Clear_system.(register (e :> t));
   e

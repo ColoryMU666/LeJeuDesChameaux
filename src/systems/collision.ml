@@ -3,7 +3,7 @@ open Component_defs
 
 type t = collidable
 
-let init _ = Gfx.debug "Collision init\n"
+let init _ = Gfx.debug "Collision init\n%!"
 
 let rec iter_pairs f s =
   match s () with

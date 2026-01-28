@@ -4,6 +4,7 @@ type t = {
   window : Gfx.window;
   ctx : Gfx.context;
   player1 : block;
+  main_camera : camera;
 }
 
 val mouse_x : int ref

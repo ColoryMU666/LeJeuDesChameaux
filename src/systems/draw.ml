@@ -4,7 +4,7 @@ open Component_defs
 
 type t = drawable
 
-let init _ = Gfx.debug "Drawn init\n"
+let init _ = Gfx.debug "Drawn init\n%!"
 
 let white = Gfx.color 255 255 255 255
 
@@ -15,9 +15,9 @@ let update _dt el =
   Gfx.set_color ctx white;
   Gfx.fill_rect ctx surface 0 0 ww wh;
   Seq.iter (fun (e:t) ->
-      let pos = e#position#get in
+      let dpos = e#dposition#get in
       let box = e#box#get in
       let txt = e#texture#get in
-      Texture.draw ctx surface pos box txt
+      Texture.draw ctx surface dpos box txt
     ) el;
   Gfx.commit ctx

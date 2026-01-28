@@ -10,9 +10,11 @@ let init dt =
 
 let update dt =
   let () = Player.stop_players () in
+  let () = Camera.stop_camera () in
   let () = Input.handle_input () in
   Move_system.update dt;
-  Collision_system.update dt;  
+  Collision_system.update dt;
+  Display_system.update dt;  
   Draw_system.update dt;
   Clear_system.update dt;
   None
@@ -30,7 +32,8 @@ let run () =
   let () = Gfx.set_context_logical_size ctx 800 600 in
   let _walls = Wall.walls () in
   let player1 = Player.players () in
-  let global = Global.{ window; ctx; player1 } in
+  let main_camera = Camera.create () in
+  let global = Global.{ window; ctx; player1; main_camera } in
   Global.set global;
   let@ () = Gfx.main_loop ~limit:false init in
   let@ () = Gfx.main_loop update in ()

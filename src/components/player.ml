@@ -13,6 +13,7 @@ let stop_players () =
 
 let move player v =
   player#velocity#set  (Vector.add v player#velocity#get);
+  Camera.(move v (camera ()));
   ()
 
 let jump player =
