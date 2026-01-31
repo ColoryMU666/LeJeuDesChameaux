@@ -12,6 +12,8 @@ let state = ref None
 let mouse_x = ref 0
 let mouse_y = ref 0
 
+let player_on_ground = ref true
+
 let get () : t =
   match !state with
     None -> failwith "Uninitialized global state"

@@ -18,12 +18,22 @@ let stop_players () =
 let move player v =
   player#velocity#set  (Vector.add v player#velocity#get);
   let Vector.{x; y} = player#dposition#get in
-  Gfx.debug "x = %f ; y = %f\n%!" x y;
-  Gfx.debug "%f\n%!" (float Cst.window_width);
   if x >= (float Cst.window_width) /. 2. then
     Camera.(move v (camera()))
   else
     ()
 
 let jump player =
-  player#velocity#set (Vector.add Cst.player_v_jump player#velocity#get)
+  if !Global.player_on_ground then
+    player#velocity#set (Vector.add Cst.player_v_jump player#velocity#get)
+
+let is_on_ground el = 
+  let res = ref false in
+  let player1 = player1 () in
+  let rect = Rect.{width = Cst.player_width ; height = 2} in
+  let pos = Vector.add player1#position#get (Vector.{x = 0. ; y = float Cst.player_height}) in
+  Seq.iter (fun e -> 
+    let mdif = Rect.mdiff pos rect e#position#get e#box#get in
+    res := !res || Rect.has_origin (fst mdif) (snd mdif)
+    ) el;
+  !res

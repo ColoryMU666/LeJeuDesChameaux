@@ -12,6 +12,7 @@ let update dt =
   let () = Player.stop_players () in
   let () = Camera.stop_camera () in
   let () = Input.handle_input () in
+  Global.player_on_ground := Player.is_on_ground (Collision_system.get_elt_list ());
   Move_system.update dt;
   Collision_system.update dt;
   Display_system.update dt;  

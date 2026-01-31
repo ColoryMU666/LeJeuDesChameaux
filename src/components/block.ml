@@ -43,4 +43,4 @@ let create_random () =
   let width = 20 in
   let height = 20 in
   let mass = 1.0 +. (Random.float 99.0) in
-  create (x, y, Vector.{x = vx; y = vy}, txt, width, height, mass, Some Cst.g, Some 60, 1., 3)
+  create (x, y, Vector.{x = vx; y = vy}, txt, width, height, mass, Some Cst.g, None(*Some 60*), 1., 3)

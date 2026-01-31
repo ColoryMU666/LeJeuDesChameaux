@@ -10,5 +10,7 @@ type t = {
 val mouse_x : int ref
 val mouse_y : int ref
 
+val player_on_ground : bool ref
+
 val get : unit -> t
 val set : t -> unit

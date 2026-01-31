@@ -39,7 +39,7 @@ let player_v_up = Vector.{ x = 0.0; y = -5.0 }
 let player_v_down = Vector.sub Vector.zero player_v_up
 let player_v_left = Vector.{ x = -5.0 ; y = 0.0 }
 let player_v_right = Vector.sub Vector.zero player_v_left
-let player_v_jump = Vector.{ x = 0.0 ; y = -30.0 }
+let player_v_jump = Vector.{ x = 0.0 ; y = -80.0 }
 
 let g = Vector.{x = 0.0; y = 3.1 }
 let gy = 1.1
