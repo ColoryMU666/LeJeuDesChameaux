@@ -18,6 +18,12 @@ class velocity () =
     method velocity = r
   end
 
+class friction () =
+  let r = Component.init Vector.{x = 1. ; y = 1.} in
+  object
+    method friction = r
+  end
+
 class mass () =
   let r = Component.init 0.0 in
   object
@@ -42,8 +48,19 @@ class texture () =
     method texture = r
   end
 
+class life () = 
+  let r1 = Component.init 100.0 in
+  let r2 = Component.init 100.0 in
+  object
+    method life = r1
+    method max_life = r2
+  end
+
 type tag = ..
 type tag += No_tag
+type tag += Wall_tag
+type tag += Player_tag of bool (* is_on_floor *)
+type tag += Enemy_tag of bool (* is_on_floor *)
 
 class tagged () =
   let r = Component.init No_tag in
@@ -55,17 +72,6 @@ class resolver () =
   let r = Component.init (fun (_ : Vector.t) (_ : tag) -> ()) in
   object
     method resolve = r
-  end
-
-class score1 () =
-  let r = Component.init 0 in
-  object
-    method score1 = r
-  end
-class score2 () =
-  let r = Component.init 0 in
-  object
-    method score2 = r
   end
 
 class lifespan () = 
@@ -86,6 +92,8 @@ class type movable =
     inherit Entity.t
     inherit position
     inherit velocity
+    inherit friction
+    inherit mass
     inherit forces
   end
 
@@ -99,6 +107,7 @@ class type collidable =
     inherit resolver
     inherit tagged
     inherit forces
+    inherit resolver
     inherit elasticity
   end
 
@@ -114,9 +123,9 @@ class type drawable =
   object
     inherit Entity.t
     inherit dposition
+    inherit position
     inherit box
     inherit texture
-    inherit lifespan
   end
 
 class type deletable = 
@@ -147,10 +156,24 @@ class block () =
     inherit mass ()
     inherit forces ()
     inherit velocity ()
+    inherit friction ()
+    inherit tagged ()
+    inherit resolver ()
     inherit lifespan ()
     inherit elasticity ()
   end
 
+class player () =
+  object
+    inherit block ()
+    inherit life ()
+  end
+
+class enemy () =
+  object
+    inherit block ()
+    inherit life ()
+  end
 
 class camera () =
   object

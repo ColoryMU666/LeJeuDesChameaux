@@ -7,20 +7,18 @@ type t = { width : int; height : int }
    https://en.wikipedia.org/wiki/Minkowski_addition#Collision_detection
 *)
 
-let mdiff v1 r1 v2 r2 = 
-  let tmpx = v2.x -. v1.x -. (float_of_int r1.width) in
-  let tmpy = v2.y -. v1.y -. (float_of_int r1.height) in
-  (Vector.{x = tmpx ; y = tmpy}, {width = r2.width + r1.width ; height = r2.height + r1.height})
+let mdiff p1 r1 p2 r2 =
+  Vector.{x = p2.x -. p1.x -. float_of_int r1.width ;
+          y = p2.y -. p1.y -. float_of_int r1.height},
+  {width = r1.width + r2.width; height = r1.height + r2.height}
 
 
-let has_origin v r = 
-  if v.x < 0. && v.x +. (float_of_int r.width) > 0. then
-    if v.y < 0. && v.y +. (float_of_int r.height) > 0. then
-      true
-    else
-      false
-  else
-    false
+let has_origin p r =
+  p.x < 0. &&
+  p.y < 0. &&
+  p.x +. float_of_int r.width > 0. &&
+  p.y +. float_of_int r.height > 0.
+
 
 let min_norm v1 v2 =
   if Vector.norm v1 <= Vector.norm v2 then v1 else v2

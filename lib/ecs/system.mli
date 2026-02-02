@@ -40,9 +40,6 @@ sig
 
   val reset : unit -> unit
   (** Remove all entities from the system. *)
-
-  val get_elt_list : unit -> t Seq.t
-
 end
 
 module Make (X : T) : S with type t = X.t

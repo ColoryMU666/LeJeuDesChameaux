@@ -7,17 +7,17 @@ let init dt =
   Ecs.System.init_all dt;
   Some ()
 
-
+let last_dt = ref 0.
 let update dt =
-  let () = Player.stop_players () in
   let () = Camera.stop_camera () in
   let () = Input.handle_input () in
-  Global.player_on_ground := Player.is_on_ground (Collision_system.get_elt_list ());
-  Move_system.update dt;
-  Collision_system.update dt;
-  Display_system.update dt;  
-  Draw_system.update dt;
-  Clear_system.update dt;
+  let delta = (dt -. !last_dt) /. 25. in
+  Move_system.update delta;
+  Collision_system.update delta;
+  Display_system.update delta;
+  Draw_system.update delta;
+  Clear_system.update delta;
+  last_dt := dt;
   None
 
 let (let@) f k = f k
@@ -31,10 +31,9 @@ let run () =
   let window = Gfx.create  window_spec in
   let ctx = Gfx.get_context window in
   let () = Gfx.set_context_logical_size ctx 800 600 in
-  let _walls = Wall.walls () in
-  let player1 = Player.players () in
+  let _walls = Block.walls () in
   let main_camera = Camera.create () in
-  let global = Global.{ window; ctx; player1; main_camera } in
+  let global = Global.{ window; ctx ; main_camera} in
   Global.set global;
   let@ () = Gfx.main_loop ~limit:false init in
   let@ () = Gfx.main_loop update in ()

@@ -23,9 +23,6 @@ module type S = sig
 
   val reset : unit -> unit
   (* remove all entities *)
-
-  val get_elt_list : unit -> t Seq.t
-
 end
 
 
@@ -46,7 +43,6 @@ struct
   let unregister e = Entity.Table.remove table e
   let init dt = X.init dt
   let update dt = X.update dt (Entity.Table.to_seq_keys  table)
-  let get_elt_list () = Entity.Table.to_seq_keys table
 
   let reset () = Entity.Table.clear table
 end
@@ -60,7 +56,6 @@ struct
   let register = M.register
   let unregister = M.unregister
   let reset = M.reset
-  let get_elt_list = M.get_elt_list
 end
 
 let init_all dt =

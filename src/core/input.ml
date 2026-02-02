@@ -1,30 +1,53 @@
 let key_table = Hashtbl.create 16
-let has_key s = Hashtbl.mem key_table s
-let set_key s= Hashtbl.replace key_table s ()
-let unset_key s = Hashtbl.remove key_table s
+let action_pressed_table = Hashtbl.create 16
+let action_just_released_table = Hashtbl.create 16
+let action_just_pressed_table = Hashtbl.create 16
 
-let action_table = Hashtbl.create 16
-let register key action = Hashtbl.replace action_table key action
+let has_key table s = Hashtbl.mem table s
 
-let handle_input () =
-  let () =
-    match Gfx.poll_event () with
-      KeyDown s -> set_key s
-    | KeyUp s -> unset_key s
+let set_key s =
+  if has_key action_just_pressed_table s then
+    (Hashtbl.find action_just_pressed_table s) ();
+  Hashtbl.replace key_table s ()
+
+let unset_key s =
+  if has_key action_just_released_table s then 
+    (Hashtbl.find action_just_released_table s) ();
+  Hashtbl.remove key_table s
+
+let register action_table key action =
+  Hashtbl.replace action_table key action
+ 
+let rec get_inputs () =
+  match Gfx.poll_event () with
+      KeyDown s -> if not (has_key key_table s) then (set_key s; get_inputs ())
+    | KeyUp s -> unset_key s; get_inputs ()
     | MouseButton(i, b, x, y) ->  Global.mouse_x := x;
                                   Global.mouse_y := y;
                                   if b then set_key (string_of_int i) else unset_key (string_of_int i)
     | Quit -> exit 0
+    | NoEvent -> ()
     | _ -> ()
-  in
-  Hashtbl.iter (fun key action ->
-      if has_key key then action ()) action_table
+let handle_input () =
+  get_inputs ();
+  Hashtbl.iter (fun key action_pressed ->
+      if has_key key_table key then action_pressed ()) action_pressed_table
 
 let () =
-  register "z" (fun () -> Player.(move (player1()) Cst.player_v_up));
-  register "s" (fun () -> Player.(move (player1()) Cst.player_v_down));
-  register "q" (fun () -> Player.(move (player1()) Cst.player_v_left));
-  register "d" (fun () -> Player.(move (player1()) Cst.player_v_right));
-  register "space" (fun () -> Player.(jump (player1 ())));
-  register "1" (fun () -> ignore (Gun_stuff.(fire_laser ())));
-  register "n" (fun () -> ignore (Block.create_random ()))
+  register action_pressed_table "n" (fun () -> ignore (Block.create_random ()) );
+  
+  register action_just_pressed_table "k" (fun () -> ignore (Enemy.create (300, 300, Vector.{x=0. ; y=0.}, Texture.red, 20, 50, 1.)) );
+
+  register action_just_pressed_table "q" (fun () -> Player.move_direction (-1.));
+  register action_just_released_table "q" (fun () -> Player.move_direction 1.);
+
+  register action_just_pressed_table "d" (fun () -> Player.move_direction 1.);
+  register action_just_released_table "d" (fun () -> Player.move_direction (-1.));
+
+  register action_pressed_table "space" (fun () -> Player.jump ());
+  register action_pressed_table " " (fun () -> Player.jump ());
+
+  register action_just_pressed_table "s" (fun () -> Player.fast_falling 1.);
+  register action_just_released_table "s" (fun () -> Player.fast_falling (-1.));
+
+  register action_pressed_table "1" (fun () -> ignore (Gun_stuff.(fire_laser ())));

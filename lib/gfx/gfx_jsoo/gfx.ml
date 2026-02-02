@@ -371,6 +371,6 @@ let open_formatter src =
     let out_indent = out_spaces in
     Format.(
       formatter_of_out_functions
-        { out_string; out_flush; out_newline; out_spaces; out_indent })
+        { (get_formatter_out_functions ()) with out_string; out_flush; out_newline; out_spaces; out_indent })
   with
   | Not_found -> failwith ("No element with id " ^ src)

@@ -3,14 +3,11 @@ open Component_defs
 type t = {
   window : Gfx.window;
   ctx : Gfx.context;
-  player1 : block;
   main_camera : camera;
 }
 
 val mouse_x : int ref
 val mouse_y : int ref
-
-val player_on_ground : bool ref
 
 val get : unit -> t
 val set : t -> unit

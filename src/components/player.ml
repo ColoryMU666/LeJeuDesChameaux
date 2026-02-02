@@ -2,38 +2,40 @@ open Ecs
 open Component_defs
 open System_defs
 
-let players () =  
-  Block.create Cst.(player1_x, player1_y, Vector.zero, player_color, player_width, player_height, 100.,Some Cst.g, None, 0., 2)
+let resolve (v : Vector.t) (player : player) (reacter : tag) =
+  player#velocity#set (Vector.mult 2. v);
+  player#life#set (player#life#get -. 10.);
+  Gfx.debug "The player has been hit : %f/%f\n%!" player#life#get player#max_life#get
+
+let create (x, y, v, txt, width, height, mass) =
+  let e = new player () in
+  e#texture#set txt;
+  e#position#set Vector.{x=float x ; y = float y};
+  e#velocity#set v;
+  e#box#set Rect.{width;height};
+  e#mass#set mass;
+  e#forces#set Cst.g;
+  e#friction#set Vector.{x = 0.5 ; y = 1.};
+  e#tag#set (Player_tag false);
+  e#resolve#set (fun (v:Vector.t) (reacter:tag) -> resolve v e reacter);
+  Collision_system.(register (e:>t));
+  Move_system.(register (e:>t));
+  Draw_system.(register (e:>t));
+  e
 
 
-let player1 () = 
-  let Global.{player1; _ } = Global.get () in
-  player1
+let player = create (100, 100, Vector.{x=0. ; y=0.}, Texture.blue, 20, 50, 1.)
 
-let stop_players () = 
-  let Global.{player1; _ } = Global.get () in
-  player1#velocity#set Vector.zero;
-  ()
 
-let move player v =
-  player#velocity#set  (Vector.add v player#velocity#get);
-  let Vector.{x; y} = player#dposition#get in
-  if x >= (float Cst.window_width) /. 2. then
-    Camera.(move v (camera()))
-  else
-    ()
+let move_direction d =
+  player#forces#set Vector.(add {x = (d *. Cst.player_speed) ; y = 0.} player#forces#get)
 
-let jump player =
-  if !Global.player_on_ground then
-    player#velocity#set (Vector.add Cst.player_v_jump player#velocity#get)
+let jump () =
+  match player#tag#get with
+    | Player_tag true ->
+      player#tag#set (Player_tag false);
+      player#velocity#set Vector.{x = player#velocity#get.x ; y = -.Cst.player_jump_speed}
+    | _ -> ()
 
-let is_on_ground el = 
-  let res = ref false in
-  let player1 = player1 () in
-  let rect = Rect.{width = Cst.player_width ; height = 2} in
-  let pos = Vector.add player1#position#get (Vector.{x = 0. ; y = float Cst.player_height}) in
-  Seq.iter (fun e -> 
-    let mdif = Rect.mdiff pos rect e#position#get e#box#get in
-    res := !res || Rect.has_origin (fst mdif) (snd mdif)
-    ) el;
-  !res
+let fast_falling d =
+  player#forces#set Vector.(add {x = 0.; y = (d *. Cst.player_fast_falling_speed)} player#forces#get)
