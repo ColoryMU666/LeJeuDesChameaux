@@ -181,4 +181,6 @@ class camera () =
     inherit position ()
     inherit velocity ()
     inherit forces ()
+    inherit friction ()
+    inherit mass ()
   end
