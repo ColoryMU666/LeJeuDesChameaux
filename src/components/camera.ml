@@ -14,8 +14,9 @@ let camera () =
   let Global.{main_camera; _ } = Global.get () in
   main_camera
 
-let move v cam = 
-  cam#velocity#set v
+let move () = 
+  let Global.{player1; main_camera; _} = Global.get () in
+  main_camera#velocity#set (Vector.sub player1#position#get main_camera#position#get)
 
 let stop_camera () =
   let Global.{main_camera; _ } = Global.get () in

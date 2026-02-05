@@ -12,9 +12,9 @@ let update dt =
   let () = Camera.stop_camera () in
   let () = Input.handle_input () in
   let delta = (dt -. !last_dt) /. 25. in
+  let () = Camera.move () in
   Move_system.update delta;
   Collision_system.update delta;
-  Display_system.update delta;
   Draw_system.update delta;
   Clear_system.update delta;
   last_dt := dt;
@@ -33,7 +33,8 @@ let run () =
   let () = Gfx.set_context_logical_size ctx 800 600 in
   let _walls = Block.walls () in
   let main_camera = Camera.create () in
-  let global = Global.{ window; ctx ; main_camera} in
+  let player1 = Player.create_player () in
+  let global = Global.{ window; ctx ; player1 ;main_camera} in
   Global.set global;
   let@ () = Gfx.main_loop ~limit:false init in
   let@ () = Gfx.main_loop update in ()

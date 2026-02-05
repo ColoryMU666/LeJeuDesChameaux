@@ -1,6 +1,6 @@
 let fire_laser () =
-  let x = int_of_float ((Player.player)#position#get.x) + Cst.player_width in
-  let y = int_of_float ((Player.player)#position#get.y) in
+  let x = int_of_float ((Player.player ())#position#get.x) + Cst.player_width in
+  let y = int_of_float ((Player.player ())#position#get.y) in
   Block.create (
     x,
     y,

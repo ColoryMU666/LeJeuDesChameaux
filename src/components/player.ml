@@ -24,18 +24,24 @@ let create (x, y, v, txt, width, height, mass) =
   e
 
 
-let player = create (Cst.player1_x, Cst.player1_y, Vector.{x=0. ; y=0.}, Texture.blue, 20, 50, 1.)
+let create_player () = create (100, 100, Vector.{x=0. ; y=0.}, Texture.blue, 20, 50, 1.)
 
+let player () = 
+  let Global.{player1; _} = Global.get () in
+  player1
 
 let move_direction d =
-  player#forces#set Vector.(add {x = (d *. Cst.player_speed) ; y = 0.} player#forces#get)
+  let Global.{player1; _} = Global.get () in
+  player1#forces#set Vector.(add {x = (d *. Cst.player_speed) ; y = 0.} player1#forces#get)
 
 let jump () =
-  match player#tag#get with
+  let Global.{player1; _} = Global.get () in
+  match player1#tag#get with
     | Player_tag true ->
-      player#tag#set (Player_tag false);
-      player#velocity#set Vector.{x = player#velocity#get.x ; y = -.Cst.player_jump_speed}
+      player1#tag#set (Player_tag false);
+      player1#velocity#set Vector.{x = player1#velocity#get.x ; y = -.Cst.player_jump_speed}
     | _ -> ()
 
 let fast_falling d =
-  player#forces#set Vector.(add {x = 0.; y = (d *. Cst.player_fast_falling_speed)} player#forces#get)
+  let Global.{player1; _} = Global.get () in
+  player1#forces#set Vector.(add {x = 0.; y = (d *. Cst.player_fast_falling_speed)} player1#forces#get)

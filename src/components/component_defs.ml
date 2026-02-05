@@ -25,7 +25,7 @@ class friction () =
   end
 
 class mass () =
-  let r = Component.init 0.0 in
+  let r = Component.init 1.0 in
   object
     method mass = r
   end
