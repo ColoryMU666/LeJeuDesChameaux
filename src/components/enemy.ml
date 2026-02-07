@@ -15,7 +15,7 @@ let create (x, y, v, txt, width, height, mass) =
   e#mass#set mass;
   e#forces#set Cst.g;
   e#friction#set Vector.{x = 0.5 ; y = 1.};
-  e#tag#set (Enemy_tag false); 
+  e#tag#set (Enemy_tag {is_on_floor = false}); 
   Collision_system.(register (e:>t));
   Move_system.(register (e:>t));
   Draw_system.(register (e:>t));

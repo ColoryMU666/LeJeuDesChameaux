@@ -17,5 +17,3 @@ module Draw_system = System.Make(Draw)
 (* Use a functor to define the new system *)
 
 module Clear_system = System.Make(Clear)
-
-module Display_system = System.Make(Display)

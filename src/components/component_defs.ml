@@ -56,11 +56,13 @@ class life () =
     method max_life = r2
   end
 
-type tag = ..
-type tag += No_tag
-type tag += Wall_tag
-type tag += Player_tag of bool (* is_on_floor *)
-type tag += Enemy_tag of bool (* is_on_floor *)
+type tag =
+  | No_tag
+  | Wall_tag
+  | Player_tag of {is_on_floor : bool}
+  | Ally_projectile_tag of {damage : float}
+  | Enemy_tag of {is_on_floor : bool}
+  | Enemy_projectile_tag of {damage : float}
 
 class tagged () =
   let r = Component.init No_tag in
@@ -117,12 +119,12 @@ class type physics =
     inherit mass
     inherit forces
     inherit velocity
+    inherit friction
   end
 
 class type drawable =
   object
     inherit Entity.t
-    inherit dposition
     inherit position
     inherit box
     inherit texture
@@ -134,21 +136,12 @@ class type deletable =
     inherit lifespan
   end
 
-class type displayable =
-  object
-    inherit Entity.t
-    inherit position
-    inherit dposition
-    inherit velocity
-  end
-
 (** Real objects *)
 
 class block () =
   object
     inherit Entity.t ()
     inherit position ()
-    inherit dposition ()
     inherit box ()
     inherit resolver ()
     inherit tagged ()
@@ -157,8 +150,6 @@ class block () =
     inherit forces ()
     inherit velocity ()
     inherit friction ()
-    inherit tagged ()
-    inherit resolver ()
     inherit lifespan ()
     inherit elasticity ()
   end

@@ -26,9 +26,9 @@ let physic_collision e1 e2 has_player =
         | None -> ()
         | Some i -> 
           if i = 0 && n.y < 0. then
-            e1#tag#set (Player_tag true)
+            e1#tag#set (Player_tag {is_on_floor = true})
           else if i = 1 && n.y > 0. then
-            e2#tag#set (Player_tag true)
+            e2#tag#set (Player_tag {is_on_floor = true})
       in
       let v1 = e1#velocity#get in
       let v2 = e2#velocity#get in
@@ -71,7 +71,8 @@ let update dt el =
     el
     |> Seq.iter (fun (e:t) -> 
       match e#tag#get with
-      | Player_tag true -> e#tag#set (Player_tag false)
+      | Player_tag {is_on_floor = true} ->
+        e#tag#set (Player_tag {is_on_floor = false})
       | _ -> ()
       );
   for i = 0 to 2 do 

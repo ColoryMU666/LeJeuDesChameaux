@@ -2,48 +2,103 @@ open Ecs
 open Component_defs
 open System_defs
 
+type set_block_values ={
+  pos_x : float;
+  pos_y : float;
+  velocity : Vector.t;
+  texture : Texture.t;
+  width : int;
+  height : int;
+  mass : float;
+  friction_x : float;
+  friction_y : float;
+  default_forces : Vector.t option;
+  lifespan : int option;
+  elasticity : float;
+  resolve : Vector.t -> tag -> unit;
+  tag : tag;
+}
 
-let create (x, y, v, txt, width, height, mass, default_forces, life, elasticity, tag) =
-  let e = new block () in
-  e#texture#set txt;
-  e#position#set Vector.{x=float x;y = float y};
-  e#dposition#set e#position#get;
-  e#velocity#set v;
-  e#box#set Rect.{width;height};
-  e#mass#set mass;
-  (match life with
-  | None -> e#lifespan#set (-1)
-  | Some i -> e#lifespan#set i
+let default_set_values = {
+  pos_x = 0.;
+  pos_y = 0.;
+  velocity = Vector.zero;
+  texture = Texture.black;
+  width = 100;
+  height = 100;
+  mass = 1.;
+  friction_x = 1.;
+  friction_y = 1.;
+  default_forces = None;
+  lifespan = None;
+  elasticity = 1.0;
+  resolve = (fun (_ : Vector.t) (_ : tag) -> ());
+  tag = No_tag;
+}
+
+let set_block b values =
+  b#texture#set values.texture;
+  b#position#set Vector.{x = values.pos_x ; y = values.pos_y};
+  b#velocity#set values.velocity;
+  b#box#set Rect.{width = values.width ; height = values.height};
+  b#mass#set values.mass;
+  b#friction#set (Vector.{x = values.friction_x ; y = values.friction_y});
+  b#elasticity#set values.elasticity;
+  b#tag#set values.tag;
+  (match values.lifespan with
+  | None -> b#lifespan#set (-1)
+  | Some i -> b#lifespan#set i
   );
-  (match default_forces with
+  (match values.default_forces with
   | None -> ()
-  | Some f -> e#forces#set f
+  | Some f -> b#forces#set f
   );
-  Collision_system.(register (e:>t));
-  Move_system.(register (e:>t));
-  Display_system.(register (e :> t));
-  Draw_system.(register (e:>t));
-  Clear_system.(register (e :> t));
-  e
+  Collision_system.(register (b:>t));
+  Move_system.(register (b:>t));
+  Draw_system.(register (b:>t));
+  Clear_system.(register (b :> t));
+  ()
+
+let create values =
+  let b = new block () in
+  set_block b values;
+  b
 
 
 let create_random () =
-  let x = Cst.window_width / 2 in
-  let y = Cst.window_height / 2 in
-  let vx = (Random.float 10.) -. 5. in
-  let vy = (Random.float 10.) -. 5. in
-  let txt = Texture.black in 
-  let width = 20 in
-  let height = 20 in
-  let mass = 1.0 +. (Random.float 20.0) in
-  create (x, y, Vector.{x = vx; y = vy}, txt, width, height, mass, Some Cst.g, None(*Some 60*), 1., 3)
+  let values = { default_set_values with
+    pos_x = float(Cst.window_width) /. 2.;
+    pos_y = float(Cst.window_height) /. 2.;
+    velocity = Vector.{x = (Random.float 10.) -. 5. ; y = (Random.float 10.) -. 5.};
+    texture = Texture.black;
+    width = 20;
+    height = 20;
+    mass = 1.0 +. (Random.float 20.0);
+  } in
+  create values
 
 
 let walls () =
+  let hvalues = Cst.{ default_set_values with
+    mass = infinity;
+    width = hwall_width;
+    height = hwall_height;
+    texture = Texture.blue;
+    elasticity = 0.;
+    tag = Wall_tag;
+  } in
+  let vvalues = Cst.{ default_set_values with
+    mass = infinity;
+    width = vwall_width;
+    height = vwall_height;
+    texture = Texture.green;
+    elasticity = 0.;
+    tag = Wall_tag;
+  } in
   List.map create
     Cst.[ 
-      (hwall1_x, hwall1_y, Vector.zero, Texture.blue, hwall_width, hwall_height, infinity, None, None, 0., 0);
-      (hwall2_x, hwall2_y, Vector.zero, Texture.blue, hwall_width, hwall_height, infinity, None, None, 0., 0);
-      (vwall1_x, vwall1_y, Vector.zero, Texture.green, vwall_width, vwall_height, infinity, None, None, 0., 1);
-      (vwall2_x, vwall2_y, Vector.zero, Texture.green, vwall_width, vwall_height, infinity, None, None, 0., 1)
+      {hvalues with pos_x = float(hwall1_x) ; pos_y = float(hwall1_y)};
+      {hvalues with pos_x = float(hwall2_x) ; pos_y = float(hwall2_y)};
+      {vvalues with pos_x = float(vwall1_x) ; pos_y = float(vwall1_y)};
+      {vvalues with pos_x = float(vwall2_x) ; pos_y = float(vwall2_y)}
     ]

@@ -1,16 +1,14 @@
 let fire_laser () =
-  let x = int_of_float ((Player.player ())#position#get.x) + Cst.player_width in
-  let y = int_of_float ((Player.player ())#position#get.y) in
-  Block.create (
-    x,
-    y,
-    Vector.{x = ((float !Global.mouse_x) -. (float x)) /. 60. ; y = ((float !Global.mouse_y) -. (float y)) /. 60.},
-    Texture.(red),
-    10,
-    10,
-    infinity,
-    None,
-    Some 60,
-    0.,
-    3
-    )
+  let x = (Player.player ())#position#get.x +. float(Cst.player_width) /. 2. in
+  let y = (Player.player ())#position#get.y in
+  Block.create Block.{ Block.default_set_values with
+    pos_x = x;
+    pos_y = y;
+    velocity = Vector.{x = ((float !Global.mouse_x) -. x) /. 60. ; y = ((float !Global.mouse_y) -. y) /. 60.};
+    texture = Texture.(red);
+    width = 10;
+    height = 10;
+    lifespan = Some 60;
+    elasticity = 0.;
+    tag = Ally_projectile_tag {damage = 10.}
+    }
