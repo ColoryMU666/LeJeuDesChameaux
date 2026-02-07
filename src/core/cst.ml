@@ -31,8 +31,6 @@ let vwall2_y = vwall1_y
 
 let player_width = 20
 let player_height = 50
-let player1_x = wall_thickness
-let player1_y = window_height - wall_thickness - player_height
 let player_color = Texture.black
 let g = Vector.{x = 0.0; y = 2. }
 let player_speed = 7.
@@ -41,3 +39,8 @@ let player_fast_falling_speed = 1.
 
 let minimal_speed = 0.1
 let elasticity = 0.
+
+let camera_offset = Vector.{
+    x = Float.round(float(window_width) *. 0.5 -. float(player_width) /. 2.);
+    y = Float.round(float(window_height) *. 0.65)
+}
