@@ -45,6 +45,7 @@ let set_block b values =
   b#friction#set (Vector.{x = values.friction_x ; y = values.friction_y});
   b#elasticity#set values.elasticity;
   b#tag#set values.tag;
+  b#resolve#set values.resolve;
   (match values.lifespan with
   | None -> b#lifespan#set (-1)
   | Some i -> b#lifespan#set i

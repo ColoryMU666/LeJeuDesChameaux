@@ -14,5 +14,5 @@ let update _ el =
       (e#lifespan#set (e#lifespan#get - 1);
       acc)
     ) [] el in
-  Gc.compact ();
-  List.iter (fun elt -> Entity.delete elt) tmp
+  List.iter (fun elt -> Entity.delete elt) tmp;
+  Gc.compact ()
