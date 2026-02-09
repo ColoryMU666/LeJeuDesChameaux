@@ -16,6 +16,7 @@ let update dt =
   Move_system.update delta;
   Collision_system.update delta;
   Draw_system.update delta;
+  Lifebar_draw_system.update delta;
   Clear_system.update delta;
   last_dt := dt;
   None

@@ -5,7 +5,7 @@ open Rect
 type t = collidable
 
 
-let init _ = ()
+let init _ = Gfx.debug "Collision init\n%!"
 
 let rec iter_pairs f s =
   match s () with

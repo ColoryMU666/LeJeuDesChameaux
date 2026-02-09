@@ -136,6 +136,14 @@ class type deletable =
     inherit lifespan
   end
 
+class type killable = 
+  object
+    inherit Entity.t
+    inherit position
+    inherit box
+    inherit life
+  end
+
 (** Real objects *)
 
 class block () =

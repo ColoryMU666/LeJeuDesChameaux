@@ -9,7 +9,7 @@ let resolve (v : Vector.t) (player : player) (reacter : tag) =
 
 let create (pos_x, pos_y, velocity, texture, width, height, mass) =
   let p = new player () in
-  let values = Block.{default_set_values with
+  Block.set_block p {Block.default_set_values with
     pos_x;
     pos_y;
     velocity;
@@ -22,8 +22,8 @@ let create (pos_x, pos_y, velocity, texture, width, height, mass) =
     default_forces = Some(Cst.g);
     resolve = (fun (v:Vector.t) (reacter:tag) -> resolve v p reacter);
     tag = Player_tag {is_on_floor = false}
-  } in
-  Block.set_block p values;
+  };
+  Lifebar_draw_system.(register (p:>t));
   p
 
 

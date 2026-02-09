@@ -21,4 +21,3 @@ let update _dt el =
       let txt = e#texture#get in
       Texture.draw ctx surface pos box txt
     ) el;
-  Gfx.commit ctx

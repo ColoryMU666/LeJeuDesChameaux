@@ -23,6 +23,7 @@ let create (pos_x, pos_y, velocity, texture, width, height, mass) =
     resolve = (fun (v:Vector.t) (reacter:tag) -> resolve v e reacter);
     tag = Enemy_tag {is_on_floor = false}
   };
+  Lifebar_draw_system.(register (e:>t));
   e
 
 let () = Gfx.debug "aaa\n%!"
