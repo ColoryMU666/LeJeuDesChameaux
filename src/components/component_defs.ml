@@ -88,6 +88,12 @@ class elasticity () =
     method elasticity = r
   end
 
+class tokill () = 
+  let r = Component.init false in
+  object
+    method tokill = r
+  end
+
 (** Archetype *)
 class type movable =
   object
@@ -133,7 +139,7 @@ class type drawable =
 class type deletable = 
   object
     inherit Entity.t
-    inherit lifespan
+    inherit tokill
   end
 
 class type killable = 
@@ -159,6 +165,7 @@ class block () =
     inherit velocity ()
     inherit friction ()
     inherit lifespan ()
+    inherit tokill ()
     inherit elasticity ()
   end
 
@@ -182,4 +189,9 @@ class camera () =
     inherit forces ()
     inherit friction ()
     inherit mass ()
+  end
+
+class ammunition () =
+  object
+    inherit block ()
   end

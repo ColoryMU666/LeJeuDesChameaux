@@ -10,7 +10,6 @@ let white = Gfx.color 255 255 255 255
 
 let update _dt el =
   let Global.{window;ctx;main_camera;player1} = Global.get () in
-  Gfx.debug "x = %f ; y = %f\n%!" (player1#position#get.x) (player1#position#get.y);
   let surface = Gfx.get_surface window in
   let ww, wh = Gfx.get_context_logical_size ctx in
   Gfx.set_color ctx white;

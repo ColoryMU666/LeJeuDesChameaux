@@ -79,11 +79,16 @@ let update dt el =
     el
     |> iter_pairs (fun (e1:t) (e2:t) ->
       match (e1#tag#get, e2#tag#get) with
-      | (Player_tag _, Enemy_tag _) | (Player_tag _, Enemy_projectile_tag _)
-      | (Enemy_tag _, Ally_projectile_tag _) ->
+      | (Player_tag _, Enemy_tag _) ->
         affect e2 e1
-      | (Enemy_tag _, Player_tag _) | (Enemy_projectile_tag _, Player_tag _)
-      | (Ally_projectile_tag _, Enemy_tag _) ->
+      | (Enemy_tag _, Player_tag _)->
+        affect e1 e2
+      | (Player_tag _, Enemy_projectile_tag _) | (Enemy_tag _, Ally_projectile_tag _)
+      | (Enemy_projectile_tag _, Player_tag _) | (Ally_projectile_tag _, Enemy_tag _) 
+      -> (affect e1 e2; affect e2 e1)
+      | (Wall_tag , Enemy_projectile_tag _) | (Wall_tag , Ally_projectile_tag _) ->
+        affect e2 e1
+      | (Enemy_projectile_tag _, Wall_tag ) | (Ally_projectile_tag _, Wall_tag ) ->
         affect e1 e2
       | (_, Ally_projectile_tag _) | (Ally_projectile_tag _, _)
       | (_, Enemy_projectile_tag _) | (Enemy_projectile_tag _, _) ->

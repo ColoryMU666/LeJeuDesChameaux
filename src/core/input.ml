@@ -22,9 +22,8 @@ let rec get_inputs () =
   match Gfx.poll_event () with
       KeyDown s -> if not (has_key key_table s) then (set_key s; get_inputs ())
     | KeyUp s -> unset_key s; get_inputs ()
-    | MouseButton(i, b, x, y) ->  Global.mouse_x := x;
-                                  Global.mouse_y := y;
-                                  if b then set_key (string_of_int i) else unset_key (string_of_int i)
+    | MouseMove(x, y) -> Global.mouse_x := x; Global.mouse_y := y
+    | MouseButton(i, b, x, y) -> if b then set_key (string_of_int i) else unset_key (string_of_int i)
     | Quit -> exit 0
     | NoEvent -> ()
     | _ -> ()
