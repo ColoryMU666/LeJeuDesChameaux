@@ -26,7 +26,6 @@ let rec get_inputs () =
     | MouseButton(i, b, x, y) -> if b then set_key (string_of_int i) else unset_key (string_of_int i)
     | Quit -> exit 0
     | NoEvent -> ()
-    | _ -> ()
 let handle_input () =
   get_inputs ();
   Hashtbl.iter (fun key action_pressed ->

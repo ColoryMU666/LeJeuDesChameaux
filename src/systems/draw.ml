@@ -4,7 +4,7 @@ open Component_defs
 
 type t = drawable
 
-let init _ = Gfx.debug "Drawn init\n%!"
+let init _ = Gfx.debug "Drawn system initialised\n%!"
 
 let white = Gfx.color 255 255 255 255
 

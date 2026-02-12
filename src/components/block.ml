@@ -13,7 +13,6 @@ type set_block_values ={
   friction_x : float;
   friction_y : float;
   default_forces : Vector.t option;
-  lifespan : int option;
   elasticity : float;
   resolve : Vector.t -> tag -> unit;
   tag : tag;
@@ -30,7 +29,6 @@ let default_set_values = {
   friction_x = 1.;
   friction_y = 1.;
   default_forces = None;
-  lifespan = None;
   elasticity = 1.0;
   resolve = (fun (_ : Vector.t) (_ : tag) -> ());
   tag = No_tag;
@@ -46,10 +44,6 @@ let set_block b values =
   b#elasticity#set values.elasticity;
   b#tag#set values.tag;
   b#resolve#set values.resolve;
-  (match values.lifespan with
-  | None -> b#lifespan#set (-1)
-  | Some i -> b#lifespan#set i
-  );
   (match values.default_forces with
   | None -> ()
   | Some f -> b#forces#set f

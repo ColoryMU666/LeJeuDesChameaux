@@ -3,7 +3,7 @@ open Component_defs
 
 type t = movable
 
-let init _ = Gfx.debug "Move init\n%!"
+let init _ = Gfx.debug "Move system initialised\n%!"
 
 let update dt el =
   Seq.iter (fun (e:t) ->

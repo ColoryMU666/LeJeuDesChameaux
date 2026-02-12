@@ -18,6 +18,13 @@ class velocity () =
     method velocity = r
   end
 
+
+class can_move () =
+  let r = Component.init true in
+  object
+    method can_move = r
+  end
+
 class friction () =
   let r = Component.init Vector.{x = 1. ; y = 1.} in
   object
@@ -76,10 +83,12 @@ class resolver () =
     method resolve = r
   end
 
-class lifespan () = 
-  let r = Component.init (-1) in
+class time_left () = 
+  let r1 = Component.init (-1.) in
+  let r2 = Component.init (fun (dt: float) -> ()) in
   object
-    method lifespan = r
+    method time_left = r1
+    method time_out_fun = r2
   end
 
 class elasticity () =
@@ -95,14 +104,20 @@ class tokill () =
   end
 
 (** Archetype *)
+class type physics =
+  object 
+    inherit Entity.t
+    inherit mass
+    inherit forces
+    inherit velocity
+    inherit friction
+  end
+
 class type movable =
   object
     inherit Entity.t
     inherit position
-    inherit velocity
-    inherit friction
-    inherit mass
-    inherit forces
+    inherit physics
   end
 
 class type collidable =
@@ -119,14 +134,6 @@ class type collidable =
     inherit elasticity
   end
 
-class type physics =
-  object 
-    inherit Entity.t
-    inherit mass
-    inherit forces
-    inherit velocity
-    inherit friction
-  end
 
 class type drawable =
   object
@@ -150,6 +157,13 @@ class type killable =
     inherit life
   end
 
+class type timeable =
+  object
+    inherit Entity.t
+    inherit time_left
+    inherit deletable
+  end
+
 (** Real objects *)
 
 class block () =
@@ -164,7 +178,6 @@ class block () =
     inherit forces ()
     inherit velocity ()
     inherit friction ()
-    inherit lifespan ()
     inherit tokill ()
     inherit elasticity ()
   end
@@ -173,6 +186,7 @@ class player () =
   object
     inherit block ()
     inherit life ()
+    inherit can_move ()
   end
 
 class enemy () =
@@ -194,4 +208,11 @@ class camera () =
 class ammunition () =
   object
     inherit block ()
+  end
+
+class timer () =
+  object
+    inherit Entity.t ()
+    inherit time_left ()
+    inherit tokill ()
   end

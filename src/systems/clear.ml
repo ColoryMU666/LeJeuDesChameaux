@@ -4,7 +4,7 @@ open Component_defs
 
 type t = deletable
 
-let init _ = Gfx.debug "Clear init\n%!"
+let init _ = Gfx.debug "Clear system initialised\n%!"
 
 let update _ el =
   let tmp = Seq.fold_left (fun acc (e:t) -> 

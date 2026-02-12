@@ -2,12 +2,13 @@ open System_defs
 open Component_defs
 open Ecs
 
+let last_dt = ref 0.
 
 let init dt =
   Ecs.System.init_all dt;
+  last_dt := dt;
   Some ()
 
-let last_dt = ref 0.
 let update dt =
   let () = Camera.stop_camera () in
   let () = Input.handle_input () in
@@ -15,9 +16,10 @@ let update dt =
   let () = Camera.move () in
   Move_system.update delta;
   Collision_system.update delta;
+  Timer_system.update delta;
+  Clear_system.update delta;
   Draw_system.update delta;
   Lifebar_draw_system.update delta;
-  Clear_system.update delta;
   last_dt := dt;
   None
 
@@ -26,7 +28,7 @@ let (let@) f k = f k
 
 let run () =
   let window_spec = 
-    Format.sprintf "game_canvas:%dx%d:"
+    Format.sprintf "game_canvas:%dx%d:r=presentvsync"
       Cst.window_width Cst.window_height
   in
   let window = Gfx.create  window_spec in
