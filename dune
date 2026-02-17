@@ -11,5 +11,5 @@
 
 (alias
    (name default)
-   (deps (alias js))
+   (deps (alias sdl))
 )

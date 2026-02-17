@@ -7,6 +7,9 @@ let white = Color (Gfx.color 255 255 255 255)
 let red = Color (Gfx.color 255 0 0 255)
 let green = Color (Gfx.color 0 255 0 255)
 let blue = Color (Gfx.color 0 0 255 255)
+let yellow = Color (Gfx.color 255 255 0 255)
+let cyan = Color (Gfx.color 0 255 255 255)
+let magenta = Color(Gfx.color 255 0 255 255)
 let transparent = Color (Gfx.color 0 0 0 0)
 
 let draw ctx dst pos box src =

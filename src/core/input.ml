@@ -48,4 +48,9 @@ let () =
   register action_just_pressed_table "s" (fun () -> Player.fast_falling 1.);
   register action_just_released_table "s" (fun () -> Player.fast_falling (-1.));
 
-  register action_pressed_table "1" (fun () -> ignore (Gun_stuff.(fire_laser ())));
+  register action_just_pressed_table "e" (fun () -> Global.is_interacting := true);
+  register action_just_released_table "e" (fun () -> Global.is_interacting := false);
+
+  register action_pressed_table "1" (fun () -> ignore (Gun.(handle_fire ())));
+  
+  register action_just_pressed_table "g" (fun () -> ignore (Gun.create_laser ()));

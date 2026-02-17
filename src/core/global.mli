@@ -7,6 +7,8 @@ type t = {
   main_camera : camera;
 }
 
+val is_interacting : bool ref
+
 val mouse_x : int ref
 val mouse_y : int ref
 

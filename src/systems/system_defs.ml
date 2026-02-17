@@ -11,3 +11,5 @@ module Clear_system = System.Make(Clear)
 module Draw_system = System.Make(Draw)
 
 module Lifebar_draw_system = System.Make(Lifebar_draw)
+
+module Interact_system = System.Make(Interact)

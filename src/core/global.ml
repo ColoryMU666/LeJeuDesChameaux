@@ -7,6 +7,7 @@ type t = {
   main_camera : camera;
 }
 
+let is_interacting = ref false
 let mouse_x = ref 0
 let mouse_y = ref 0
 

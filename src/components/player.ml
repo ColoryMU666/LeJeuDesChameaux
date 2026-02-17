@@ -24,6 +24,7 @@ let create (pos_x, pos_y, velocity, texture, width, height, mass) =
     tag = Player_tag {is_on_floor = false}
   };
   Lifebar_draw_system.(register (p:>t));
+  p#gun_id#set 0;
   p
 
 

@@ -16,6 +16,7 @@ let update dt =
   let () = Camera.move () in
   Move_system.update delta;
   Collision_system.update delta;
+  Interact_system.update delta;
   Timer_system.update delta;
   Clear_system.update delta;
   Draw_system.update delta;

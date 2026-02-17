@@ -75,24 +75,30 @@ let update dt el =
         e#tag#set (Player_tag {is_on_floor = false})
       | _ -> ()
       );
-  el
-  |> iter_pairs (fun (e1:t) (e2:t) ->
-    match (e1#tag#get, e2#tag#get) with
-    | (Player_tag _, Enemy_tag _) ->
-    affect e2 e1
-    | (Enemy_tag _, Player_tag _)->
-      affect e1 e2
-    | (Player_tag _, Enemy_projectile_tag _) | (Enemy_tag _, Ally_projectile_tag _)
-    | (Enemy_projectile_tag _, Player_tag _) | (Ally_projectile_tag _, Enemy_tag _) 
-    -> (affect e1 e2; affect e2 e1)
-    | (Wall_tag , Enemy_projectile_tag _) | (Wall_tag , Ally_projectile_tag _) ->
-      affect e2 e1
-    | (Enemy_projectile_tag _, Wall_tag ) | (Ally_projectile_tag _, Wall_tag ) ->
-      affect e1 e2
-    | (_, Ally_projectile_tag _) | (Ally_projectile_tag _, _)
-    | (_, Enemy_projectile_tag _) | (Enemy_projectile_tag _, _) ->
-      ()
-    | (Player_tag _, _) -> physic_collision e1 e2 (Some 0)
-    | (_, Player_tag _)  -> physic_collision e1 e2 (Some 1)
-    | (_, _) -> physic_collision e1 e2 None
-    )
+  for i = 0 to 2 do 
+    el
+    |> iter_pairs (fun (e1:t) (e2:t) ->
+      match (e1#tag#get, e2#tag#get) with
+      | (Player_tag _, Enemy_tag _) ->
+        affect e2 e1
+      | (Enemy_tag _, Player_tag _)->
+        affect e1 e2
+      | (Player_tag _, Enemy_projectile_tag _) | (Enemy_tag _, Ally_projectile_tag _)
+      | (Enemy_projectile_tag _, Player_tag _) | (Ally_projectile_tag _, Enemy_tag _) 
+      -> (affect e1 e2; affect e2 e1)
+      | (Wall_tag , Enemy_projectile_tag _) | (Wall_tag , Ally_projectile_tag _) ->
+        affect e1 e2
+      | (Enemy_projectile_tag _, Wall_tag ) | (Ally_projectile_tag _, Wall_tag ) ->
+        affect e2 e1
+      | (Player_tag _, Gun_tag _) | (Gun_tag _, Player_tag _) ->
+        ()
+      | (Enemy_tag _, Gun_tag _) | (Gun_tag _, Enemy_tag _) ->
+        ()
+      | (_, Ally_projectile_tag _) | (Ally_projectile_tag _, _)
+      | (_, Enemy_projectile_tag _) | (Enemy_projectile_tag _, _) ->
+        ()
+      | (Player_tag _, _) -> physic_collision e1 e2 (Some 0)
+      | (_, Player_tag _)  -> physic_collision e1 e2 (Some 1)
+      | (_, _) -> physic_collision e1 e2 None
+      )
+  done

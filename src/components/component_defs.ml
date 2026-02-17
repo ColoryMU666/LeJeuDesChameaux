@@ -70,6 +70,7 @@ type tag =
   | Ally_projectile_tag of {damage : float}
   | Enemy_tag of {is_on_floor : bool}
   | Enemy_projectile_tag of {damage : float}
+  | Gun_tag of {gunType : int}
 
 class tagged () =
   let r = Component.init No_tag in
@@ -103,6 +104,35 @@ class tokill () =
     method tokill = r
   end
 
+class fire_seter () =
+  let r = Component.init (fun () -> ()) in
+  object
+    method fire_seter = r
+  end
+
+class gun_id () =
+  let r = Component.init 0 in
+  object
+    method gun_id = r
+  end
+
+class fire_ok () =
+  let r = Component.init true in
+  object
+    method last_fired = r
+  end
+
+class fire_rate () =
+  let r = Component.init 0. in
+  object
+    method fire_rate = r
+  end
+
+class interact_resolver () =
+  let r = Component.init (fun () -> ()) in
+  object
+    method interact_resolver = r
+  end
 (** Archetype *)
 class type physics =
   object 
@@ -164,6 +194,14 @@ class type timeable =
     inherit deletable
   end
 
+class type interactable =
+  object
+    inherit Entity.t
+    inherit interact_resolver
+    inherit box
+    inherit position
+  end
+
 (** Real objects *)
 
 class block () =
@@ -187,6 +225,7 @@ class player () =
     inherit block ()
     inherit life ()
     inherit can_move ()
+    inherit gun_id ()
   end
 
 class enemy () =
@@ -215,4 +254,13 @@ class timer () =
     inherit Entity.t ()
     inherit time_left ()
     inherit tokill ()
+  end
+class gun () =
+  object
+    inherit block ()
+    inherit fire_seter ()
+    inherit gun_id ()
+    inherit fire_ok ()
+    inherit fire_rate ()
+    inherit interact_resolver ()
   end
