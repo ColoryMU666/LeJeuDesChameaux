@@ -116,10 +116,10 @@ class gun_id () =
     method gun_id = r
   end
 
-class fire_ok () =
+class can_shoot () =
   let r = Component.init true in
   object
-    method last_fired = r
+    method can_shoot = r
   end
 
 class fire_rate () =
@@ -226,6 +226,8 @@ class player () =
     inherit life ()
     inherit can_move ()
     inherit gun_id ()
+    inherit can_shoot ()
+    inherit fire_rate ()
   end
 
 class enemy () =
@@ -260,7 +262,6 @@ class gun () =
     inherit block ()
     inherit fire_seter ()
     inherit gun_id ()
-    inherit fire_ok ()
     inherit fire_rate ()
     inherit interact_resolver ()
   end

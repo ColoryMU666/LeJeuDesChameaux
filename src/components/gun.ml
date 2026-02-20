@@ -13,6 +13,8 @@ let resolve (v : Vector.t) (ammo : ammunition) (reacter : tag) =
 let interact_resolver (gun : gun) =
   let Global.{player1; _} = Global.get () in
   player1#gun_id#set gun#gun_id#get;
+  player1#fire_rate#set gun#fire_rate#get;
+  player1#can_shoot#set true;
   gun#tokill#set true
 
 let fire_laser () =
@@ -25,7 +27,7 @@ let fire_laser () =
   let values = Block.{ Block.default_set_values with
     pos_x = x;
     pos_y = y;
-    velocity = Vector.{x = target_x /. 60. ; y = target_y /. 60.};
+    velocity = Vector.(mult 5. (normalize {x = target_x ; y = target_y}));
     texture = Texture.(red);
     width = 10;
     height = 10;
@@ -46,7 +48,7 @@ let fire_glock () =
   let values = Block.{ Block.default_set_values with
     pos_x = x;
     pos_y = y;
-    velocity = Vector.{x = target_x /. 60. ; y = target_y /. 60.};
+    velocity = Vector.(mult 5. (normalize {x = target_x ; y = target_y}));
     texture = Texture.cyan;
     width = 10;
     height = 10;
@@ -70,6 +72,7 @@ let create_laser () =
   };
   g#fire_seter#set  (fun() -> ignore (fire_laser ()));
   g#gun_id#set 1;
+  g#fire_rate#set 1.;
   g#interact_resolver#set (fun () -> interact_resolver g);
   Interact_system.(register (g :> t));
   g 
@@ -87,6 +90,7 @@ let create_glock () =
   };
   g#fire_seter#set  (fun() -> ignore (fire_glock ()));
   g#gun_id#set 0;
+  g#fire_rate#set 30000.;
   g#interact_resolver#set (fun () -> interact_resolver g);
   Interact_system.(register (g :> t));
   g
@@ -95,4 +99,14 @@ let fire_func_ar = [|fire_glock; fire_laser|]
 
 let handle_fire () = 
   let Global.{player1; _} = Global.get () in
-  fire_func_ar.(player1#gun_id#get) ()
+  if player1#can_shoot#get then begin
+    player1#can_shoot#set false;
+    ignore(fire_func_ar.(player1#gun_id#get) ());
+    let t  = new timer () in
+    t#time_left#set player1#fire_rate#get;
+    t#time_out_fun#set (fun dt -> player1#can_shoot#set true);
+    Timer_system.(register (t :> t));
+    Clear_system.(register (t :> t))
+  end
+  else
+    ()

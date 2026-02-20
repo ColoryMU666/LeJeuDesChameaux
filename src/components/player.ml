@@ -25,6 +25,7 @@ let create (pos_x, pos_y, velocity, texture, width, height, mass) =
   };
   Lifebar_draw_system.(register (p:>t));
   p#gun_id#set 0;
+  p#fire_rate#set 30.;
   p
 
 
