@@ -104,10 +104,10 @@ class tokill () =
     method tokill = r
   end
 
-class fire_seter () =
+class shoot () =
   let r = Component.init (fun () -> ()) in
   object
-    method fire_seter = r
+    method shoot = r
   end
 
 class gun_id () =
@@ -220,22 +220,6 @@ class block () =
     inherit elasticity ()
   end
 
-class player () =
-  object
-    inherit block ()
-    inherit life ()
-    inherit can_move ()
-    inherit gun_id ()
-    inherit can_shoot ()
-    inherit fire_rate ()
-  end
-
-class enemy () =
-  object
-    inherit block ()
-    inherit life ()
-  end
-
 class camera () =
   object
     inherit Entity.t ()
@@ -246,22 +230,41 @@ class camera () =
     inherit mass ()
   end
 
-class ammunition () =
-  object
-    inherit block ()
-  end
-
 class timer () =
   object
     inherit Entity.t ()
     inherit time_left ()
     inherit tokill ()
   end
+
+class ammunition () =
+  object
+    inherit block ()
+  end
+
 class gun () =
   object
     inherit block ()
-    inherit fire_seter ()
+    inherit shoot ()
     inherit gun_id ()
+    inherit can_shoot ()
     inherit fire_rate ()
     inherit interact_resolver ()
+  end
+
+class player () =
+  let r = Component.init (None : gun option) in
+  object
+    inherit block ()
+    inherit life ()
+    inherit can_move ()
+    inherit can_shoot ()
+    inherit fire_rate ()
+    method curent_gun = r;
+  end
+
+class enemy () =
+  object
+    inherit block ()
+    inherit life ()
   end

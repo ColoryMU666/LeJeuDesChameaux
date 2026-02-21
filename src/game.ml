@@ -10,18 +10,20 @@ let init dt =
   Some ()
 
 let update dt =
+  let real_delta = (dt -. !last_dt) in
+  let delta = real_delta /. 25. in
+  last_dt := dt;
   let () = Camera.stop_camera () in
   let () = Input.handle_input () in
-  let delta = (dt -. !last_dt) /. 25. in
   let () = Camera.move () in
+  Player_manager_system.update delta;
   Move_system.update delta;
   Collision_system.update delta;
   Interact_system.update delta;
-  Timer_system.update delta;
+  Timer_system.update real_delta;
   Clear_system.update delta;
   Draw_system.update delta;
   Lifebar_draw_system.update delta;
-  last_dt := dt;
   None
 
 let (let@) f k = f k

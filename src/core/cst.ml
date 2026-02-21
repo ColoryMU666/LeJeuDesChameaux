@@ -33,9 +33,9 @@ let player_width = 20
 let player_height = 50
 let player_color = Texture.black
 let g = Vector.{x = 0.0; y = 2. }
-let player_speed = 7.
+let player_speed = 10.
 let player_jump_speed = 20.
-let player_fast_falling_speed = 1.
+let player_fast_falling_speed = 0.5
 
 let minimal_speed = 0.1
 let elasticity = 0.

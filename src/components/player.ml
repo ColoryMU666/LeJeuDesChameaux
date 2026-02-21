@@ -23,9 +23,9 @@ let create (pos_x, pos_y, velocity, texture, width, height, mass) =
     resolve = (fun (v:Vector.t) (reacter:tag) -> resolve v p reacter);
     tag = Player_tag {is_on_floor = false}
   };
+  p#curent_gun#set (Some (Gun.create_glock ()));
   Lifebar_draw_system.(register (p:>t));
-  p#gun_id#set 0;
-  p#fire_rate#set 30.;
+  Player_manager_system.(register (p:>t));
   p
 
 

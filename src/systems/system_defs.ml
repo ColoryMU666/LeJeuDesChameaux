@@ -1,5 +1,7 @@
 open Ecs
 
+module Player_manager_system = System.Make(Player_manager)
+
 module Collision_system = System.Make(Collision)
 
 module Move_system = System.Make(Move)
