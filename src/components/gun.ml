@@ -11,9 +11,19 @@ let resolve (v : Vector.t) (ammo : ammunition) (reacter : tag) =
   ammo#tokill#set true
 
 let interact_resolver (gun : gun) =
-  Gfx.debug "interaction\n%!";
+  Gfx.debug "interaction avec gun d'id %d\n%!" gun#gun_id#get;
   let Global.{player1; _} = Global.get () in
-  player1#curent_gun#set (Some(gun))
+  (match player1#curent_gun#get with
+  | Some g -> g#position#set (Vector.add player1#position#get Vector.{ x = (float Cst.player_width) +. 1. ; y = 0.});
+   g#tokill#set false;
+   Draw_system.(register (g :> t));
+   Collision_system.(register (g :> t));
+   Clear_system.(register (g :> t));
+   Move_system.(register (g :> t));
+   Interact_system.(register (g :> t))
+  | _ -> ());
+  player1#curent_gun#set (Some(gun));
+  gun#tokill#set true
 
 let fire_laser () =
   let a = new ammunition () in

@@ -63,6 +63,12 @@ class life () =
     method max_life = r2
   end
 
+class action () = 
+  let r = Component.init (fun () -> ()) in
+  object
+    method action = r
+  end
+
 type tag =
   | No_tag
   | Wall_tag
@@ -267,4 +273,5 @@ class enemy () =
   object
     inherit block ()
     inherit life ()
+    inherit action ()
   end

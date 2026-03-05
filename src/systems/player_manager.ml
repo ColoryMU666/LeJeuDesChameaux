@@ -34,7 +34,7 @@ let handle_movement dt e =
 let handle_fire dt (e:t) =
   if Input.is_pressed "Mouse1" then
     match e#curent_gun#get with
-    | None -> Gfx.debug "hit with fist"
+    | None -> Gfx.debug "hit with fist\n%!"
     | Some(gun) ->
       gun#shoot#get ();
   ;

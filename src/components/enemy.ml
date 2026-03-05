@@ -3,9 +3,13 @@ open Component_defs
 open System_defs
 
 let resolve (v : Vector.t) (enemy : enemy) (reacter : tag) =
-  enemy#velocity#set (Vector.mult 10. v);
-  enemy#life#set (enemy#life#get -. 10.);
-  Gfx.debug "The enemy has been hit\n%!"
+  (match reacter with
+  | Ally_projectile_tag {damage} -> enemy#life#set (enemy#life#get -. damage);
+  | _ -> ());
+  (*enemy#velocity#set (Vector.mult 10. v);*)
+  
+  (*Gfx.debug "The enemy has been hit\n%!"*)
+  ()
 
 let create (pos_x, pos_y, velocity, texture, width, height, mass) =
   let e = new enemy () in

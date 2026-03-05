@@ -40,6 +40,7 @@ let run () =
   let _walls = Block.walls () in
   let main_camera = Camera.create () in
   let player1 = Player.create_player () in
+  Enemy.enemy;
   let global = Global.{ window; ctx ; player1 ;main_camera} in
   Global.set global;
   let@ () = Gfx.main_loop ~limit:false init in

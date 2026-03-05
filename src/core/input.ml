@@ -52,9 +52,6 @@ let is_just_released key =
 let () =
   
   register action_just_pressed_table "k" (fun () -> ignore (Enemy.create (300., 300., Vector.{x=0. ; y=0.}, Texture.red, 20, 50, 1.)) );
-
-  register action_just_pressed_table "e" (fun () -> Global.is_interacting := true);
-  register action_just_released_table "e" (fun () -> Global.is_interacting := false);
   
   register action_just_pressed_table "g" (fun () -> ignore (Gun.create_laser ()));
 *)
