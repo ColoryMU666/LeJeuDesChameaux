@@ -11,6 +11,7 @@ let init dt =
 
 let update dt =
   let real_delta = (dt -. !last_dt) in
+  Timer_system.update real_delta;
   let delta = real_delta /. 25. in
   last_dt := dt;
   let () = Camera.stop_camera () in
@@ -20,8 +21,8 @@ let update dt =
   Move_system.update delta;
   Collision_system.update delta;
   Interact_system.update delta;
-  Timer_system.update real_delta;
   Clear_system.update delta;
+  Drawn_background_system.update delta;
   Draw_system.update delta;
   Lifebar_draw_system.update delta;
   None

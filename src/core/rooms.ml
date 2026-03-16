@@ -9,6 +9,7 @@ let create_door x y size =
     pos_y = y -. float(size.height);
     width = size.width;
     height = size.height;
+    z_level = Background;
   }
 
 let default_room () =

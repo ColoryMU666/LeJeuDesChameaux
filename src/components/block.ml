@@ -2,6 +2,10 @@ open Ecs
 open Component_defs
 open System_defs
 
+type z_level =
+  | Background
+  | Front
+
 type set_block_values ={
   pos_x : float;
   pos_y : float;
@@ -16,6 +20,7 @@ type set_block_values ={
   elasticity : float;
   resolve : Vector.t -> tag -> unit;
   tag : tag;
+  z_level : z_level
 }
 
 let default_set_values = {
@@ -32,6 +37,8 @@ let default_set_values = {
   elasticity = 1.0;
   resolve = (fun (_ : Vector.t) (_ : tag) -> ());
   tag = No_tag;
+  z_level = Front
+
 }
 
 let set_block b values =
@@ -50,7 +57,9 @@ let set_block b values =
   );
   Collision_system.(register (b:>t));
   Move_system.(register (b:>t));
-  Draw_system.(register (b:>t));
+  (match values.z_level with
+  | Front -> Draw_system.(register (b:>t))
+  | Background -> Drawn_background_system.(register (b:>t)));
   Clear_system.(register (b :> t));
   ()
 

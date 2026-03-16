@@ -12,6 +12,8 @@ module Timer_system = System.Make(Timer)
 
 module Clear_system = System.Make(Clear)
 
+module Drawn_background_system = System.Make(Draw_background)
+
 module Draw_system = System.Make(Draw)
 
 module Lifebar_draw_system = System.Make(Lifebar_draw)
