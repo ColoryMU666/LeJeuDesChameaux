@@ -30,4 +30,4 @@ let create (pos_x, pos_y, velocity, texture, width, height, mass) =
   Lifebar_draw_system.(register (e:>t));
   e
 
-let enemy = create (300., 300., Vector.{x=0. ; y=0.}, Texture.red, 20, 50, 1.)
+let enemy () = create (300., 300., Vector.{x=0. ; y=0.}, Texture.red, 20, 50, 1.)

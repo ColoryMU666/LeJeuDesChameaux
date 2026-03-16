@@ -5,6 +5,7 @@ type t = {
   ctx : Gfx.context;
   player1 : player;
   main_camera : camera;
+  room : room
 }
 
 let is_interacting = ref false

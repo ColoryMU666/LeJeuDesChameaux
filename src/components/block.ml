@@ -90,10 +90,10 @@ let walls () =
     elasticity = 0.;
     tag = Wall_tag;
   } in
-  List.map create
-    Cst.[ 
+  Array.map create
+    Cst.[| 
       {hvalues with pos_x = float(hwall1_x) ; pos_y = float(hwall1_y)};
       {hvalues with pos_x = float(hwall2_x) ; pos_y = float(hwall2_y)};
       {vvalues with pos_x = float(vwall1_x) ; pos_y = float(vwall1_y)};
       {vvalues with pos_x = float(vwall2_x) ; pos_y = float(vwall2_y)}
-    ]
+    |]

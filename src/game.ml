@@ -37,11 +37,10 @@ let run () =
   let window = Gfx.create  window_spec in
   let ctx = Gfx.get_context window in
   let () = Gfx.set_context_logical_size ctx 800 600 in
-  let _walls = Block.walls () in
   let main_camera = Camera.create () in
   let player1 = Player.create_player () in
-  Enemy.enemy;
-  let global = Global.{ window; ctx ; player1 ;main_camera} in
+  let room = Rooms.default_room () in
+  let global = Global.{window ; ctx ; player1 ; main_camera ; room} in
   Global.set global;
   let@ () = Gfx.main_loop ~limit:false init in
   let@ () = Gfx.main_loop update in ()

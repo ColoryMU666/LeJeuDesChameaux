@@ -77,6 +77,7 @@ type tag =
   | Enemy_tag of {is_on_floor : bool}
   | Enemy_projectile_tag of {damage : float}
   | Gun_tag of {gunType : int}
+  | Door
 
 class tagged () =
   let r = Component.init No_tag in
@@ -274,4 +275,15 @@ class enemy () =
     inherit block ()
     inherit life ()
     inherit action ()
+  end
+
+class room () =
+  let walls = Component.init ([||] : block array) in
+  let doors = Component.init ([||] : block array) in
+  let enemies = Component.init ([||] : enemy array) in
+  object
+    inherit Entity.t ()
+    method walls = walls
+    method doors = doors
+    method enemies = enemies
   end

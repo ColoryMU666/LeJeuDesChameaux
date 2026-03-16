@@ -4,6 +4,8 @@ module Player_manager_system = System.Make(Player_manager)
 
 module Collision_system = System.Make(Collision)
 
+module Room_loader_system = System.Make(Room_loader)
+
 module Move_system = System.Make(Move)
 
 module Timer_system = System.Make(Timer)

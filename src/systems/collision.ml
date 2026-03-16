@@ -97,8 +97,9 @@ let update dt el =
       | (_, Ally_projectile_tag _) | (Ally_projectile_tag _, _)
       | (_, Enemy_projectile_tag _) | (Enemy_projectile_tag _, _) ->
         ()
-      | (Player_tag _, _) -> physic_collision e1 e2 (Some 0)
-      | (_, Player_tag _)  -> physic_collision e1 e2 (Some 1)
-      | (_, _) -> physic_collision e1 e2 None
+      | (Player_tag _, Wall_tag) -> physic_collision e1 e2 (Some 0)
+      | (Wall_tag, Player_tag _) -> physic_collision e1 e2 (Some 1)
+      | (Wall_tag, _) | (_, Wall_tag) -> physic_collision e1 e2 None
+      | (_, _) -> ()
       )
   done
