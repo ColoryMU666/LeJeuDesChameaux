@@ -167,7 +167,6 @@ class type collidable =
     inherit resolver
     inherit tagged
     inherit forces
-    inherit resolver
     inherit elasticity
   end
 
@@ -277,9 +276,20 @@ class enemy () =
     inherit action ()
   end
 
+class door () =
+  object
+    inherit block ()
+  end
+
+type doors = {
+  up : door option;
+  left : door option;
+  down : door option;
+  right : door option;
+}
 class room () =
   let walls = Component.init ([||] : block array) in
-  let doors = Component.init ([||] : block array) in
+  let doors = Component.init ({up = None; left = None; down = None; right = None} : doors) in
   let enemies = Component.init ([||] : enemy array) in
   object
     inherit Entity.t ()

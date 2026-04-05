@@ -7,6 +7,7 @@ let last_dt = ref 0.
 let init dt =
   Ecs.System.init_all dt;
   last_dt := dt;
+  Rooms.create_dungeon 7;
   Some ()
 
 let update dt =
