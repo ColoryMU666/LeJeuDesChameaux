@@ -7,7 +7,7 @@ let last_dt = ref 0.
 let init dt =
   Ecs.System.init_all dt;
   last_dt := dt;
-  Rooms.create_dungeon 7;
+  Dungeon.create_dungeon 7;
   Some ()
 
 let update dt =
@@ -41,16 +41,8 @@ let run () =
   let () = Gfx.set_context_logical_size ctx 800 600 in
   let main_camera = Camera.create () in
   let player1 = Player.create_player () in
-  let room = Rooms.default_room () in
+  let room = Rooms.room_up_left_right () in
   let global = Global.{window ; ctx ; player1 ; main_camera ; room} in
   Global.set global;
   let@ () = Gfx.main_loop ~limit:false init in
   let@ () = Gfx.main_loop update in ()
-
-
-
-
-
-
-
-
