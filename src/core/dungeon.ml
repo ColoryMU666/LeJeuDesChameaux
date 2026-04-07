@@ -1,29 +1,6 @@
 open Component_defs
 open Rect
 open Rooms
-
-type room_doors = {
-  up : bool;
-  left : bool;
-  down : bool;
-  right : bool;
-}
-type room_map = {
-  room_blueprint_id : int;
-  doors : room_doors;
-}
-
-type dungeon = {
-  rooms : room_map option array array;
-  links : ((int * int) * (int * int)) list
-}
-
-type direction =
-  | Up
-  | Left
-  | Right
-  | Down
-
 module IntMap = Map.Make(Int)
 
 let () = Random.self_init ()
@@ -32,56 +9,95 @@ let room_id_map, _ =
   let l = [
     (* special rooms *)
     (default_room,
-      {up = false; left = true ; down = false; right = true });
+      {up = false; left = true ; down = false; right = true },
+      Enemy_room);
     (boss_room_left,
-      {up = false; left = true ; down = false; right = false});
+      {up = false; left = true ; down = false; right = false},
+      Boss_room);
     (boss_room_right,
-      {up = false; left = false; down = false; right = true });
+      {up = false; left = false; down = false; right = true },
+      Boss_room);
+    
+
+    (* ROOMS HERE ONLY FOR TESTING AND TO COMPLETE ALL THE TYPES OF ROOMS, THEY ARE ENEMY ROOM *)
+    (room_up,
+      {up = true ; left = false; down = false; right = false},
+      Boss_room);
+    (room_down,
+      {up = false; left = false; down = true ; right = false},
+      Boss_room);
+    (room_up,
+      {up = true ; left = false; down = false; right = false},
+      Start_room);
+    (room_left,
+      {up = false; left = true ; down = false; right = false},
+      Start_room);
+    (room_down,
+      {up = false; left = false; down = true ; right = false},
+      Start_room);
+    (room_right,
+      {up = false; left = false; down = false; right = true },
+      Start_room);
     
     (* One direction rooms *)
     (room_up,
-      {up = true ; left = false; down = false; right = false});
+      {up = true ; left = false; down = false; right = false},
+      Enemy_room);
     (room_left,
-      {up = false; left = true ; down = false; right = false});
+      {up = false; left = true ; down = false; right = false},
+      Enemy_room);
     (room_down,
-      {up = false; left = false; down = true ; right = false});
+      {up = false; left = false; down = true ; right = false},
+      Enemy_room);
     (room_right,
-      {up = false; left = false; down = false; right = true });
+      {up = false; left = false; down = false; right = true },
+      Enemy_room);
     
     
     (* Two directions rooms *)
     (room_up_left,
-      {up = true ; left = true ; down = false; right = false});
+      {up = true ; left = true ; down = false; right = false},
+      Enemy_room);
     (room_up_down,
-      {up = true ; left = false; down = true ; right = false});
+      {up = true ; left = false; down = true ; right = false},
+      Enemy_room);
     (room_up_right,
-      {up = true ; left = false; down = false; right = true });
+      {up = true ; left = false; down = false; right = true },
+      Enemy_room);
     
     (room_left_down,
-      {up = false; left = true ; down = true ; right = false});
+      {up = false; left = true ; down = true ; right = false},
+      Enemy_room);
     (room_left_right,
-      {up = false; left = true ; down = false; right = true });
+      {up = false; left = true ; down = false; right = true },
+      Enemy_room);
     
     (room_down_right,
-      {up = false; left = false; down = true ; right = true });
+      {up = false; left = false; down = true ; right = true },
+      Enemy_room);
 
     (* Three directions rooms *)
     (room_up_left_down,
-      {up = true ; left = true ; down = true ; right = false});
+      {up = true ; left = true ; down = true ; right = false},
+      Enemy_room);
     (room_up_left_right,
-      {up = true ; left = true ; down = false; right = true });
+      {up = true ; left = true ; down = false; right = true },
+      Enemy_room);
     (room_up_down_right,
-      {up = true ; left = false; down = true ; right = true });
+      {up = true ; left = false; down = true ; right = true },
+      Enemy_room);
     (room_left_down_right,
-      {up = false; left = true ; down = true ; right = true });
+      {up = false; left = true ; down = true ; right = true },
+      Enemy_room);
     
     (* Four directions rooms *)
     (room_up_left_down_right,
-      {up = true ; left = true ; down = true ; right = true });
+      {up = true ; left = true ; down = true ; right = true },
+      Enemy_room);
   ] in
   List.fold_left 
-    (fun (acc, i) (room, door_number) -> 
-      (IntMap.add i (room, door_number) acc, i+1))
+    (fun (acc, i) (room, door_number, tag) -> 
+      (IntMap.add i (room, door_number, tag) acc, i+1))
   (IntMap.empty, 0) l
 
 let has_link links (r1, c1) (r2, c2) =
@@ -99,16 +115,16 @@ let print_dungeon (m : bool array array)
   let row_prefix_width = String.length (string_of_int (rows - 1)) + 1 in
   let pad = String.make row_prefix_width ' ' in
   (* Print column header *)
-  print_string pad;
+  Gfx.debug "%s" pad;
   for c = 0 to cols - 1 do
-    print_string (string_of_int c);
-    if c < cols - 1 then print_string " "
+    Gfx.debug "%d" c;
+    if c < cols - 1 then Gfx.debug " "
   done;
-  print_newline ();
+  Gfx.debug "\n";
   for r = 0 to rows - 1 do
     let row_label = string_of_int r in
-    print_string row_label;
-    print_string (String.make (row_prefix_width - String.length row_label) ' ');
+    Gfx.debug "%s" row_label;
+    Gfx.debug "%s" (String.make (row_prefix_width - String.length row_label) ' ');
     (* Print nodes and horizontal links *)
     for c = 0 to cols - 1 do
       let node_char =
@@ -117,26 +133,27 @@ let print_dungeon (m : bool array array)
         else if m.(r).(c) then "#"
         else " "
       in
-      print_string node_char;
+      Gfx.debug "%s" node_char;
       if c < cols - 1 then
         if has_link links (r, c) (r, c + 1) then
-          print_string "-"
+          Gfx.debug "-"
         else
-          print_string " "
+          Gfx.debug " "
     done;
-    print_newline ();
+    Gfx.debug "\n";
     (* Print vertical links *)
     if r < rows - 1 then begin
-      print_string pad;
+      Gfx.debug "%s" pad;
       for c = 0 to cols - 1 do
         if has_link links (r, c) (r + 1, c) then
-          print_string "|"
+          Gfx.debug "|"
         else
-          print_string " ";
-        if c < cols - 1 then print_string " "
+          Gfx.debug " ";
+        if c < cols - 1 then Gfx.debug " "
       done;
-      print_newline ();
-    end
+      Gfx.debug "\n"
+    end;
+    Gfx.debug "%!";
   done
 
 let create_path tab path_size start =
@@ -227,15 +244,65 @@ let create_path tab path_size start =
   let links = add_annex_room links start boss_room in
   let links = add_more_links links start boss_room in
   boss_room, links
-  
-let create_dungeon size : unit =
+
+let find_specific_rooms directions room_tag =
+  IntMap.fold (fun id (room_creator, doors, tag) acc -> 
+    if tag = room_tag && doors = directions then
+      (id, room_creator) :: acc
+    else
+      acc
+  ) room_id_map []
+
+let assign_rooms (tab : bool array array) 
+                 (links : ((int * int) * (int * int)) list) 
+                 (start_room : int * int)
+                 (boss_room : int * int) 
+                 : room_map option array array =
+  let size = Array.length tab in
+  Array.init size (fun i ->
+    Array.init size (fun j ->
+      if not tab.(i).(j) then None
+      else begin
+        let doors = {
+          up    = has_link links (i, j) (i - 1, j);
+          down  = has_link links (i, j) (i + 1, j);
+          left  = has_link links (i, j) (i, j - 1);
+          right = has_link links (i, j) (i, j + 1);
+        } in
+        let room_tag =
+          if (i, j) = start_room then Start_room
+          else if (i, j) = boss_room then Boss_room
+          else Enemy_room
+        in
+        let candidates = find_specific_rooms doors room_tag in
+        match candidates with
+        | [] -> failwith (Printf.sprintf "No matching room for room %d %d" i j)
+        | _ ->
+          let idx = Random.int (List.length candidates) in
+          let (room_blueprint_id, room_creator) = List.nth candidates idx in
+          Some {room_blueprint_id; doors; room_tag; room_creator}
+      end
+    )
+  )
+
+let create_dungeon size : dungeon =
   let tab = Array.init size (fun _ -> Array.init size (fun _ -> false)) in
   let path_size = (size * size / 5 - 3) +  Random.int (7) in
-  let spawn = (Random.int size, Random.int size) in
-  let boss, links = create_path tab path_size spawn in
-  print_dungeon tab links spawn boss;
-  let i, j = spawn in
-  let x, y = boss in
-  print_endline ("path size : " ^ (string_of_int path_size));
-  print_endline ("start : " ^ (string_of_int i) ^ " " ^ (string_of_int j) ^ " | end : " ^ (string_of_int x) ^ " " ^ (string_of_int y));
-  ()
+  let start = (Random.int size, Random.int size) in
+  let boss, links = create_path tab path_size start in
+
+  (* Some prints for debuging *)
+  print_dungeon tab links start boss;
+  let start_i, start_j = start in
+  let boss_i, boss_j = boss in
+  Gfx.debug "path size : %s" (string_of_int path_size);
+  Gfx.debug "start : %d %d | end : %d %d%!" start_i start_i boss_i boss_j;
+
+  let dg = new dungeon () in
+  let rooms = assign_rooms tab links start boss in
+  dg#layout#set ({rooms ; links});
+  dg#visited#set (Array.init size (fun i -> Array.init size (fun j -> if (i, j) = start then true else false)));
+  (match rooms.(start_i).(start_j) with
+  | None -> failwith "Start room should not be None in the dungeon layout."
+  | Some {room_creator; _} -> dg#curent_room#set (Some (room_creator ())));
+  dg

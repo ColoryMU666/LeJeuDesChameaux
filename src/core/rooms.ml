@@ -1,17 +1,27 @@
 open Component_defs
 open Rect
+open System_defs
 
 let small_door_size = {width = 50 ; height = 100}
 
-let create_door x y size =
-  Block.create {Block.default_set_values with
+let door_interact_resolver direction () =
+  let Global.{dungeon; _} as g = Global.get () in
+  dungeon#change_room#set (Some(direction))
+
+let create_door x y size dir =
+  let d = new door () in
+  d#direction#set dir;
+  Block.set_block d {Block.default_set_values with
     tag = Door;
     pos_x = x -. float(size.width) /. 2.;
     pos_y = y -. float(size.height);
     width = size.width;
     height = size.height;
     z_level = Background;
-  }
+  };
+  d#interact_resolver#set (door_interact_resolver dir);
+  Interact_system.register (d :> interactable);
+  d
 
 let create_platform x y w h =
   Block.(create {default_set_values with
@@ -29,9 +39,9 @@ let default_room () =
   res#enemies#set [|(Enemy.enemy ())|];
   res#doors#set {
     up = None;
-    left = Some (create_door 100. (float(Cst.hwall2_y)) small_door_size);
+    left = Some (create_door 100. (float(Cst.hwall2_y)) small_door_size Left);
     down = None;
-    right = Some (create_door 700. (float(Cst.hwall2_y)) small_door_size);
+    right = Some (create_door 700. (float(Cst.hwall2_y)) small_door_size Right);
   };
   res
 
@@ -41,7 +51,7 @@ let boss_room_left () =
   res#enemies#set [|(Enemy.enemy ())|];
   res#doors#set {
     up = None;
-    left = Some (create_door 100. (float(Cst.hwall2_y)) small_door_size);
+    left = Some (create_door 100. (float(Cst.hwall2_y)) small_door_size Left);
     down = None;
     right = None;
   };
@@ -55,7 +65,7 @@ let boss_room_right () =
     up = None;
     left = None;
     down = None;
-    right = Some (create_door 700. (float(Cst.hwall2_y)) small_door_size);
+    right = Some (create_door 700. (float(Cst.hwall2_y)) small_door_size Right);
   };
   res
 
@@ -65,9 +75,9 @@ let room_left_right () =
   res#enemies#set [|(Enemy.enemy ()); (Enemy.enemy ())|];
   res#doors#set {
     up = None;
-    left = Some (create_door 100. (float(Cst.hwall2_y)) small_door_size);
+    left = Some (create_door 100. (float(Cst.hwall2_y)) small_door_size Left);
     down = None;
-    right = Some (create_door 700. (float(Cst.hwall2_y)) small_door_size);
+    right = Some (create_door 700. (float(Cst.hwall2_y)) small_door_size Right);
   };
   res
 
@@ -77,7 +87,7 @@ let room_left () =
   res#enemies#set [|(Enemy.enemy ()); (Enemy.enemy ())|];
   res#doors#set {
     up = None;
-    left = Some (create_door 100. (float(Cst.hwall2_y)) small_door_size);
+    left = Some (create_door 100. (float(Cst.hwall2_y)) small_door_size Left);
     down = None;
     right = None;
   };
@@ -91,7 +101,7 @@ let room_right () =
     up = None;
     left = None;
     down = None;
-    right = Some (create_door 700. (float(Cst.hwall2_y)) small_door_size);
+    right = Some (create_door 700. (float(Cst.hwall2_y)) small_door_size Right);
   };
   res
 
@@ -110,7 +120,7 @@ let room_up () =
   ]);
   res#enemies#set [|(Enemy.enemy ()); (Enemy.enemy ())|];
   res#doors#set {
-    up = Some (create_door 400. 180. small_door_size);
+    up = Some (create_door 400. 180. small_door_size Up);
     left = None;
     down = None;
     right = None;
@@ -137,7 +147,7 @@ let room_down () =
   res#doors#set {
     up = None;
     left = None;
-    down = Some (create_door 400. (float(Cst.hwall2_y)) small_door_size);
+    down = Some (create_door 400. (float(Cst.hwall2_y)) small_door_size Down);
     right = None;
   };
   res
@@ -160,10 +170,10 @@ let room_up_left_down_right () =
   ]);
   res#enemies#set [|(Enemy.enemy ()); (Enemy.enemy ())|];
   res#doors#set {
-    up = Some (create_door 400. 180. small_door_size);
-    left = Some (create_door 82. 500. small_door_size);
-    down = Some (create_door 400. (float(Cst.hwall2_y)) small_door_size);
-    right = Some (create_door 718. 340. small_door_size);
+    up = Some (create_door 400. 180. small_door_size Up);
+    left = Some (create_door 82. 500. small_door_size Left);
+    down = Some (create_door 400. (float(Cst.hwall2_y)) small_door_size Down);
+    right = Some (create_door 718. 340. small_door_size Right);
   };
   res
 
@@ -185,9 +195,9 @@ let room_up_left_down () =
   ]);
   res#enemies#set [|(Enemy.enemy ()); (Enemy.enemy ())|];
   res#doors#set {
-    up = Some (create_door 400. 180. small_door_size);
-    left = Some (create_door 82. 500. small_door_size);
-    down = Some (create_door 400. (float(Cst.hwall2_y)) small_door_size);
+    up = Some (create_door 400. 180. small_door_size Up);
+    left = Some (create_door 82. 500. small_door_size Left);
+    down = Some (create_door 400. (float(Cst.hwall2_y)) small_door_size Down);
     right = None;
   };
   res
@@ -207,10 +217,10 @@ let room_up_left_right () =
   ]);
   res#enemies#set [|(Enemy.enemy ()); (Enemy.enemy ())|];
   res#doors#set {
-    up = Some (create_door 400. 180. small_door_size);
-    left = Some (create_door 100. (float(Cst.hwall2_y)) small_door_size);
+    up = Some (create_door 400. 180. small_door_size Up);
+    left = Some (create_door 100. (float(Cst.hwall2_y)) small_door_size Left);
     down = None;
-    right = Some (create_door 700. (float(Cst.hwall2_y)) small_door_size);
+    right = Some (create_door 700. (float(Cst.hwall2_y)) small_door_size Right);
   };
   res
 
@@ -229,10 +239,10 @@ let room_up_right () =
   ]);
   res#enemies#set [|(Enemy.enemy ()); (Enemy.enemy ())|];
   res#doors#set {
-    up = Some (create_door 400. 180. small_door_size);
+    up = Some (create_door 400. 180. small_door_size Up);
     left = None;
     down = None;
-    right = Some (create_door 700. (float(Cst.hwall2_y)) small_door_size);
+    right = Some (create_door 700. (float(Cst.hwall2_y)) small_door_size Right);
   };
   res
 
@@ -251,8 +261,8 @@ let room_up_left () =
   ]);
   res#enemies#set [|(Enemy.enemy ()); (Enemy.enemy ())|];
   res#doors#set {
-    up = Some (create_door 400. 180. small_door_size);
-    left = Some (create_door 100. (float(Cst.hwall2_y)) small_door_size);
+    up = Some (create_door 400. 180. small_door_size Up);
+    left = Some (create_door 100. (float(Cst.hwall2_y)) small_door_size Left);
     down = None;
     right = None;
   };
@@ -276,9 +286,9 @@ let room_up_down () =
   ]);
   res#enemies#set [|(Enemy.enemy ()); (Enemy.enemy ())|];
   res#doors#set {
-    up = Some (create_door 400. 180. small_door_size);
+    up = Some (create_door 400. 180. small_door_size Up);
     left = None;
-    down = Some (create_door 400. (float(Cst.hwall2_y)) small_door_size);
+    down = Some (create_door 400. (float(Cst.hwall2_y)) small_door_size Down);
     right = None;
   };
   res
@@ -302,8 +312,8 @@ let room_left_down () =
   res#enemies#set [|(Enemy.enemy ()); (Enemy.enemy ())|];
   res#doors#set {
     up = None;
-    left = Some (create_door 82. 340. small_door_size);
-    down = Some (create_door 400. (float(Cst.hwall2_y)) small_door_size);
+    left = Some (create_door 82. 340. small_door_size Left);
+    down = Some (create_door 400. (float(Cst.hwall2_y)) small_door_size Down);
     right = None;
   };
   res
@@ -328,8 +338,8 @@ let room_down_right () =
   res#doors#set {
     up = None;
     left = None;
-    down = Some (create_door 400. (float(Cst.hwall2_y)) small_door_size);
-    right = Some (create_door 718. 340. small_door_size);
+    down = Some (create_door 400. (float(Cst.hwall2_y)) small_door_size Down);
+    right = Some (create_door 718. 340. small_door_size Right);
   };
   res
 
@@ -351,10 +361,10 @@ let room_up_down_right () =
   ]);
   res#enemies#set [|(Enemy.enemy ()); (Enemy.enemy ())|];
   res#doors#set {
-    up = Some (create_door 400. 180. small_door_size);
+    up = Some (create_door 400. 180. small_door_size Up);
     left = None;
-    down = Some (create_door 400. (float(Cst.hwall2_y)) small_door_size);
-    right = Some (create_door 718. 340. small_door_size);
+    down = Some (create_door 400. (float(Cst.hwall2_y)) small_door_size Down);
+    right = Some (create_door 718. 340. small_door_size Right);
   };
   res
 
@@ -377,8 +387,8 @@ let room_left_down_right () =
   res#enemies#set [|(Enemy.enemy ()); (Enemy.enemy ())|];
   res#doors#set {
     up = None;
-    left = Some (create_door 82. 340. small_door_size);
-    down = Some (create_door 400. (float(Cst.hwall2_y)) small_door_size);
-    right = Some (create_door 718. 340. small_door_size);
+    left = Some (create_door 82. 340. small_door_size Left);
+    down = Some (create_door 400. (float(Cst.hwall2_y)) small_door_size Down);
+    right = Some (create_door 718. 340. small_door_size Right);
   };
   res

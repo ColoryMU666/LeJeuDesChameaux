@@ -140,6 +140,7 @@ class interact_resolver () =
   object
     method interact_resolver = r
   end
+
 (** Archetype *)
 class type physics =
   object 
@@ -276,9 +277,18 @@ class enemy () =
     inherit action ()
   end
 
+type direction =
+  | Up
+  | Left
+  | Right
+  | Down
+
 class door () =
+  let d = Component.init Up in
   object
     inherit block ()
+    inherit interact_resolver ()
+    method direction = d
   end
 
 type doors = {
@@ -287,6 +297,7 @@ type doors = {
   down : door option;
   right : door option;
 }
+
 class room () =
   let walls = Component.init ([||] : block array) in
   let doors = Component.init ({up = None; left = None; down = None; right = None} : doors) in
@@ -296,4 +307,41 @@ class room () =
     method walls = walls
     method doors = doors
     method enemies = enemies
+  end
+
+type room_doors = {
+  up : bool;
+  left : bool;
+  down : bool;
+  right : bool;
+}
+
+type room_tag =
+  | Boss_room
+  | Start_room
+  | Enemy_room
+  | Treasure_room
+
+type room_map = {
+  room_blueprint_id : int;
+  doors : room_doors;
+  room_tag : room_tag;
+  room_creator : unit -> room
+}
+
+type dungeon_layout = {
+  rooms : room_map option array array;
+  links : ((int * int) * (int * int)) list
+}
+
+class dungeon () =
+  let layout = Component.init ({rooms = [||] ; links = []} : dungeon_layout) in
+  let visited = Component.init ([||] : bool array array) in
+  let curent = Component.init (None : room option) in
+  let change_room = Component.init (None : direction option) in
+  object
+    method layout = layout
+    method visited = visited
+    method curent_room = curent
+    method change_room = change_room
   end

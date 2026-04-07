@@ -5,7 +5,7 @@ type t = {
   ctx : Gfx.context;
   player1 : player;
   main_camera : camera;
-  room : room
+  dungeon : dungeon;
 }
 
 val is_interacting : bool ref
