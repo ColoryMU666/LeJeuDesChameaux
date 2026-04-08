@@ -13,6 +13,21 @@ let magenta = Color(Gfx.color 255 0 255 255)
 let purple = Color(Gfx.color 92 34 191 255)
 let transparent = Color (Gfx.color 0 0 0 0)
 
+let glock_txt = ref (Color (Gfx.color 0 0 0 0))
+let glock_bullet_txt = ref (Color (Gfx.color 0 0 0 0))
+let player_txt = ref (Color (Gfx.color 0 0 0 0))
+
+let rl_txt = ref (Color (Gfx.color 0 0 0 0))
+let rl_rocket_txt = ref (Color (Gfx.color 0 0 0 0))
+
+let load_txt ctx =
+  glock_txt := Image (Gfx.get_resource (Gfx.load_image ctx "resources/gun_assets/individual_sprites/Guns/Glock - P80 [64x48].png"));
+  glock_bullet_txt := Image (Gfx.get_resource (Gfx.load_image ctx "resources/gun_assets/individual_sprites/Bullets & Ammo/Glock - P80/Bullet.png"));
+  rl_txt := Image (Gfx.get_resource (Gfx.load_image ctx "resources/gun_assets/individual_sprites/Guns/Bazooka - M20 [192x32].png"));
+  rl_rocket_txt := Image (Gfx.get_resource (Gfx.load_image ctx "resources/gun_assets/individual_sprites/Bullets & Ammo/Bazooka - M20 - Copy/M20 Rocket.png"));
+  player_txt := Image (Gfx.get_resource (Gfx.load_image ctx "resources/player_assets/player_noweapon.png"))
+  
+
 let draw ctx dst pos box src =
   let x = int_of_float pos.Vector.x in
   let y = int_of_float pos.Vector.y in

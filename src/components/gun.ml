@@ -27,7 +27,7 @@ let resolve_rl (v : Vector.t) (ammo : ammunition) (reacter : tag) =
     tag = Ally_projectile_tag {damage = 50.}
     } in
   Block.set_block a values;
-  Time.create_timer 500. (fun dt -> a#tokill#set true)
+  Time.create_timer 1. (fun dt -> a#tokill#set true)
   
 let interact_resolver (gun : gun) =
   Gfx.debug "interaction avec gun d'id %d\n%!" gun#gun_id#get;
@@ -75,7 +75,7 @@ let fire_glock () =
     pos_x = x;
     pos_y = y;
     velocity = Vector.(mult 5. (normalize {x = target_x ; y = target_y}));
-    texture = Texture.cyan;
+    texture = !(Texture.glock_bullet_txt);
     width = 10;
     height = 10;
     resolve = (fun (v:Vector.t) (reacter:tag) -> resolve v a reacter);
@@ -117,9 +117,9 @@ let fire_rl () =
     pos_x = x;
     pos_y = y;
     velocity = Vector.(mult 5. (normalize {x = target_x ; y = target_y}));
-    texture = Texture.purple;
-    width = 10;
-    height = 10;
+    texture = !(Texture.rl_rocket_txt);
+    width = 32;
+    height = 16;
     resolve = (fun (v:Vector.t) (reacter:tag) -> resolve_rl v a reacter);
     elasticity = 0.;
     tag = Ally_projectile_tag {damage = 30.}
@@ -162,9 +162,9 @@ let create_glock () =
   Block.set_block g {Block.default_set_values with
     pos_x = 200.;
     pos_y = 100.;
-    texture = Texture.magenta;
-    width = 10;
-    height = 10;
+    texture = !(Texture.glock_txt);
+    width = 64;
+    height = 48;
     default_forces = Some(Cst.g);
     tag = Gun_tag {gunType = 0};
   };
@@ -198,9 +198,9 @@ let create_rl () =
   Block.set_block g {Block.default_set_values with
     pos_x = 200.;
     pos_y = 100.;
-    texture = Texture.magenta;
-    width = 10;
-    height = 10;
+    texture = !(Texture.rl_txt);
+    width = 192;
+    height = 32;
     default_forces = Some(Cst.g);
     tag = Gun_tag {gunType = 3};
   };
