@@ -10,22 +10,28 @@ let init dt =
   Some ()
 
 let update dt =
-  let real_delta = (dt -. !last_dt) in
-  Timer_system.update real_delta;
-  let delta = real_delta /. 25. in
-  last_dt := dt;
-  let () = Camera.stop_camera () in
-  let () = Input.handle_input () in
-  let () = Camera.move () in
-  Player_manager_system.update delta;
-  Move_system.update delta;
-  Collision_system.update delta;
-  Interact_system.update delta;
-  Clear_system.update delta;
-  Drawn_background_system.update delta;
-  Draw_system.update delta;
-  Lifebar_draw_system.update delta;
-  None
+  match (Global.get ()).state with
+  | Playing -> begin
+    let real_delta = (dt -. !last_dt) in
+    Timer_system.update real_delta;
+    let delta = real_delta /. 25. in
+    last_dt := dt;
+    let () = Camera.stop_camera () in
+    let () = Input.handle_input () in
+    let () = Camera.move () in
+    Player_manager_system.update delta;
+    Interact_system.update delta;
+    Move_system.update delta;
+    Collision_system.update delta;
+    Room_loader_system.update delta;
+    Clear_system.update delta;
+    Draw_background_system.update delta;
+    Draw_system.update delta;
+    Lifebar_draw_system.update delta;
+    None
+  end
+  | Pause ->
+    None
 
 let (let@) f k = f k
 
@@ -43,12 +49,14 @@ let run () =
   let main_camera = Camera.create () in
   let player1 = Player.create_player () in
   let dungeon = Dungeon.create_dungeon 7 in
+  let state = Global.Playing in
   let global = Global.{
     window;
     ctx;
     player1;
     main_camera;
-    dungeon
+    dungeon;
+    state;
   } in
   Global.set global;
   let@ () = Gfx.main_loop ~limit:false init in

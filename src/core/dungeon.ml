@@ -296,13 +296,14 @@ let create_dungeon size : dungeon =
   let start_i, start_j = start in
   let boss_i, boss_j = boss in
   Gfx.debug "path size : %s" (string_of_int path_size);
-  Gfx.debug "start : %d %d | end : %d %d%!" start_i start_i boss_i boss_j;
+  Gfx.debug "start : %d %d | end : %d %d\n%!" start_i start_i boss_i boss_j;
 
   let dg = new dungeon () in
   let rooms = assign_rooms tab links start boss in
   dg#layout#set ({rooms ; links});
   dg#visited#set (Array.init size (fun i -> Array.init size (fun j -> if (i, j) = start then true else false)));
+  dg#current_room_pos#set start;
   (match rooms.(start_i).(start_j) with
   | None -> failwith "Start room should not be None in the dungeon layout."
-  | Some {room_creator; _} -> dg#curent_room#set (Some (room_creator ())));
+  | Some {room_creator; _} -> dg#current_room#set (Some (room_creator ())));
   dg

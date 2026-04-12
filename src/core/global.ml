@@ -1,11 +1,16 @@
 open Component_defs
 
+type game_state =
+  | Playing
+  | Pause
+
 type t = {
   window : Gfx.window;
   ctx : Gfx.context;
   player1 : player;
   main_camera : camera;
   dungeon : dungeon;
+  state : game_state;
 }
 
 let is_interacting = ref false

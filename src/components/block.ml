@@ -59,7 +59,7 @@ let set_block b values =
   Move_system.(register (b:>t));
   (match values.z_level with
   | Front -> Draw_system.(register (b:>t))
-  | Background -> Drawn_background_system.(register (b:>t)));
+  | Background -> Draw_background_system.(register (b:>t)));
   Clear_system.(register (b :> t));
   ()
 

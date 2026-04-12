@@ -339,9 +339,11 @@ class dungeon () =
   let visited = Component.init ([||] : bool array array) in
   let curent = Component.init (None : room option) in
   let change_room = Component.init (None : direction option) in
+  let current_room_pos = Component.init (0, 0) in
   object
     method layout = layout
     method visited = visited
-    method curent_room = curent
+    method current_room = curent
+    method current_room_pos = current_room_pos
     method change_room = change_room
   end
