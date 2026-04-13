@@ -55,7 +55,7 @@ let fire_laser () =
     pos_x = x;
     pos_y = y;
     velocity = Vector.(mult 5. (normalize {x = target_x ; y = target_y}));
-    texture = Texture.(red);
+    texture = !(Texture.laser_laser_txt);
     width = 10;
     height = 10;
     resolve = (fun (v:Vector.t) (reacter:tag) -> resolve v a reacter);
@@ -96,7 +96,7 @@ let fire_shotgun () =
     pos_x = x;
     pos_y = y;
     velocity = Vector.(mult 10. (normalize {x = target_x +. ((float i) *. 20.); y = target_y +. ((float i) *. 20.)}));
-    texture = Texture.yellow;
+    texture = !(Texture.shotgun_pelet_txt);
     width = 10;
     height = 10;
     resolve = (fun (v:Vector.t) (reacter:tag) -> resolve v a reacter);
@@ -163,8 +163,8 @@ let create_glock () =
     pos_x = 200.;
     pos_y = 100.;
     texture = !(Texture.glock_txt);
-    width = 64;
-    height = 48;
+    width = 30;
+    height = 20;
     default_forces = Some(Cst.g);
     tag = Gun_tag {gunType = 0};
   };
@@ -180,9 +180,9 @@ let create_shotgun () =
   Block.set_block g {Block.default_set_values with
     pos_x = 200.;
     pos_y = 100.;
-    texture = Texture.magenta;
-    width = 10;
-    height = 10;
+    texture = !(Texture.shotgun_txt);
+    width = 49;
+    height = 16;
     default_forces = Some(Cst.g);
     tag = Gun_tag {gunType = 2};
   };
@@ -198,9 +198,9 @@ let create_rl () =
   Block.set_block g {Block.default_set_values with
     pos_x = 200.;
     pos_y = 100.;
-    texture = !(Texture.rl_txt);
-    width = 192;
-    height = 32;
+    texture = !(Texture.rl_txt) (*Texture.cyan*);
+    width = 59;
+    height = 11;
     default_forces = Some(Cst.g);
     tag = Gun_tag {gunType = 3};
   };
@@ -210,5 +210,3 @@ let create_rl () =
   g#interact_resolver#set (fun () -> interact_resolver g);
   Interact_system.(register (g :> t));
   g
-
-let () = ignore (create_rl ())

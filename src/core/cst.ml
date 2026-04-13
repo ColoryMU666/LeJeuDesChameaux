@@ -29,9 +29,8 @@ let vwall1_y = wall_thickness
 let vwall2_x = window_width - wall_thickness
 let vwall2_y = vwall1_y
 
-let player_width = 20
+let player_width = 35
 let player_height = 50
-let player_color = Texture.black
 let g = Vector.{x = 0.0; y = 2. }
 let player_speed = 10.
 let player_jump_speed = 20.
