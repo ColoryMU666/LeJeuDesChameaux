@@ -16,6 +16,8 @@ module Draw_background_system = System.Make(Draw_background)
 
 module Draw_system = System.Make(Draw)
 
-module Lifebar_draw_system = System.Make(Lifebar_draw)
+module Draw_lifebar_system = System.Make(Draw_lifebar)
+
+module Draw_map_system = System.Make(Draw_map)
 
 module Interact_system = System.Make(Interact)

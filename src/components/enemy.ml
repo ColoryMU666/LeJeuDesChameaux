@@ -61,7 +61,7 @@ let create_shooter (pos_x, pos_y, velocity, texture, width, height, mass) =
   };
   e#action#set (fun () -> act_shooter e);
   create_action_timer e;
-  Lifebar_draw_system.(register (e:>t));
+  Draw_lifebar_system.(register (e:>t));
   e
 
 let enemy () = create_shooter (300., 300., Vector.{x=0. ; y=0.}, Texture.red, 20, 50, 1.)

@@ -27,7 +27,8 @@ let update dt =
     Clear_system.update delta;
     Draw_background_system.update delta;
     Draw_system.update delta;
-    Lifebar_draw_system.update delta;
+    Draw_lifebar_system.update delta;
+    Draw_map_system.update delta;
     None
   end
   | Pause ->
@@ -43,7 +44,7 @@ let run () =
   in
   let window = Gfx.create  window_spec in
   let ctx = Gfx.get_context window in
-  let () = Gfx.set_context_logical_size ctx 800 600 in
+  let () = Gfx.set_context_logical_size ctx Cst.window_width Cst.window_height in
   let () = Texture.load_txt ctx in
   let _walls = Block.walls () in
   let main_camera = Camera.create () in

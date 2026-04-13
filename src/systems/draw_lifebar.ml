@@ -16,6 +16,7 @@ let bar_height = 5
 let border_size = 1.
 
 
+
 let update _dt el =
   let Global.{window ; ctx ; main_camera ; _} = Global.get () in
   let surface = Gfx.get_surface window in
@@ -51,4 +52,3 @@ let update _dt el =
         Texture.draw ctx surface life_pos life_box (Color(green))
       
     ) el;
-  Gfx.commit ctx
