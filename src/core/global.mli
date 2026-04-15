@@ -15,6 +15,7 @@ type t = {
 }
 
 val is_interacting : bool ref
+val is_facing_left : bool ref
 
 val mouse_x : int ref
 val mouse_y : int ref

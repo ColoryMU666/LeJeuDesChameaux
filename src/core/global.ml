@@ -14,9 +14,9 @@ type t = {
 }
 
 let is_interacting = ref false
+let is_facing_left = ref false
 let mouse_x = ref 0
 let mouse_y = ref 0
-
 let state = ref None
 
 let get () : t =
