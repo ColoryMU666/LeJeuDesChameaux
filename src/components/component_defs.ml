@@ -178,6 +178,7 @@ class type drawable =
     inherit position
     inherit box
     inherit texture
+    inherit tagged
   end
 
 class type deletable = 

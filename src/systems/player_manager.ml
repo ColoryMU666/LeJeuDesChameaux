@@ -11,6 +11,14 @@ let handle_movement dt e =
     let right = if Input.is_pressed "d" then 1. else 0. in
     left +. right
   in
+  let () = (if Input.is_pressed "q" then begin
+              e#texture#set !(Texture.player_txt_reverted);
+              Global.is_facing_left := true
+            end
+            else if Input.is_pressed "d" then begin
+              e#texture#set !(Texture.player_txt);
+              Global.is_facing_left := false
+            end) in
   let target_speed_x = direction_x *. Cst.player_speed in
   let Vector.{x ; y} = e#velocity#get in
   let speed_x = dt *. (target_speed_x -. x) +. x in

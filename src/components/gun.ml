@@ -19,21 +19,25 @@ let resolve_rl (v : Vector.t) (ammo : ammunition) (reacter : tag) =
     pos_x = ammo#position#get.x -. 50.;
     pos_y = ammo#position#get.y -. 50.;
     velocity = Vector.zero;
-    texture = Texture.(purple);
-    width = 110;
-    height = 110;
+    texture = !(Texture.explosion_txt);
+    width = 100;
+    height = 100;
     resolve = (fun (v:Vector.t) (reacter:tag) -> ());
     elasticity = 0.;
     tag = Ally_projectile_tag {damage = 50.}
     } in
   Block.set_block a values;
-  Time.create_timer 1. (fun dt -> a#tokill#set true)
+  Time.create_timer 10. (fun dt -> a#tokill#set true)
   
 let interact_resolver (gun : gun) =
   Gfx.debug "interaction avec gun d'id %d\n%!" gun#gun_id#get;
   let Global.{player1; _} = Global.get () in
   (match player1#curent_gun#get with
-  | Some g -> g#position#set (Vector.add player1#position#get Vector.{ x = (float Cst.player_width) +. 1. ; y = 0.});
+  | Some g -> (if !Global.is_facing_left then
+                let dim = g#box#get in
+                g#position#set (Vector.add player1#position#get Vector.{ x = -1. -. (float dim.width) ; y = 0.})
+              else
+                g#position#set (Vector.add player1#position#get Vector.{ x = (float Cst.player_width) +. 1. ; y = 0.}));
    g#tokill#set false;
    Draw_system.(register (g :> t));
    Collision_system.(register (g :> t));
@@ -55,7 +59,7 @@ let fire_laser () =
     pos_x = x;
     pos_y = y;
     velocity = Vector.(mult 5. (normalize {x = target_x ; y = target_y}));
-    texture = Texture.(red);
+    texture = !(Texture.laser_laser_txt);
     width = 10;
     height = 10;
     resolve = (fun (v:Vector.t) (reacter:tag) -> resolve v a reacter);
@@ -75,7 +79,7 @@ let fire_glock () =
     pos_x = x;
     pos_y = y;
     velocity = Vector.(mult 5. (normalize {x = target_x ; y = target_y}));
-    texture = !(Texture.glock_bullet_txt);
+    texture = if target_x < 0. then !(Texture.glock_bullet_txt_reverted) else !(Texture.glock_bullet_txt);
     width = 10;
     height = 10;
     resolve = (fun (v:Vector.t) (reacter:tag) -> resolve v a reacter);
@@ -96,7 +100,7 @@ let fire_shotgun () =
     pos_x = x;
     pos_y = y;
     velocity = Vector.(mult 10. (normalize {x = target_x +. ((float i) *. 20.); y = target_y +. ((float i) *. 20.)}));
-    texture = Texture.yellow;
+    texture = if target_x < 0. then !(Texture.shotgun_pelet_txt_reverted) else !(Texture.shotgun_pelet_txt);
     width = 10;
     height = 10;
     resolve = (fun (v:Vector.t) (reacter:tag) -> resolve v a reacter);
@@ -117,7 +121,7 @@ let fire_rl () =
     pos_x = x;
     pos_y = y;
     velocity = Vector.(mult 5. (normalize {x = target_x ; y = target_y}));
-    texture = !(Texture.rl_rocket_txt);
+    texture = if target_x < 0. then !(Texture.rl_rocket_txt_reverted) else !(Texture.rl_rocket_txt);
     width = 32;
     height = 16;
     resolve = (fun (v:Vector.t) (reacter:tag) -> resolve_rl v a reacter);
@@ -144,9 +148,9 @@ let create_laser () =
   Block.set_block g {Block.default_set_values with
     pos_x = 200.;
     pos_y = 100.;
-    texture = Texture.magenta;
-    width = 10;
-    height = 10;
+    texture = !(Texture.laser_txt);
+    width = 61;
+    height = 32;
     default_forces = Some(Cst.g);
     tag = Gun_tag {gunType = 1};
   };
@@ -163,8 +167,8 @@ let create_glock () =
     pos_x = 200.;
     pos_y = 100.;
     texture = !(Texture.glock_txt);
-    width = 64;
-    height = 48;
+    width = 30;
+    height = 20;
     default_forces = Some(Cst.g);
     tag = Gun_tag {gunType = 0};
   };
@@ -180,9 +184,9 @@ let create_shotgun () =
   Block.set_block g {Block.default_set_values with
     pos_x = 200.;
     pos_y = 100.;
-    texture = Texture.magenta;
-    width = 10;
-    height = 10;
+    texture = !(Texture.shotgun_txt);
+    width = 49;
+    height = 16;
     default_forces = Some(Cst.g);
     tag = Gun_tag {gunType = 2};
   };
@@ -198,9 +202,9 @@ let create_rl () =
   Block.set_block g {Block.default_set_values with
     pos_x = 200.;
     pos_y = 100.;
-    texture = !(Texture.rl_txt);
-    width = 192;
-    height = 32;
+    texture = !(Texture.rl_txt) (*Texture.cyan*);
+    width = 59;
+    height = 11;
     default_forces = Some(Cst.g);
     tag = Gun_tag {gunType = 3};
   };
@@ -210,5 +214,3 @@ let create_rl () =
   g#interact_resolver#set (fun () -> interact_resolver g);
   Interact_system.(register (g :> t));
   g
-
-let () = ignore (create_rl ())

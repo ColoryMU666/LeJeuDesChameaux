@@ -86,7 +86,7 @@ let walls () =
   let hvalues = Cst.{ default_set_values with
     mass = infinity;
     width = hwall_width;
-    height = hwall_height + 20;
+    height = hwall_height;
     texture = Texture.blue;
     elasticity = 0.;
     tag = Wall_tag;
@@ -101,8 +101,8 @@ let walls () =
   } in
   Array.map create
     Cst.[| 
-      {hvalues with pos_x = float(hwall1_x) ; pos_y = float(hwall1_y)};
-      {hvalues with pos_x = float(hwall2_x) ; pos_y = float(hwall2_y)};
-      {vvalues with pos_x = float(vwall1_x) ; pos_y = float(vwall1_y)};
-      {vvalues with pos_x = float(vwall2_x) ; pos_y = float(vwall2_y)}
+      {hvalues with pos_x = float(hwall1_x) ; pos_y = float(hwall1_y) ; texture = !(Texture.ceiling_txt)};
+      {hvalues with pos_x = float(hwall2_x) ; pos_y = float(hwall2_y) ; texture = !(Texture.floor_txt)};
+      {vvalues with pos_x = float(vwall1_x) ; pos_y = float(vwall1_y) ; texture = !(Texture.left_wall_txt)};
+      {vvalues with pos_x = float(vwall2_x) ; pos_y = float(vwall2_y) ; texture = !(Texture.right_wall_txt)}
     |]

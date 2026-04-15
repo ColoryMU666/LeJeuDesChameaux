@@ -32,7 +32,7 @@ let create (pos_x, pos_y, velocity, texture, width, height, mass) =
   p
 
 
-let create_player () = create (100., 100., Vector.{x=0. ; y=0.}, !(Texture.player_txt), 20, 50, 1.)
+let create_player () = create (100., 100., Vector.{x=0. ; y=0.}, !(Texture.player_txt),Cst.player_width, Cst.player_height, 1.)
 
 let player () = 
   let Global.{player1; _} = Global.get () in
