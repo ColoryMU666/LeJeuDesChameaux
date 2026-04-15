@@ -303,6 +303,8 @@ let create_dungeon size : dungeon =
   dg#layout#set ({rooms ; links});
   dg#visited#set (Array.init size (fun i -> Array.init size (fun j -> if (i, j) = start then true else false)));
   dg#current_room_pos#set start;
+  dg#start_room_pos#set start;
+  dg#boos_room_pos#set boss;
   (match rooms.(start_i).(start_j) with
   | None -> failwith "Start room should not be None in the dungeon layout."
   | Some {room_creator; _} -> dg#current_room#set (Some (room_creator ())));
