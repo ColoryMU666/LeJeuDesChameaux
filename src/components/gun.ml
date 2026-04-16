@@ -84,7 +84,7 @@ let fire_glock () =
     height = 10;
     resolve = (fun (v:Vector.t) (reacter:tag) -> resolve v a reacter);
     elasticity = 0.;
-    tag = Ally_projectile_tag {damage = 1.}
+    tag = Ally_projectile_tag {damage = 20.}
     } in
   Block.set_block a values
 

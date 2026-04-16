@@ -38,6 +38,12 @@ let left_wall_txt = ref (Color (Gfx.color 0 0 0 0))
 let right_wall_txt = ref (Color (Gfx.color 0 0 0 0))
 let floor_txt = ref (Color (Gfx.color 0 0 0 0))
 let ceiling_txt = ref (Color (Gfx.color 0 0 0 0))
+let lighted_door_txt = ref (Color (Gfx.color 0 0 0 0))
+let unlighted_door_txt = ref (Color (Gfx.color 0 0 0 0))
+let turret_txt = ref (Color (Gfx.color 0 0 0 0))
+let turret_txt_reverted = ref (Color (Gfx.color 0 0 0 0))
+let enemy_bullet_txt = ref (Color (Gfx.color 0 0 0 0))
+
 
 
 let load_txt ctx =
@@ -63,7 +69,14 @@ let load_txt ctx =
   left_wall_txt := Image (Gfx.get_resource (Gfx.load_image ctx "resources/terrain/left_wall.png"));
   right_wall_txt := Image (Gfx.get_resource (Gfx.load_image ctx "resources/terrain/right_wall.png"));
   floor_txt := Image (Gfx.get_resource (Gfx.load_image ctx "resources/terrain/floor.png"));
-  ceiling_txt := Image (Gfx.get_resource (Gfx.load_image ctx "resources/terrain/ceiling.png"))
+  ceiling_txt := Image (Gfx.get_resource (Gfx.load_image ctx "resources/terrain/ceiling.png"));
+
+  lighted_door_txt := Image (Gfx.get_resource (Gfx.load_image ctx "resources/terrain/lighted_door.png"));
+  unlighted_door_txt := Image (Gfx.get_resource (Gfx.load_image ctx "resources/terrain/unlighted_door.png"));
+
+  turret_txt := Image (Gfx.get_resource (Gfx.load_image ctx "resources/enemy_assets/turret.png"));
+  turret_txt_reverted := Image (Gfx.get_resource (Gfx.load_image ctx "resources/enemy_assets/turret_reverted.png"));
+  enemy_bullet_txt := Image (Gfx.get_resource (Gfx.load_image ctx "resources/enemy_assets/shot.png"))
   
 
 let draw ctx dst pos box src=

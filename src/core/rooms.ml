@@ -18,6 +18,7 @@ let create_door x y size dir =
     width = size.width;
     height = size.height;
     z_level = Background;
+    texture = !(Texture.unlighted_door_txt)
   };
   d#interact_resolver#set (door_interact_resolver dir);
   Interact_system.register (d :> interactable);

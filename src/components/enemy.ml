@@ -25,21 +25,26 @@ let rec create_action_timer (enemy:enemy)=
 let act_shooter (src:enemy) = 
   let a = new ammunition () in
   let Global.{main_camera ; player1 ; _} = Global.get () in
-  let x = src#position#get.x +. float(Cst.player_width) /. 2. in
-  let y = src#position#get.y +. float(Cst.player_height) /. 2. in
+  let x = if src#position#get > player1#position#get then src#position#get.x 
+          else src#position#get.x +. float src#box#get.width in
+  let y = src#position#get.y +. 5. in
   let target_x = (player1#position#get.x +. float(Cst.player_width) /. 2. -. x) in
   let target_y = (player1#position#get.y +. float(Cst.player_height) /. 2. -. y) in
   let values = Block.{ Block.default_set_values with
     pos_x = x;
     pos_y = y;
     velocity = Vector.(mult 5. (normalize {x = target_x ; y = target_y}));
-    texture = Texture.red;
+    texture = !(Texture.enemy_bullet_txt);
     width = 10;
     height = 10;
     resolve = (fun (v:Vector.t) (reacter:tag) -> resolve_ammo v a reacter);
     elasticity = 0.;
     tag = Enemy_projectile_tag {damage = 1.}
     } in
+  (if target_x < 0. then
+    src#texture#set !(Texture.turret_txt_reverted)
+  else
+    src#texture#set !(Texture.turret_txt));
   Block.set_block a values
 
 
@@ -64,4 +69,4 @@ let create_shooter (pos_x, pos_y, velocity, texture, width, height, mass) =
   Draw_lifebar_system.(register (e:>t));
   e
 
-let enemy () = create_shooter (300., 300., Vector.{x=0. ; y=0.}, Texture.red, 20, 50, 1.)
+let enemy () = create_shooter (300., 300., Vector.{x=0. ; y=0.}, !(Texture.turret_txt), 40, 50, 1.)

@@ -106,3 +106,17 @@ let walls () =
       {vvalues with pos_x = float(vwall1_x) ; pos_y = float(vwall1_y) ; texture = !(Texture.left_wall_txt)};
       {vvalues with pos_x = float(vwall2_x) ; pos_y = float(vwall2_y) ; texture = !(Texture.right_wall_txt)}
     |]
+
+
+let create_background () = 
+  let b = new block () in
+  let values = {default_set_values with 
+  pos_x = 0.;
+  pos_y = 0.;
+  width = Cst.window_width;
+  height = Cst.window_height;
+  texture = Texture.magenta;
+  mass = infinity} in
+  set_block b values;
+  Draw_background_system.(register (b :> t));
+  ()
