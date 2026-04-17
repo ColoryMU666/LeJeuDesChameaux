@@ -53,7 +53,7 @@ let act_boss (src:enemy) =
   let y = src#position#get.y in
   let target_x = (player1#position#get.x +. float(Cst.player_width) /. 2. -. x) in
   let target_y = (player1#position#get.y +. float(Cst.player_height) /. 2. -. y) in
-  src#velocity#set Vector.{x = target_x ; y = target_y}
+  src#velocity#set  (Vector.mult 3. (Vector.normalize Vector.{x = target_x ; y = target_y}))
 
 let create_shooter (pos_x, pos_y, velocity, texture, width, height, mass) =
   let e = new enemy () in
@@ -107,4 +107,4 @@ let enemy_random_pos () =
   Gfx.debug "%d %d\n%!" x y;
   enemy (float x) (float y)
 
-let boss () = create_boss (300., 300., Vector.{x=0. ; y=0.}, (Texture.red), 100, 100, 10.)
+let boss () = create_boss (300., 300., Vector.{x=0. ; y=0.}, (Texture.red), 80, 80, 10.)

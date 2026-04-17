@@ -52,7 +52,7 @@ let default_room visited_neighbours =
 let boss_room_left visited_neighbours =
   let res = new room () in
   res#walls#set (Block.walls ());
-  Array.iter (fun e -> Room_loader.add res (e :> deletable)) [|(Enemy.enemy_random_pos ())|];
+  Array.iter (fun e -> Room_loader.add res (e :> deletable)) [|(Enemy.boss ())|];
   res#doors#set {
     up = None;
     left = Some (create_door 100. (float(Cst.hwall2_y)) small_door_size Left visited_neighbours.left);
@@ -61,10 +61,34 @@ let boss_room_left visited_neighbours =
   };
   res
 
+let boss_room_up visited_neighbours =
+  let res = new room () in
+  res#walls#set (Block.walls ());
+  Array.iter (fun e -> Room_loader.add res (e :> deletable)) [|(Enemy.boss ())|];
+  res#doors#set {
+    up = Some (create_door 100. (float(Cst.hwall2_y)) small_door_size Left visited_neighbours.up);
+    left = None;
+    down = None;
+    right = None;
+  };
+  res
+
+let boss_room_down visited_neighbours =
+  let res = new room () in
+  res#walls#set (Block.walls ());
+  Array.iter (fun e -> Room_loader.add res (e :> deletable)) [|(Enemy.boss ())|];
+  res#doors#set {
+    up = None;
+    left = None;
+    down = Some (create_door 100. (float(Cst.hwall2_y)) small_door_size Left visited_neighbours.down);
+    right = None;
+  };
+  res
+
 let boss_room_right visited_neighbours =
   let res = new room () in
   res#walls#set (Block.walls ());
-  Array.iter (fun e -> Room_loader.add res (e :> deletable)) [|(Enemy.enemy_random_pos ())|];
+  Array.iter (fun e -> Room_loader.add res (e :> deletable)) [|(Enemy.boss ())|];
   res#doors#set {
     up = None;
     left = None;

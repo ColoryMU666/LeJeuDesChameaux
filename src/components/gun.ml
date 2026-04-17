@@ -30,7 +30,7 @@ let resolve_rl (v : Vector.t) (ammo : ammunition) (reacter : tag) (room : room) 
     } in
   Block.set_block a values;
   Room_loader.add_current_room (a :> deletable);
-  Time.create_timer 10. (fun dt -> 
+  Time.create_timer 40. (fun dt -> 
     Room_loader.remove_current_room (a :> deletable);
     a#tokill#set true
   )
@@ -115,7 +115,7 @@ let fire_shotgun () =
       height = 10;
       resolve = (fun (v:Vector.t) (reacter:tag) -> resolve v a reacter);
       elasticity = 0.;
-      tag = Ally_projectile_tag {damage = 25.}
+      tag = Ally_projectile_tag {damage = 20.}
     } in
     Block.set_block a values;
     Room_loader.add_current_room (a :> deletable)
@@ -131,7 +131,7 @@ let fire_rl () =
   let values = Block.{ Block.default_set_values with
     pos_x = x;
     pos_y = y;
-    velocity = Vector.(mult 5. (normalize {x = target_x ; y = target_y}));
+    velocity = Vector.(mult 10. (normalize {x = target_x ; y = target_y}));
     texture = if target_x < 0. then !(Texture.rl_rocket_txt_reverted) else !(Texture.rl_rocket_txt);
     width = 32;
     height = 16;

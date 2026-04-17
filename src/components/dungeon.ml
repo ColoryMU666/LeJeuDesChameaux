@@ -15,6 +15,12 @@ let room_id_map, _ =
     (boss_room_right,
       {up = false; left = false; down = false; right = true },
       Boss_room);
+    (boss_room_up,
+      {up = true; left = false; down = false; right = false },
+      Boss_room);
+    (boss_room_down,
+      {up = false; left = false; down = true; right = false },
+      Boss_room);
     
 
     (* ROOMS HERE ONLY FOR TESTING AND TO COMPLETE ALL THE TYPES OF ROOMS, THEY ARE ENEMY ROOM *)
