@@ -40,6 +40,7 @@ let (let@) f k = f k
 
 
 let run () =
+  Random.self_init ();
   let window_spec = 
     Format.sprintf "game_canvas:%dx%d:r=presentvsync"
       Cst.window_width Cst.window_height

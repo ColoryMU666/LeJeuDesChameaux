@@ -4,11 +4,11 @@ open System_defs
 
 let small_door_size = {width = 50 ; height = 100}
 
-let door_interact_resolver direction () =
+let door_interact_resolver direction = fun () ->
   let Global.{dungeon; _} as g = Global.get () in
   dungeon#change_room#set (Some(direction))
 
-let create_door x y size dir =
+let create_door x y size dir visited =
   let d = new door () in
   d#direction#set dir;
   Block.set_block d {Block.default_set_values with
@@ -18,7 +18,9 @@ let create_door x y size dir =
     width = size.width;
     height = size.height;
     z_level = Background;
-    texture = !(Texture.unlighted_door_txt)
+    texture = 
+      if visited then !(Texture.lighted_door_txt) 
+      else !(Texture.unlighted_door_txt)
   };
   d#interact_resolver#set (door_interact_resolver dir);
   Interact_system.register (d :> interactable);
@@ -35,79 +37,79 @@ let create_platform x y w h =
     texture = !(Texture.plateform_txt)
   })
 
-let default_room () =
+let default_room visited_neighbours =
   let res = new room () in
   res#walls#set (Block.walls ());
-  Array.iter (fun e -> Room_loader.add res (e :> deletable)) [|(Enemy.enemy ())|];
+  Array.iter (fun e -> Room_loader.add res (e :> deletable)) [|(Enemy.enemy_random_pos ())|];
   res#doors#set {
     up = None;
-    left = Some (create_door 100. (float(Cst.hwall2_y)) small_door_size Left);
+    left = Some (create_door 100. (float(Cst.hwall2_y)) small_door_size Left visited_neighbours.left);
     down = None;
-    right = Some (create_door 700. (float(Cst.hwall2_y)) small_door_size Right);
+    right = Some (create_door 700. (float(Cst.hwall2_y)) small_door_size Right visited_neighbours.right);
   };
   res
 
-let boss_room_left () =
+let boss_room_left visited_neighbours =
   let res = new room () in
   res#walls#set (Block.walls ());
-  Array.iter (fun e -> Room_loader.add res (e :> deletable)) [|(Enemy.enemy ())|];
+  Array.iter (fun e -> Room_loader.add res (e :> deletable)) [|(Enemy.enemy_random_pos ())|];
   res#doors#set {
     up = None;
-    left = Some (create_door 100. (float(Cst.hwall2_y)) small_door_size Left);
-    down = None;
-    right = None;
-  };
-  res
-
-let boss_room_right () =
-  let res = new room () in
-  res#walls#set (Block.walls ());
-  Array.iter (fun e -> Room_loader.add res (e :> deletable)) [|(Enemy.enemy ())|];
-  res#doors#set {
-    up = None;
-    left = None;
-    down = None;
-    right = Some (create_door 700. (float(Cst.hwall2_y)) small_door_size Right);
-  };
-  res
-
-let room_left_right () =
-  let res = new room () in
-  res#walls#set (Block.walls ());
-  Array.iter (fun e -> Room_loader.add res (e :> deletable)) [|(Enemy.enemy ()); (Enemy.enemy ())|];
-  res#doors#set {
-    up = None;
-    left = Some (create_door 100. (float(Cst.hwall2_y)) small_door_size Left);
-    down = None;
-    right = Some (create_door 700. (float(Cst.hwall2_y)) small_door_size Right);
-  };
-  res
-
-let room_left () =
-  let res = new room () in
-  res#walls#set (Block.walls ());
-  Array.iter (fun e -> Room_loader.add res (e :> deletable)) [|(Enemy.enemy ()); (Enemy.enemy ())|];
-  res#doors#set {
-    up = None;
-    left = Some (create_door 100. (float(Cst.hwall2_y)) small_door_size Left);
+    left = Some (create_door 100. (float(Cst.hwall2_y)) small_door_size Left visited_neighbours.left);
     down = None;
     right = None;
   };
   res
 
-let room_right () =
+let boss_room_right visited_neighbours =
   let res = new room () in
   res#walls#set (Block.walls ());
-  Array.iter (fun e -> Room_loader.add res (e :> deletable)) [|(Enemy.enemy ()); (Enemy.enemy ())|];
+  Array.iter (fun e -> Room_loader.add res (e :> deletable)) [|(Enemy.enemy_random_pos ())|];
   res#doors#set {
     up = None;
     left = None;
     down = None;
-    right = Some (create_door 700. (float(Cst.hwall2_y)) small_door_size Right);
+    right = Some (create_door 700. (float(Cst.hwall2_y)) small_door_size Right visited_neighbours.right);
   };
   res
 
-let room_up () =
+let room_left_right visited_neighbours =
+  let res = new room () in
+  res#walls#set (Block.walls ());
+  Array.iter (fun e -> Room_loader.add res (e :> deletable)) [|(Enemy.enemy_random_pos ()); (Enemy.enemy_random_pos ())|];
+  res#doors#set {
+    up = None;
+    left = Some (create_door 100. (float(Cst.hwall2_y)) small_door_size Left visited_neighbours.left);
+    down = None;
+    right = Some (create_door 700. (float(Cst.hwall2_y)) small_door_size Right visited_neighbours.right);
+  };
+  res
+
+let room_left visited_neighbours =
+  let res = new room () in
+  res#walls#set (Block.walls ());
+  Array.iter (fun e -> Room_loader.add res (e :> deletable)) [|(Enemy.enemy_random_pos ()); (Enemy.enemy_random_pos ())|];
+  res#doors#set {
+    up = None;
+    left = Some (create_door 100. (float(Cst.hwall2_y)) small_door_size Left visited_neighbours.left);
+    down = None;
+    right = None;
+  };
+  res
+
+let room_right visited_neighbours =
+  let res = new room () in
+  res#walls#set (Block.walls ());
+  Array.iter (fun e -> Room_loader.add res (e :> deletable)) [|(Enemy.enemy_random_pos ()); (Enemy.enemy_random_pos ())|];
+  res#doors#set {
+    up = None;
+    left = None;
+    down = None;
+    right = Some (create_door 700. (float(Cst.hwall2_y)) small_door_size Right visited_neighbours.right);
+  };
+  res
+
+let room_up visited_neighbours =
   let res = new room () in
   res#walls#set (Array.concat [
     Block.walls ();
@@ -120,16 +122,16 @@ let room_up () =
       create_platform 568. 260. 100 15;
       create_platform 400. 180. 150 15;|]
   ]);
-  Array.iter (fun e -> Room_loader.add res (e :> deletable)) [|(Enemy.enemy ()); (Enemy.enemy ())|];
+  Array.iter (fun e -> Room_loader.add res (e :> deletable)) [|(Enemy.enemy_random_pos ()); (Enemy.enemy_random_pos ())|];
   res#doors#set {
-    up = Some (create_door 400. 180. small_door_size Up);
+    up = Some (create_door 400. 180. small_door_size Up visited_neighbours.up);
     left = None;
     down = None;
     right = None;
   };
   res
 
-let room_down () =
+let room_down visited_neighbours =
   let res = new room () in
   res#walls#set (Array.concat [
     Block.walls ();
@@ -145,16 +147,16 @@ let room_down () =
 
       create_platform 400. 180. 150 15;|]
   ]);
-  Array.iter (fun e -> Room_loader.add res (e :> deletable)) [|(Enemy.enemy ()); (Enemy.enemy ())|];
+  Array.iter (fun e -> Room_loader.add res (e :> deletable)) [|(Enemy.enemy_random_pos ()); (Enemy.enemy_random_pos ())|];
   res#doors#set {
     up = None;
     left = None;
-    down = Some (create_door 400. (float(Cst.hwall2_y)) small_door_size Down);
+    down = Some (create_door 400. (float(Cst.hwall2_y)) small_door_size Down visited_neighbours.down);
     right = None;
   };
   res
 
-let room_up_left_down_right () =
+let room_up_left_down_right visited_neighbours =
   let res = new room () in
   res#walls#set (Array.concat [
     Block.walls ();
@@ -170,16 +172,16 @@ let room_up_left_down_right () =
 
       create_platform 400. 180. 150 15;|]
   ]);
-  Array.iter (fun e -> Room_loader.add res (e :> deletable)) [|(Enemy.enemy ()); (Enemy.enemy ())|];
+  Array.iter (fun e -> Room_loader.add res (e :> deletable)) [|(Enemy.enemy_random_pos ()); (Enemy.enemy_random_pos ())|];
   res#doors#set {
-    up = Some (create_door 400. 180. small_door_size Up);
-    left = Some (create_door 82. 500. small_door_size Left);
-    down = Some (create_door 400. (float(Cst.hwall2_y)) small_door_size Down);
-    right = Some (create_door 718. 340. small_door_size Right);
+    up = Some (create_door 400. 180. small_door_size Up visited_neighbours.up);
+    left = Some (create_door 82. 500. small_door_size Left visited_neighbours.left);
+    down = Some (create_door 400. (float(Cst.hwall2_y)) small_door_size Down visited_neighbours.down);
+    right = Some (create_door 718. 340. small_door_size Right visited_neighbours.right);
   };
   res
 
-let room_up_left_down () =
+let room_up_left_down visited_neighbours =
   let res = new room () in
   res#walls#set (Array.concat [
     Block.walls ();
@@ -195,16 +197,16 @@ let room_up_left_down () =
 
       create_platform 400. 180. 150 15;|]
   ]);
-  Array.iter (fun e -> Room_loader.add res (e :> deletable)) [|(Enemy.enemy ()); (Enemy.enemy ())|];
+  Array.iter (fun e -> Room_loader.add res (e :> deletable)) [|(Enemy.enemy_random_pos ()); (Enemy.enemy_random_pos ())|];
   res#doors#set {
-    up = Some (create_door 400. 180. small_door_size Up);
-    left = Some (create_door 82. 500. small_door_size Left);
-    down = Some (create_door 400. (float(Cst.hwall2_y)) small_door_size Down);
+    up = Some (create_door 400. 180. small_door_size Up visited_neighbours.up);
+    left = Some (create_door 82. 500. small_door_size Left visited_neighbours.left);
+    down = Some (create_door 400. (float(Cst.hwall2_y)) small_door_size Down visited_neighbours.down);
     right = None;
   };
   res
 
-let room_up_left_right () =
+let room_up_left_right visited_neighbours =
   let res = new room () in
   res#walls#set (Array.concat [
     Block.walls ();
@@ -217,16 +219,16 @@ let room_up_left_right () =
       create_platform 568. 260. 100 15;
       create_platform 400. 180. 150 15;|]
   ]);
-  Array.iter (fun e -> Room_loader.add res (e :> deletable)) [|(Enemy.enemy ()); (Enemy.enemy ())|];
+  Array.iter (fun e -> Room_loader.add res (e :> deletable)) [|(Enemy.enemy_random_pos ()); (Enemy.enemy_random_pos ())|];
   res#doors#set {
-    up = Some (create_door 400. 180. small_door_size Up);
-    left = Some (create_door 100. (float(Cst.hwall2_y)) small_door_size Left);
+    up = Some (create_door 400. 180. small_door_size Up visited_neighbours.up);
+    left = Some (create_door 100. (float(Cst.hwall2_y)) small_door_size Left visited_neighbours.left);
     down = None;
-    right = Some (create_door 700. (float(Cst.hwall2_y)) small_door_size Right);
+    right = Some (create_door 700. (float(Cst.hwall2_y)) small_door_size Right visited_neighbours.right);
   };
   res
 
-let room_up_right () =
+let room_up_right visited_neighbours =
   let res = new room () in
   res#walls#set (Array.concat [
     Block.walls ();
@@ -239,16 +241,16 @@ let room_up_right () =
       create_platform 568. 260. 100 15;
       create_platform 400. 180. 150 15;|]
   ]);
-  Array.iter (fun e -> Room_loader.add res (e :> deletable)) [|(Enemy.enemy ()); (Enemy.enemy ())|];
+  Array.iter (fun e -> Room_loader.add res (e :> deletable)) [|(Enemy.enemy_random_pos ()); (Enemy.enemy_random_pos ())|];
   res#doors#set {
-    up = Some (create_door 400. 180. small_door_size Up);
+    up = Some (create_door 400. 180. small_door_size Up visited_neighbours.up);
     left = None;
     down = None;
-    right = Some (create_door 700. (float(Cst.hwall2_y)) small_door_size Right);
+    right = Some (create_door 700. (float(Cst.hwall2_y)) small_door_size Right visited_neighbours.right);
   };
   res
 
-let room_up_left () =
+let room_up_left visited_neighbours =
   let res = new room () in
   res#walls#set (Array.concat [
     Block.walls ();
@@ -261,16 +263,16 @@ let room_up_left () =
       create_platform 568. 260. 100 15;
       create_platform 400. 180. 150 15;|]
   ]);
-  Array.iter (fun e -> Room_loader.add res (e :> deletable)) [|(Enemy.enemy ()); (Enemy.enemy ())|];
+  Array.iter (fun e -> Room_loader.add res (e :> deletable)) [|(Enemy.enemy_random_pos ()); (Enemy.enemy_random_pos ())|];
   res#doors#set {
-    up = Some (create_door 400. 180. small_door_size Up);
-    left = Some (create_door 100. (float(Cst.hwall2_y)) small_door_size Left);
+    up = Some (create_door 400. 180. small_door_size Up visited_neighbours.up);
+    left = Some (create_door 100. (float(Cst.hwall2_y)) small_door_size Left visited_neighbours.left);
     down = None;
     right = None;
   };
   res
 
-let room_up_down () =
+let room_up_down visited_neighbours =
   let res = new room () in
   res#walls#set (Array.concat [
     Block.walls ();
@@ -286,16 +288,16 @@ let room_up_down () =
 
       create_platform 400. 180. 150 15;|]
   ]);
-  Array.iter (fun e -> Room_loader.add res (e :> deletable)) [|(Enemy.enemy ()); (Enemy.enemy ())|];
+  Array.iter (fun e -> Room_loader.add res (e :> deletable)) [|(Enemy.enemy_random_pos ()); (Enemy.enemy_random_pos ())|];
   res#doors#set {
-    up = Some (create_door 400. 180. small_door_size Up);
+    up = Some (create_door 400. 180. small_door_size Up visited_neighbours.up);
     left = None;
-    down = Some (create_door 400. (float(Cst.hwall2_y)) small_door_size Down);
+    down = Some (create_door 400. (float(Cst.hwall2_y)) small_door_size Down visited_neighbours.down);
     right = None;
   };
   res
 
-let room_left_down () =
+let room_left_down visited_neighbours =
   let res = new room () in
   res#walls#set (Array.concat [
     Block.walls ();
@@ -311,16 +313,16 @@ let room_left_down () =
 
       create_platform 400. 180. 150 15;|]
   ]);
-  Array.iter (fun e -> Room_loader.add res (e :> deletable)) [|(Enemy.enemy ()); (Enemy.enemy ())|];
+  Array.iter (fun e -> Room_loader.add res (e :> deletable)) [|(Enemy.enemy_random_pos ()); (Enemy.enemy_random_pos ())|];
   res#doors#set {
     up = None;
-    left = Some (create_door 82. 340. small_door_size Left);
-    down = Some (create_door 400. (float(Cst.hwall2_y)) small_door_size Down);
+    left = Some (create_door 82. 340. small_door_size Left visited_neighbours.left);
+    down = Some (create_door 400. (float(Cst.hwall2_y)) small_door_size Down visited_neighbours.down);
     right = None;
   };
   res
 
-let room_down_right () =
+let room_down_right visited_neighbours =
   let res = new room () in
   res#walls#set (Array.concat [
     Block.walls ();
@@ -336,16 +338,16 @@ let room_down_right () =
 
       create_platform 400. 180. 150 15;|]
   ]);
-  Array.iter (fun e -> Room_loader.add res (e :> deletable)) [|(Enemy.enemy ()); (Enemy.enemy ())|];
+  Array.iter (fun e -> Room_loader.add res (e :> deletable)) [|(Enemy.enemy_random_pos ()); (Enemy.enemy_random_pos ())|];
   res#doors#set {
     up = None;
     left = None;
-    down = Some (create_door 400. (float(Cst.hwall2_y)) small_door_size Down);
-    right = Some (create_door 718. 340. small_door_size Right);
+    down = Some (create_door 400. (float(Cst.hwall2_y)) small_door_size Down visited_neighbours.down);
+    right = Some (create_door 718. 340. small_door_size Right visited_neighbours.right);
   };
   res
 
-let room_up_down_right () =
+let room_up_down_right visited_neighbours =
   let res = new room () in
   res#walls#set (Array.concat [
     Block.walls ();
@@ -361,16 +363,16 @@ let room_up_down_right () =
 
       create_platform 400. 180. 150 15;|]
   ]);
-  Array.iter (fun e -> Room_loader.add res (e :> deletable)) [|(Enemy.enemy ()); (Enemy.enemy ())|];
+  Array.iter (fun e -> Room_loader.add res (e :> deletable)) [|(Enemy.enemy_random_pos ()); (Enemy.enemy_random_pos ())|];
   res#doors#set {
-    up = Some (create_door 400. 180. small_door_size Up);
+    up = Some (create_door 400. 180. small_door_size Up visited_neighbours.up);
     left = None;
-    down = Some (create_door 400. (float(Cst.hwall2_y)) small_door_size Down);
-    right = Some (create_door 718. 340. small_door_size Right);
+    down = Some (create_door 400. (float(Cst.hwall2_y)) small_door_size Down visited_neighbours.down);
+    right = Some (create_door 718. 340. small_door_size Right visited_neighbours.right);
   };
   res
 
-let room_left_down_right () =
+let room_left_down_right visited_neighbours =
   let res = new room () in
   res#walls#set (Array.concat [
     Block.walls ();
@@ -386,11 +388,11 @@ let room_left_down_right () =
 
       create_platform 400. 180. 150 15;|]
   ]);
-  Array.iter (fun e -> Room_loader.add res (e :> deletable)) [|(Enemy.enemy ()); (Enemy.enemy ())|];
+  Array.iter (fun e -> Room_loader.add res (e :> deletable)) [|(Enemy.enemy_random_pos ()); (Enemy.enemy_random_pos ())|];
   res#doors#set {
     up = None;
-    left = Some (create_door 82. 340. small_door_size Left);
-    down = Some (create_door 400. (float(Cst.hwall2_y)) small_door_size Down);
-    right = Some (create_door 718. 340. small_door_size Right);
+    left = Some (create_door 82. 340. small_door_size Left visited_neighbours.left);
+    down = Some (create_door 400. (float(Cst.hwall2_y)) small_door_size Down visited_neighbours.down);
+    right = Some (create_door 718. 340. small_door_size Right visited_neighbours.right);
   };
   res

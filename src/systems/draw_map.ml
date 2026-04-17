@@ -14,7 +14,7 @@ let update dt el =
   let {rooms; links} = dungeon#layout#get in
   let visited = dungeon#visited#get in
   let (cur_row, cur_col) = dungeon#current_room_pos#get in
-  let (boss_row, boss_col) = dungeon#boos_room_pos#get in
+  let (boss_row, boss_col) = dungeon#boss_room_pos#get in
   let (start_row, start_col) = dungeon#start_room_pos#get in
 
   let grid_size = Array.length rooms in
@@ -32,12 +32,7 @@ let update dt el =
   let map_x = Cst.window_width - map_size - padding in
   let map_y = padding in
 
-  let has_link links (r1, c1) (r2, c2) =
-    List.exists (fun ((a, b), (c, d)) ->
-      (a = r1 && b = c1 && c = r2 && d = c2) ||
-      (a = r2 && b = c2 && c = r1 && d = c1)
-    ) links
-  in
+  let has_link = Room_loader.has_link in
 
   (* Helper: true if a room at (r, c) has been visited *)
   let is_visited r c =

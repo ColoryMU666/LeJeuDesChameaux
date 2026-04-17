@@ -100,5 +100,11 @@ let create_boss (pos_x, pos_y, velocity, texture, width, height, mass) =
   Draw_lifebar_system.(register (e:>t));
   e
 
-let enemy () = create_shooter (300., 300., Vector.{x=0. ; y=0.}, !(Texture.turret_txt), 40, 50, 1.)
+let enemy x y = create_shooter (x, y, Vector.{x=0. ; y=0.}, !(Texture.turret_txt), 40, 50, 1.)
+let enemy_random_pos () =
+  let x = Random.int (Cst.window_width - Cst.wall_thickness * 2 - 80) + Cst.wall_thickness in
+  let y = Random.int (Cst.window_height - Cst.wall_thickness * 2 - 100) + Cst.wall_thickness in
+  Gfx.debug "%d %d\n%!" x y;
+  enemy (float x) (float y)
+
 let boss () = create_boss (300., 300., Vector.{x=0. ; y=0.}, (Texture.red), 100, 100, 10.)

@@ -330,7 +330,7 @@ type room_map = {
   room_blueprint_id : int;
   doors : room_doors;
   room_tag : room_tag;
-  room_creator : unit -> room
+  room_creator : room_doors -> room
 }
 
 type dungeon_layout = {
@@ -345,13 +345,13 @@ class dungeon () =
   let change_room = Component.init (None : direction option) in
   let current_room_pos = Component.init (0, 0) in
   let start_room_pos = Component.init (0, 0) in
-  let boos_room_pos = Component.init (0, 0) in
+  let boss_room_pos = Component.init (0, 0) in
   object
     method layout = layout
     method visited = visited
     method current_room = curent
     method current_room_pos = current_room_pos
     method start_room_pos = start_room_pos
-    method boos_room_pos = boos_room_pos
+    method boss_room_pos = boss_room_pos
     method change_room = change_room
   end

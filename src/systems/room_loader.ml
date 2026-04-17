@@ -48,6 +48,13 @@ let get_door_pos (room : room) direction =
   let size = door#box#get in
   (pos.x +. float(size.width) /. 2., pos.y +. float(size.height))
 
+
+let has_link links (r1, c1) (r2, c2) =
+  List.exists (fun ((a, b), (c, d)) ->
+    (a = r1 && b = c1 && c = r2 && d = c2) ||
+    (a = r2 && b = c2 && c = r1 && d = c1)
+  ) links
+
 let update dt el =
   let g = Global.get () in
   match g.dungeon#change_room#get with
@@ -55,7 +62,7 @@ let update dt el =
   | Some dir -> begin
     unload_room (Option.get g.dungeon#current_room#get);
     let (i, j) = g.dungeon#current_room_pos#get in
-    let r_map, pos = match dir with
+    let r_map, ((i', j') as pos) = match dir with
       | Up -> g.dungeon#layout#get.rooms.(i - 1).(j), (i - 1, j)
       | Left -> g.dungeon#layout#get.rooms.(i).(j - 1), (i, j - 1)
       | Down -> g.dungeon#layout#get.rooms.(i + 1).(j), (i + 1, j)
@@ -64,7 +71,17 @@ let update dt el =
     match r_map with
     | None -> failwith "Moving to an undefined room"
     | Some r -> begin
-      let room = r.room_creator () in
+      let links = g.dungeon#layout#get.links in
+      let visited = g.dungeon#visited#get in
+      let doors = {
+          up    = has_link links (i', j') (i' - 1, j') && visited.(i' - 1).(j');
+          down  = has_link links (i', j') (i' + 1, j') && visited.(i' + 1).(j');
+          left  = has_link links (i', j') (i', j' - 1) && visited.(i').(j' - 1);
+          right = has_link links (i', j') (i', j' + 1) && visited.(i').(j' + 1);
+        } in
+      Gfx.debug "up : %b, left : %b, down : %b, right : %b"
+        doors.up doors.left doors.right doors.down;
+      let room = r.room_creator doors in
       g.dungeon#current_room#set (Some room);
       let (door_x, door_y) = get_door_pos room dir in
       let p_size = g.player1#box#get in

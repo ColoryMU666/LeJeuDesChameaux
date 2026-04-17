@@ -3,8 +3,6 @@ open Rect
 open Rooms
 module IntMap = Map.Make(Int)
 
-let () = Random.self_init ()
-
 let room_id_map, _ = 
   let l = [
     (* special rooms *)
@@ -100,11 +98,7 @@ let room_id_map, _ =
       (IntMap.add i (room, door_number, tag) acc, i+1))
   (IntMap.empty, 0) l
 
-let has_link links (r1, c1) (r2, c2) =
-    List.exists (fun ((a, b), (c, d)) ->
-      (a = r1 && b = c1 && c = r2 && d = c2) ||
-      (a = r2 && b = c2 && c = r1 && d = c1)
-    ) links
+let has_link = Room_loader.has_link
 
 let print_dungeon (m : bool array array)
                   (links : ((int * int) * (int * int)) list)
@@ -304,8 +298,11 @@ let create_dungeon size : dungeon =
   dg#visited#set (Array.init size (fun i -> Array.init size (fun j -> if (i, j) = start then true else false)));
   dg#current_room_pos#set start;
   dg#start_room_pos#set start;
-  dg#boos_room_pos#set boss;
+  dg#boss_room_pos#set boss;
   (match rooms.(start_i).(start_j) with
   | None -> failwith "Start room should not be None in the dungeon layout."
-  | Some {room_creator; _} -> dg#current_room#set (Some (room_creator ())));
+  | Some {room_creator; _} -> begin
+    let doors = { up = false; left = false; down = false ; right = false} in
+    dg#current_room#set (Some (room_creator doors));
+  end);
   dg
