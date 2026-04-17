@@ -1,9 +1,25 @@
 open Ecs
 open Component_defs
 
-type t = room
+type t = deletable
 
 let init _ = Gfx.debug "Room_loader system initialised\n%!"
+
+let add (room : room) (obj : t) =
+  room#temporary_objects#set (obj :: room#temporary_objects#get)
+
+let remove (room : room) (obj : t) =
+  room#temporary_objects#set (List.filter (fun o -> o != obj) room#temporary_objects#get)
+
+let add_current_room (obj : t) =
+  let Global.{dungeon; _} = Global.get () in
+  let room = Option.get dungeon#current_room#get in
+  add room obj
+
+let remove_current_room (obj : t) =
+  let Global.{dungeon; _} = Global.get () in
+  let room = Option.get dungeon#current_room#get in
+  remove room obj
 
 let unload e = e#tokill#set true
 
@@ -12,14 +28,14 @@ let unload_opt e_opt =
   | None -> ()
   | Some e -> unload e
 
-let unload_room (room : t) =
+let unload_room (room : room) =
   let doors = room#doors#get in
   unload_opt doors.up;
   unload_opt doors.left;
   unload_opt doors.down;
   unload_opt doors.right;
   Array.iter unload room#walls#get;
-  Array.iter unload room#enemies#get
+  List.iter (fun obj -> unload (obj :> t)) room#temporary_objects#get
 
 let get_door_pos (room : room) direction =
   let door = match direction with

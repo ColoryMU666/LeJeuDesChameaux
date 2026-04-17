@@ -65,8 +65,10 @@ class life () =
 
 class action () = 
   let r = Component.init (fun () -> ()) in
+  let b = Component.init true in
   object
     method action = r
+    method can_act = b
   end
 
 type tag =
@@ -302,12 +304,13 @@ type doors = {
 class room () =
   let walls = Component.init ([||] : block array) in
   let doors = Component.init ({up = None; left = None; down = None; right = None} : doors) in
-  let enemies = Component.init ([||] : enemy array) in
+  let temporary_objects = Component.init([] : deletable List.t) in
   object
     inherit Entity.t ()
     method walls = walls
     method doors = doors
-    method enemies = enemies
+    (* temporary objects contains enemies, bullets, weapons on the ground, items, timers *)
+    method temporary_objects = temporary_objects
   end
 
 type room_doors = {

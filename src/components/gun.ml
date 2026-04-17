@@ -10,9 +10,11 @@ Rocket launcher id = 3
 *)
 
 let resolve (v : Vector.t) (ammo : ammunition) (reacter : tag) =
+  Room_loader.remove_current_room (ammo :> deletable);
   ammo#tokill#set true
 
-let resolve_rl (v : Vector.t) (ammo : ammunition) (reacter : tag) =
+let resolve_rl (v : Vector.t) (ammo : ammunition) (reacter : tag) (room : room) =
+  Room_loader.remove_current_room (ammo :> deletable);
   ammo#tokill#set true;
   let a  = new ammunition () in
   let values = Block.{ Block.default_set_values with
@@ -27,7 +29,11 @@ let resolve_rl (v : Vector.t) (ammo : ammunition) (reacter : tag) =
     tag = Ally_projectile_tag {damage = 50.}
     } in
   Block.set_block a values;
-  Time.create_timer 10. (fun dt -> a#tokill#set true)
+  Room_loader.add_current_room (a :> deletable);
+  Time.create_timer 10. (fun dt -> 
+    Room_loader.remove_current_room (a :> deletable);
+    a#tokill#set true
+  )
   
 let interact_resolver (gun : gun) =
   Gfx.debug "interaction avec gun d'id %d\n%!" gun#gun_id#get;
@@ -43,10 +49,12 @@ let interact_resolver (gun : gun) =
    Collision_system.(register (g :> t));
    Clear_system.(register (g :> t));
    Move_system.(register (g :> t));
-   Interact_system.(register (g :> t))
+   Interact_system.(register (g :> t));
+   Room_loader.add_current_room (g :> deletable)
   | _ -> ());
   player1#curent_gun#set (Some(gun));
-  gun#tokill#set true
+  gun#tokill#set true;
+  Room_loader.remove_current_room (gun :> deletable)
 
 let fire_laser () =
   let a = new ammunition () in
@@ -66,7 +74,8 @@ let fire_laser () =
     elasticity = 0.;
     tag = Ally_projectile_tag {damage = 10.}
     } in
-  Block.set_block a values
+  Block.set_block a values;
+  Room_loader.add_current_room (a :> deletable)
 
 let fire_glock () =
   let a = new ammunition () in
@@ -86,7 +95,8 @@ let fire_glock () =
     elasticity = 0.;
     tag = Ally_projectile_tag {damage = 20.}
     } in
-  Block.set_block a values
+  Block.set_block a values;
+  Room_loader.add_current_room (a :> deletable)
 
 let fire_shotgun () =
   let Global.{main_camera ; player1 ; _} = Global.get () in
@@ -97,22 +107,23 @@ let fire_shotgun () =
   for i = -2 to 2 do
     let a = new ammunition () in
     let values = Block.{ Block.default_set_values with
-    pos_x = x;
-    pos_y = y;
-    velocity = Vector.(mult 10. (normalize {x = target_x +. ((float i) *. 20.); y = target_y +. ((float i) *. 20.)}));
-    texture = if target_x < 0. then !(Texture.shotgun_pelet_txt_reverted) else !(Texture.shotgun_pelet_txt);
-    width = 10;
-    height = 10;
-    resolve = (fun (v:Vector.t) (reacter:tag) -> resolve v a reacter);
-    elasticity = 0.;
-    tag = Ally_projectile_tag {damage = 25.}
+      pos_x = x;
+      pos_y = y;
+      velocity = Vector.(mult 10. (normalize {x = target_x +. ((float i) *. 20.); y = target_y +. ((float i) *. 20.)}));
+      texture = if target_x < 0. then !(Texture.shotgun_pelet_txt_reverted) else !(Texture.shotgun_pelet_txt);
+      width = 10;
+      height = 10;
+      resolve = (fun (v:Vector.t) (reacter:tag) -> resolve v a reacter);
+      elasticity = 0.;
+      tag = Ally_projectile_tag {damage = 25.}
     } in
-  Block.set_block a values
+    Block.set_block a values;
+    Room_loader.add_current_room (a :> deletable)
   done
 
 let fire_rl () =
   let a = new ammunition () in
-  let Global.{main_camera ; player1 ; _} = Global.get () in
+  let Global.{main_camera ; player1 ; dungeon} = Global.get () in
   let x = player1#position#get.x +. float(Cst.player_width) /. 2. in
   let y = player1#position#get.y +. float(Cst.player_height) /. 2. in
   let target_x = ((float !Global.mouse_x) -. x) +. main_camera#position#get.x in
@@ -124,11 +135,12 @@ let fire_rl () =
     texture = if target_x < 0. then !(Texture.rl_rocket_txt_reverted) else !(Texture.rl_rocket_txt);
     width = 32;
     height = 16;
-    resolve = (fun (v:Vector.t) (reacter:tag) -> resolve_rl v a reacter);
+    resolve = (fun (v:Vector.t) (reacter:tag) -> resolve_rl v a reacter (Option.get dungeon#current_room#get));
     elasticity = 0.;
     tag = Ally_projectile_tag {damage = 30.}
     } in
-  Block.set_block a values
+  Block.set_block a values;
+  Room_loader.add_current_room (a :> deletable)
 
 let fire_func_ar = [|fire_glock; fire_laser; fire_shotgun ; fire_rl|]
 
@@ -136,7 +148,7 @@ let handle_fire (gun : gun) =
   if gun#can_shoot#get then begin
     ignore(fire_func_ar.(gun#gun_id#get) ());
     gun#can_shoot#set false;
-    Time.create_timer
+    Time.create_timer_no_room_clear
       gun#fire_rate#get
       (fun dt -> gun#can_shoot#set true);
   end

@@ -29,7 +29,7 @@ let handle_movement dt e =
       0.)
     +. 
     (match (e#tag#get) with 
-    | Player_tag {is_on_floor = true} ->
+    | Player_tag {is_on_floor = true} -> 
       if Input.is_pressed "space" || Input.is_pressed " " then
         -. Cst.player_jump_speed
       else

@@ -38,7 +38,7 @@ let create_platform x y w h =
 let default_room () =
   let res = new room () in
   res#walls#set (Block.walls ());
-  res#enemies#set [|(Enemy.enemy ())|];
+  Array.iter (fun e -> Room_loader.add res (e :> deletable)) [|(Enemy.enemy ())|];
   res#doors#set {
     up = None;
     left = Some (create_door 100. (float(Cst.hwall2_y)) small_door_size Left);
@@ -50,7 +50,7 @@ let default_room () =
 let boss_room_left () =
   let res = new room () in
   res#walls#set (Block.walls ());
-  res#enemies#set [|(Enemy.boss ())|];
+  Array.iter (fun e -> Room_loader.add res (e :> deletable)) [|(Enemy.enemy ())|];
   res#doors#set {
     up = None;
     left = Some (create_door 100. (float(Cst.hwall2_y)) small_door_size Left);
@@ -62,7 +62,7 @@ let boss_room_left () =
 let boss_room_right () =
   let res = new room () in
   res#walls#set (Block.walls ());
-  res#enemies#set [|(Enemy.boss ())|];
+  Array.iter (fun e -> Room_loader.add res (e :> deletable)) [|(Enemy.enemy ())|];
   res#doors#set {
     up = None;
     left = None;
@@ -74,7 +74,7 @@ let boss_room_right () =
 let room_left_right () =
   let res = new room () in
   res#walls#set (Block.walls ());
-  res#enemies#set [|(Enemy.enemy ()); (Enemy.enemy ())|];
+  Array.iter (fun e -> Room_loader.add res (e :> deletable)) [|(Enemy.enemy ()); (Enemy.enemy ())|];
   res#doors#set {
     up = None;
     left = Some (create_door 100. (float(Cst.hwall2_y)) small_door_size Left);
@@ -86,7 +86,7 @@ let room_left_right () =
 let room_left () =
   let res = new room () in
   res#walls#set (Block.walls ());
-  res#enemies#set [|(Enemy.enemy ()); (Enemy.enemy ())|];
+  Array.iter (fun e -> Room_loader.add res (e :> deletable)) [|(Enemy.enemy ()); (Enemy.enemy ())|];
   res#doors#set {
     up = None;
     left = Some (create_door 100. (float(Cst.hwall2_y)) small_door_size Left);
@@ -98,7 +98,7 @@ let room_left () =
 let room_right () =
   let res = new room () in
   res#walls#set (Block.walls ());
-  res#enemies#set [|(Enemy.enemy ()); (Enemy.enemy ())|];
+  Array.iter (fun e -> Room_loader.add res (e :> deletable)) [|(Enemy.enemy ()); (Enemy.enemy ())|];
   res#doors#set {
     up = None;
     left = None;
@@ -120,7 +120,7 @@ let room_up () =
       create_platform 568. 260. 100 15;
       create_platform 400. 180. 150 15;|]
   ]);
-  res#enemies#set [|(Enemy.enemy ()); (Enemy.enemy ())|];
+  Array.iter (fun e -> Room_loader.add res (e :> deletable)) [|(Enemy.enemy ()); (Enemy.enemy ())|];
   res#doors#set {
     up = Some (create_door 400. 180. small_door_size Up);
     left = None;
@@ -145,7 +145,7 @@ let room_down () =
 
       create_platform 400. 180. 150 15;|]
   ]);
-  res#enemies#set [|(Enemy.enemy ()); (Enemy.enemy ())|];
+  Array.iter (fun e -> Room_loader.add res (e :> deletable)) [|(Enemy.enemy ()); (Enemy.enemy ())|];
   res#doors#set {
     up = None;
     left = None;
@@ -170,7 +170,7 @@ let room_up_left_down_right () =
 
       create_platform 400. 180. 150 15;|]
   ]);
-  res#enemies#set [|(Enemy.enemy ()); (Enemy.enemy ())|];
+  Array.iter (fun e -> Room_loader.add res (e :> deletable)) [|(Enemy.enemy ()); (Enemy.enemy ())|];
   res#doors#set {
     up = Some (create_door 400. 180. small_door_size Up);
     left = Some (create_door 82. 500. small_door_size Left);
@@ -195,7 +195,7 @@ let room_up_left_down () =
 
       create_platform 400. 180. 150 15;|]
   ]);
-  res#enemies#set [|(Enemy.enemy ()); (Enemy.enemy ())|];
+  Array.iter (fun e -> Room_loader.add res (e :> deletable)) [|(Enemy.enemy ()); (Enemy.enemy ())|];
   res#doors#set {
     up = Some (create_door 400. 180. small_door_size Up);
     left = Some (create_door 82. 500. small_door_size Left);
@@ -217,7 +217,7 @@ let room_up_left_right () =
       create_platform 568. 260. 100 15;
       create_platform 400. 180. 150 15;|]
   ]);
-  res#enemies#set [|(Enemy.enemy ()); (Enemy.enemy ())|];
+  Array.iter (fun e -> Room_loader.add res (e :> deletable)) [|(Enemy.enemy ()); (Enemy.enemy ())|];
   res#doors#set {
     up = Some (create_door 400. 180. small_door_size Up);
     left = Some (create_door 100. (float(Cst.hwall2_y)) small_door_size Left);
@@ -239,7 +239,7 @@ let room_up_right () =
       create_platform 568. 260. 100 15;
       create_platform 400. 180. 150 15;|]
   ]);
-  res#enemies#set [|(Enemy.enemy ()); (Enemy.enemy ())|];
+  Array.iter (fun e -> Room_loader.add res (e :> deletable)) [|(Enemy.enemy ()); (Enemy.enemy ())|];
   res#doors#set {
     up = Some (create_door 400. 180. small_door_size Up);
     left = None;
@@ -261,7 +261,7 @@ let room_up_left () =
       create_platform 568. 260. 100 15;
       create_platform 400. 180. 150 15;|]
   ]);
-  res#enemies#set [|(Enemy.enemy ()); (Enemy.enemy ())|];
+  Array.iter (fun e -> Room_loader.add res (e :> deletable)) [|(Enemy.enemy ()); (Enemy.enemy ())|];
   res#doors#set {
     up = Some (create_door 400. 180. small_door_size Up);
     left = Some (create_door 100. (float(Cst.hwall2_y)) small_door_size Left);
@@ -286,7 +286,7 @@ let room_up_down () =
 
       create_platform 400. 180. 150 15;|]
   ]);
-  res#enemies#set [|(Enemy.enemy ()); (Enemy.enemy ())|];
+  Array.iter (fun e -> Room_loader.add res (e :> deletable)) [|(Enemy.enemy ()); (Enemy.enemy ())|];
   res#doors#set {
     up = Some (create_door 400. 180. small_door_size Up);
     left = None;
@@ -311,7 +311,7 @@ let room_left_down () =
 
       create_platform 400. 180. 150 15;|]
   ]);
-  res#enemies#set [|(Enemy.enemy ()); (Enemy.enemy ())|];
+  Array.iter (fun e -> Room_loader.add res (e :> deletable)) [|(Enemy.enemy ()); (Enemy.enemy ())|];
   res#doors#set {
     up = None;
     left = Some (create_door 82. 340. small_door_size Left);
@@ -336,7 +336,7 @@ let room_down_right () =
 
       create_platform 400. 180. 150 15;|]
   ]);
-  res#enemies#set [|(Enemy.enemy ()); (Enemy.enemy ())|];
+  Array.iter (fun e -> Room_loader.add res (e :> deletable)) [|(Enemy.enemy ()); (Enemy.enemy ())|];
   res#doors#set {
     up = None;
     left = None;
@@ -361,7 +361,7 @@ let room_up_down_right () =
 
       create_platform 400. 180. 150 15;|]
   ]);
-  res#enemies#set [|(Enemy.enemy ()); (Enemy.enemy ())|];
+  Array.iter (fun e -> Room_loader.add res (e :> deletable)) [|(Enemy.enemy ()); (Enemy.enemy ())|];
   res#doors#set {
     up = Some (create_door 400. 180. small_door_size Up);
     left = None;
@@ -386,7 +386,7 @@ let room_left_down_right () =
 
       create_platform 400. 180. 150 15;|]
   ]);
-  res#enemies#set [|(Enemy.enemy ()); (Enemy.enemy ())|];
+  Array.iter (fun e -> Room_loader.add res (e :> deletable)) [|(Enemy.enemy ()); (Enemy.enemy ())|];
   res#doors#set {
     up = None;
     left = Some (create_door 82. 340. small_door_size Left);

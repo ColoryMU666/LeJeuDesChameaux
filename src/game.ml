@@ -21,6 +21,7 @@ let update dt =
     let () = Input.handle_input () in
     let () = Camera.move () in
     Player_manager_system.update delta;
+    Enemy_manager_system.update delta;
     Interact_system.update delta;
     Move_system.update delta;
     Collision_system.update delta;

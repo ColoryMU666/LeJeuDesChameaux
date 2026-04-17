@@ -4,7 +4,7 @@ open Component_defs
 
 type t = drawable
 
-let init _ = Gfx.debug "Drawn_map system initialised\n%!"
+let init _ = Gfx.debug "Draw_map system initialised\n%!"
 
 let update dt el =
   let Global.{ window; ctx; dungeon; _ } = Global.get () in

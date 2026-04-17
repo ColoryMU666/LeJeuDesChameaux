@@ -4,7 +4,7 @@ open Component_defs
 
 type t = drawable
 
-let init _ = Gfx.debug "Drawn system initialised\n%!"
+let init _ = Gfx.debug "Draw system initialised\n%!"
 
 let update _dt el =
   let Global.{window;ctx;main_camera;player1} = Global.get () in

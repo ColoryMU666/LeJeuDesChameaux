@@ -3,24 +3,21 @@ open Component_defs
 open System_defs
 
 let resolve_ammo (v : Vector.t) (ammo : ammunition) (reacter : tag) =
-  ammo#tokill#set true
+  ammo#tokill#set true;
+  Room_loader.add_current_room (ammo :> deletable)
 
 let resolve (v : Vector.t) (enemy : enemy) (reacter : tag) =
   (match reacter with
   | Ally_projectile_tag {damage} -> enemy#life#set (enemy#life#get -. damage);
   | _ -> ());
-  if enemy#life#get <= Float.zero then
-    enemy#tokill#set true;
+  if enemy#life#get <= Float.zero then begin
+    Room_loader.remove_current_room (enemy :> deletable);
+    enemy#tokill#set true
+  end;
   (*enemy#velocity#set (Vector.mult 10. v);*)
   
   (*Gfx.debug "The enemy has been hit\n%!"*)
   ()
-
-
-let rec create_action_timer (enemy:enemy)=
-    Time.create_timer 1000. (fun dt -> 
-      if not enemy#tokill#get then
-        enemy#action#get () ; create_action_timer enemy)
 
 let act_shooter (src:enemy) = 
   let a = new ammunition () in
@@ -45,8 +42,10 @@ let act_shooter (src:enemy) =
     src#texture#set !(Texture.turret_txt_reverted)
   else
     src#texture#set !(Texture.turret_txt));
-  Block.set_block a values
-
+  Block.set_block a values;
+  Room_loader.add_current_room (a :> deletable);
+  src#can_act#set false;
+  Time.create_timer 1000. (fun dt -> src#can_act#set true)
 
 let act_boss (src:enemy) = 
   let Global.{main_camera ; player1 ; _} = Global.get () in
@@ -73,7 +72,7 @@ let create_shooter (pos_x, pos_y, velocity, texture, width, height, mass) =
     tag = Enemy_tag {is_on_floor = false}
   };
   e#action#set (fun () -> act_shooter e);
-  create_action_timer e;
+  Enemy_manager_system.(register (e:>t));
   Draw_lifebar_system.(register (e:>t));
   e
 
@@ -96,7 +95,8 @@ let create_boss (pos_x, pos_y, velocity, texture, width, height, mass) =
   e#action#set (fun () -> act_boss e);
   e#max_life#set 1000.;
   e#life#set e#max_life#get;
-  create_action_timer e;
+  e#action#set (fun () -> act_boss e);
+  Enemy_manager_system.(register (e:>t));
   Draw_lifebar_system.(register (e:>t));
   e
 

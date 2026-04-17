@@ -2,6 +2,8 @@ open Ecs
 
 module Player_manager_system = System.Make(Player_manager)
 
+module Enemy_manager_system = System.Make(Enemy_manager)
+
 module Collision_system = System.Make(Collision)
 
 module Room_loader_system = System.Make(Room_loader)
