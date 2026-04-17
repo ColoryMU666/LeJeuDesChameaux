@@ -31,7 +31,8 @@ let create_platform x y w h =
     width = w;
     height = h;
     tag = Wall_tag;
-    mass = infinity
+    mass = infinity;
+    texture = !(Texture.plateform_txt)
   })
 
 let default_room () =
@@ -49,7 +50,7 @@ let default_room () =
 let boss_room_left () =
   let res = new room () in
   res#walls#set (Block.walls ());
-  res#enemies#set [|(Enemy.enemy ())|];
+  res#enemies#set [|(Enemy.boss ())|];
   res#doors#set {
     up = None;
     left = Some (create_door 100. (float(Cst.hwall2_y)) small_door_size Left);
@@ -61,7 +62,7 @@ let boss_room_left () =
 let boss_room_right () =
   let res = new room () in
   res#walls#set (Block.walls ());
-  res#enemies#set [|(Enemy.enemy ())|];
+  res#enemies#set [|(Enemy.boss ())|];
   res#doors#set {
     up = None;
     left = None;

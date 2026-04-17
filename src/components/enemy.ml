@@ -39,7 +39,7 @@ let act_shooter (src:enemy) =
     height = 10;
     resolve = (fun (v:Vector.t) (reacter:tag) -> resolve_ammo v a reacter);
     elasticity = 0.;
-    tag = Enemy_projectile_tag {damage = 1.}
+    tag = Enemy_projectile_tag {damage = 10.}
     } in
   (if target_x < 0. then
     src#texture#set !(Texture.turret_txt_reverted)
@@ -47,6 +47,14 @@ let act_shooter (src:enemy) =
     src#texture#set !(Texture.turret_txt));
   Block.set_block a values
 
+
+let act_boss (src:enemy) = 
+  let Global.{main_camera ; player1 ; _} = Global.get () in
+  let x = src#position#get.x in
+  let y = src#position#get.y in
+  let target_x = (player1#position#get.x +. float(Cst.player_width) /. 2. -. x) in
+  let target_y = (player1#position#get.y +. float(Cst.player_height) /. 2. -. y) in
+  src#velocity#set Vector.{x = target_x ; y = target_y}
 
 let create_shooter (pos_x, pos_y, velocity, texture, width, height, mass) =
   let e = new enemy () in
@@ -69,4 +77,28 @@ let create_shooter (pos_x, pos_y, velocity, texture, width, height, mass) =
   Draw_lifebar_system.(register (e:>t));
   e
 
+let create_boss (pos_x, pos_y, velocity, texture, width, height, mass) =
+  let e = new enemy () in
+  Block.set_block e {Block.default_set_values with
+    pos_x;
+    pos_y;
+    velocity;
+    texture;
+    width;
+    height;
+    mass;
+    friction_x = 0.5;
+    friction_y = 1.;
+    default_forces = Some(Cst.g);
+    resolve = (fun (v:Vector.t) (reacter:tag) -> resolve v e reacter);
+    tag = Enemy_tag {is_on_floor = false}
+  };
+  e#action#set (fun () -> act_boss e);
+  e#max_life#set 1000.;
+  e#life#set e#max_life#get;
+  create_action_timer e;
+  Draw_lifebar_system.(register (e:>t));
+  e
+
 let enemy () = create_shooter (300., 300., Vector.{x=0. ; y=0.}, !(Texture.turret_txt), 40, 50, 1.)
+let boss () = create_boss (300., 300., Vector.{x=0. ; y=0.}, (Texture.red), 100, 100, 10.)

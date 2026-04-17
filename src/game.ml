@@ -6,6 +6,7 @@ let last_dt = ref 0.
 
 let init dt =
   Ecs.System.init_all dt;
+  (*let () = Block.create_background () in*)
   last_dt := dt;
   Some ()
 

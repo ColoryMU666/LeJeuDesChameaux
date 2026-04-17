@@ -4,7 +4,10 @@ open System_defs
 
 let resolve (v : Vector.t) (player : player) (reacter : tag) =
   player#velocity#set (Vector.mult 2. v);
-  player#life#set (player#life#get -. 10.);
+  (match reacter with
+  | Enemy_projectile_tag{damage} -> player#life#set (player#life#get -. damage)
+  | Enemy_tag _ -> player#life#set (player#life#get -. 1.)
+  | _ -> ());
   Gfx.debug "The player has been hit : %f/%f\n%!" player#life#get player#max_life#get
 
 let create (pos_x, pos_y, velocity, texture, width, height, mass) =
