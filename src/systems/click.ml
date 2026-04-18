@@ -3,7 +3,7 @@ open Component_defs
 
 type t = interactable
 
-let init _ = Gfx.debug "C system initialised\n%!"
+let init _ = Gfx.debug "Click system initialised\n%!"
 
 let update _ el =
   let mouse_x, mouse_y = !Global.mouse_x, !Global.mouse_y in

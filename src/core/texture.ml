@@ -46,9 +46,12 @@ let enemy_bullet_txt = ref (Color (Gfx.color 0 255 0 255))
 let plateform_txt = ref (Color (Gfx.color 0 255 0 255))
 let bg_txt = ref (Color (Gfx.color 0 255 0 255))
 let boss_txt = ref (Color (Gfx.color 0 255 0 255))
-let button_txt = ref (Color (Gfx.color 255 0 0 255))
+let button_txt_loss = ref (Color (Gfx.color 255 0 0 255))
+let button_txt_win = ref (Color (Gfx.color 0 0 255 255))
+let light_txt = ref (Color (Gfx.color 255 255 255 255))
+let crown_txt = ref (Color (Gfx.color 255 255 0 255))
 
-let neon_font : Gfx.font = Gfx.load_font "resources/NeonSans_Font_084/NeonSans.ttf" "" 100
+let neon_font : Gfx.font = Gfx.load_font "resources/NeonSans_Font_084/NeonSans.ttf" "" 200
 
 
 
@@ -194,32 +197,44 @@ let load_ressources_correctly ctx =
                                                     Gfx.main_loop
                                                     (fun dt -> Gfx.get_resource_opt !boss_txt_rs)
                                                     (fun boss_txt_tmp ->
-                                                      player_txt := Image player_txt_tmp;
-                                                      player_txt_reverted := Image player_txt_reverted_tmp;
-                                                      glock_txt := Image glock_txt_tmp;
-                                                      glock_bullet_txt := Image glock_bullet_txt_tmp;
-                                                      glock_bullet_txt_reverted := Image glock_bullet_txt_reverted_tmp;
-                                                      rl_txt := Image rl_txt_tmp;
-                                                      rl_rocket_txt := Image rl_rocket_txt_tmp;
-                                                      rl_rocket_txt_reverted := Image rl_rocket_txt_reverted_tmp;
-                                                      explosion_txt := Image explosion_txt_tmp;
-                                                      laser_txt := Image laser_txt_tmp;
-                                                      laser_laser_txt := Image laser_laser_txt_tmp;
-                                                      shotgun_txt := Image shotgun_txt_tmp;
-                                                      shotgun_pelet_txt := Image shotgun_pelet_txt_tmp;
-                                                      shotgun_pelet_txt_reverted := Image shotgun_pelet_txt_reverted_tmp;
-                                                      left_wall_txt := Image left_wall_txt_tmp;
-                                                      right_wall_txt := Image right_wall_txt_tmp;
-                                                      floor_txt := Image floor_txt_tmp;
-                                                      ceiling_txt := Image ceiling_txt_tmp;
-                                                      plateform_txt := Image plateform_txt_tmp;
-                                                      bg_txt := Image bg_txt_tmp;
-                                                      lighted_door_txt := Image lighted_door_txt_tmp;
-                                                      unlighted_door_txt := Image unlighted_door_txt_tmp;
-                                                      turret_txt := Image turret_txt_tmp;
-                                                      turret_txt_reverted := Image turret_txt_reverted_tmp;
-                                                      enemy_bullet_txt := Image enemy_bullet_txt_tmp;
-                                                      boss_txt := Image boss_txt_tmp
+                                                      let light_txt_rs = ref (Gfx.load_image ctx "resources/victory_assets/light.png") in
+                                                      Gfx.main_loop
+                                                      (fun dt -> Gfx.get_resource_opt !light_txt_rs)
+                                                      (fun light_txt_tmp ->
+                                                        let crown_txt_rs = ref (Gfx.load_image ctx "resources/victory_assets/crown.png") in
+                                                        Gfx.main_loop
+                                                        (fun dt -> Gfx.get_resource_opt !crown_txt_rs)
+                                                        (fun crown_txt_tmp ->
+                                                          player_txt := Image player_txt_tmp;
+                                                          player_txt_reverted := Image player_txt_reverted_tmp;
+                                                          glock_txt := Image glock_txt_tmp;
+                                                          glock_bullet_txt := Image glock_bullet_txt_tmp;
+                                                          glock_bullet_txt_reverted := Image glock_bullet_txt_reverted_tmp;
+                                                          rl_txt := Image rl_txt_tmp;
+                                                          rl_rocket_txt := Image rl_rocket_txt_tmp;
+                                                          rl_rocket_txt_reverted := Image rl_rocket_txt_reverted_tmp;
+                                                          explosion_txt := Image explosion_txt_tmp;
+                                                          laser_txt := Image laser_txt_tmp;
+                                                          laser_laser_txt := Image laser_laser_txt_tmp;
+                                                          shotgun_txt := Image shotgun_txt_tmp;
+                                                          shotgun_pelet_txt := Image shotgun_pelet_txt_tmp;
+                                                          shotgun_pelet_txt_reverted := Image shotgun_pelet_txt_reverted_tmp;
+                                                          left_wall_txt := Image left_wall_txt_tmp;
+                                                          right_wall_txt := Image right_wall_txt_tmp;
+                                                          floor_txt := Image floor_txt_tmp;
+                                                          ceiling_txt := Image ceiling_txt_tmp;
+                                                          plateform_txt := Image plateform_txt_tmp;
+                                                          bg_txt := Image bg_txt_tmp;
+                                                          lighted_door_txt := Image lighted_door_txt_tmp;
+                                                          unlighted_door_txt := Image unlighted_door_txt_tmp;
+                                                          turret_txt := Image turret_txt_tmp;
+                                                          turret_txt_reverted := Image turret_txt_reverted_tmp;
+                                                          enemy_bullet_txt := Image enemy_bullet_txt_tmp;
+                                                          boss_txt := Image boss_txt_tmp;
+                                                          light_txt := Image light_txt_tmp;
+                                                          crown_txt := Image crown_txt_tmp
+                                                        )
+                                                      )
                                                     )
                                                   )
                                                 )

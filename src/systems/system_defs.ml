@@ -24,6 +24,8 @@ module Draw_map_system = System.Make(Draw_map)
 
 module Draw_death_menu_system = System.Make(Draw_death_menu)
 
+module Draw_victory_menu_system = System.Make(Draw_victory_menu)
+
 module Interact_system = System.Make(Interact)
 
 module Click_system = System.Make(Click)

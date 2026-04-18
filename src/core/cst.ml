@@ -31,3 +31,5 @@ let camera_offset = Vector.{
     x = Float.round(float(window_width) *. 0.5 -. float(player_width) /. 2.);
     y = Float.round(float(window_height) *. 0.65)
 }
+
+let dungeon_size = 5

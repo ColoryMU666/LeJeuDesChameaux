@@ -79,7 +79,7 @@ let update dt el =
           left  = has_link links (i', j') (i', j' - 1) && visited.(i').(j' - 1);
           right = has_link links (i', j') (i', j' + 1) && visited.(i').(j' + 1);
         } in
-      Gfx.debug "up : %b, left : %b, down : %b, right : %b"
+      Gfx.debug "doors : up : %b, left : %b, down : %b, right : %b\n%!"
         doors.up doors.left doors.right doors.down;
       let room = r.room_creator doors in
       g.dungeon#current_room#set (Some room);

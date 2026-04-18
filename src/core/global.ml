@@ -3,7 +3,7 @@ open Component_defs
 type game_state =
   | Playing
   | Player_died of button list
-  | Player_won
+  | Player_won of button list
   | Pause
   | Quit_game
 

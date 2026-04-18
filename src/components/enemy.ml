@@ -13,7 +13,7 @@ let resolve (v : Vector.t) (enemy : enemy) (reacter : tag) =
   if enemy#life#get <= Float.zero then begin
     Room_loader.remove_current_room (enemy :> deletable);
     (match enemy#tag#get with
-    | Boss_tag -> Global.set { (Global.get ()) with state = Player_won }
+    | Boss_tag -> Global.set { (Global.get ()) with state = Player_won []}
     | Enemy_tag _ -> Gun.spawn_random_gun enemy#position#get;
     | _ -> ());
     enemy#tokill#set true
@@ -106,7 +106,7 @@ let enemy x y = create_shooter (x, y, Vector.{x=0. ; y=0.}, !(Texture.turret_txt
 let enemy_random_pos () =
   let x = Random.int (Cst.window_width - Cst.wall_thickness * 2 - 80) + Cst.wall_thickness in
   let y = Random.int (Cst.window_height - Cst.wall_thickness * 2 - 100) + Cst.wall_thickness in
-  Gfx.debug "%d %d\n%!" x y;
+  (* Gfx.debug "%d %d\n%!" x y; *)
   enemy (float x) (float y)
 
 let boss () = create_boss (300.,float (Cst.vwall_height - Cst.hwall_height - 60), Vector.{x=0. ; y=0.}, !(Texture.boss_txt), 60, 60, 10.)

@@ -38,7 +38,7 @@ let update dt =
   | Player_died bl ->
     (match bl with
     | [] ->
-      Gfx.debug "loading death menu...%!";
+      Gfx.debug "loading death menu buttons...%!";
       let buttons = Button.create_death_menu_buttons () in
       Global.set {g with state = Player_died buttons };
       Gfx.debug " ok\n%!";
@@ -62,8 +62,23 @@ let update dt =
     Draw_map_system.update delta;
     Draw_death_menu_system.update delta;
     Gfx.commit g.ctx;
+
     None
-  | Player_won -> 
+  | Player_won bl ->
+    (match bl with
+    | [] ->
+      Gfx.debug "loading victory menu buttons...%!";
+      let buttons = Button.create_victory_menu_buttons () in
+      Global.set {g with state = Player_won buttons };
+      Gfx.debug " ok\n%!";
+    | _ -> ());
+    let real_delta = (dt -. !last_dt) in
+    let delta = real_delta /. 25. in
+    last_dt := dt;
+    let () = Input.handle_input () in
+    Click_system.update delta;
+    Draw_victory_menu_system.update delta;
+    Gfx.commit g.ctx;
     None
   | Pause ->
     None
@@ -87,7 +102,7 @@ let run () =
   let _walls = Block.walls () in
   let main_camera = Camera.create () in
   let player1 = Player.create_player () in
-  let dungeon = Dungeon.create_dungeon 5 in
+  let dungeon = Dungeon.create_dungeon Cst.dungeon_size in
   let state = Global.Playing in
   let global = Global.{
     window;

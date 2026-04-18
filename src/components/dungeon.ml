@@ -289,7 +289,7 @@ let create_dungeon size : dungeon =
   print_dungeon tab links start boss;
   let start_i, start_j = start in
   let boss_i, boss_j = boss in
-  Gfx.debug "path size : %s" (string_of_int path_size);
+  Gfx.debug "path size : %s | " (string_of_int path_size);
   Gfx.debug "start : %d %d | end : %d %d\n%!" start_i start_i boss_i boss_j;
 
   let dg = new dungeon () in
