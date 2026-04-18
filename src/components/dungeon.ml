@@ -26,12 +26,6 @@ let room_id_map, _ =
     (* ROOMS HERE ONLY FOR TESTING AND TO COMPLETE ALL THE TYPES OF ROOMS, THEY ARE ENEMY ROOM *)
     (room_up,
       {up = true ; left = false; down = false; right = false},
-      Boss_room);
-    (room_down,
-      {up = false; left = false; down = true ; right = false},
-      Boss_room);
-    (room_up,
-      {up = true ; left = false; down = false; right = false},
       Start_room);
     (room_left,
       {up = false; left = true ; down = false; right = false},

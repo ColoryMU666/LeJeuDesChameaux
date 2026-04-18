@@ -7,7 +7,12 @@ let resolve (v : Vector.t) (player : player) (reacter : tag) =
   (match reacter with
   | Enemy_projectile_tag{damage} -> player#life#set (player#life#get -. damage)
   | Enemy_tag _ -> player#life#set (player#life#get -. 1.)
+  | Boss_tag -> player#life#set (player#life#get -. 5.)
   | _ -> ());
+  if player#life#get <= 0. then begin
+    Global.game_lost := true;
+    player#tokill#set true
+  end;
   Gfx.debug "The player has been hit : %f/%f\n%!" player#life#get player#max_life#get
 
 let create (pos_x, pos_y, velocity, texture, width, height, mass) =
@@ -26,7 +31,7 @@ let create (pos_x, pos_y, velocity, texture, width, height, mass) =
     resolve = (fun (v:Vector.t) (reacter:tag) -> resolve v p reacter);
     tag = Player_tag {is_on_floor = false}
   };
-  p#curent_gun#set (Some (Gun.create_glock ()));
+  p#curent_gun#set (Some (Gun.create_glock Vector.zero));
   (match p#curent_gun#get with
   | Some g -> g#tokill#set true
   | _ -> ());

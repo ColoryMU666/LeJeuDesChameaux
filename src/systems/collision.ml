@@ -80,10 +80,15 @@ let update dt el =
     match (e1#tag#get, e2#tag#get) with
     | (Player_tag _, Enemy_tag _) ->
       affect e2 e1
+    | (Boss_tag, Player_tag _) ->
+      affect e1 e2
+    | (Player_tag _, Boss_tag) ->
+      affect e2 e1
     | (Enemy_tag _, Player_tag _)->
       affect e1 e2
     | (Player_tag _, Enemy_projectile_tag _) | (Enemy_tag _, Ally_projectile_tag _)
-    | (Enemy_projectile_tag _, Player_tag _) | (Ally_projectile_tag _, Enemy_tag _) 
+    | (Enemy_projectile_tag _, Player_tag _) | (Ally_projectile_tag _, Enemy_tag _)
+    | (Boss_tag, Ally_projectile_tag _) | (Ally_projectile_tag _, Boss_tag) 
     -> (affect e1 e2; affect e2 e1)
     | (Wall_tag , Enemy_projectile_tag _) | (Wall_tag , Ally_projectile_tag _) ->
       affect e1 e2

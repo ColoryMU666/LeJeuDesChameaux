@@ -49,12 +49,10 @@ let run () =
   let ctx = Gfx.get_context window in
   let () = Gfx.set_context_logical_size ctx Cst.window_width Cst.window_height in
   let () = Texture.load_txt ctx in
-  (*let () = Block.create_background () in*)
-  let () = ignore(Gun.create_rl ()) in
   let _walls = Block.walls () in
   let main_camera = Camera.create () in
   let player1 = Player.create_player () in
-  let dungeon = Dungeon.create_dungeon 7 in
+  let dungeon = Dungeon.create_dungeon 2 in
   let state = Global.Playing in
   let global = Global.{
     window;

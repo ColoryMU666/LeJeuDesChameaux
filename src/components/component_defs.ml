@@ -77,6 +77,7 @@ type tag =
   | Player_tag of {is_on_floor : bool}
   | Ally_projectile_tag of {damage : float}
   | Enemy_tag of {is_on_floor : bool}
+  | Boss_tag
   | Enemy_projectile_tag of {damage : float}
   | Gun_tag of {gunType : int}
   | Door

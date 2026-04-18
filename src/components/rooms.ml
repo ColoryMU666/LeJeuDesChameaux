@@ -66,7 +66,7 @@ let boss_room_up visited_neighbours =
   res#walls#set (Block.walls ());
   Array.iter (fun e -> Room_loader.add res (e :> deletable)) [|(Enemy.boss ())|];
   res#doors#set {
-    up = Some (create_door 100. (float(Cst.hwall2_y)) small_door_size Left visited_neighbours.up);
+    up = Some (create_door 100. (float(Cst.hwall2_y)) small_door_size Up visited_neighbours.up);
     left = None;
     down = None;
     right = None;
@@ -80,7 +80,7 @@ let boss_room_down visited_neighbours =
   res#doors#set {
     up = None;
     left = None;
-    down = Some (create_door 100. (float(Cst.hwall2_y)) small_door_size Left visited_neighbours.down);
+    down = Some (create_door 100. (float(Cst.hwall2_y)) small_door_size Down visited_neighbours.down);
     right = None;
   };
   res

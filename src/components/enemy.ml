@@ -12,6 +12,10 @@ let resolve (v : Vector.t) (enemy : enemy) (reacter : tag) =
   | _ -> ());
   if enemy#life#get <= Float.zero then begin
     Room_loader.remove_current_room (enemy :> deletable);
+    (match enemy#tag#get with
+    | Boss_tag -> Global.game_won := true
+    | Enemy_tag _ -> Gun.spawn_random_gun enemy#position#get;
+    | _ -> ());
     enemy#tokill#set true
   end;
   (*enemy#velocity#set (Vector.mult 10. v);*)
@@ -50,10 +54,8 @@ let act_shooter (src:enemy) =
 let act_boss (src:enemy) = 
   let Global.{main_camera ; player1 ; _} = Global.get () in
   let x = src#position#get.x in
-  let y = src#position#get.y in
   let target_x = (player1#position#get.x +. float(Cst.player_width) /. 2. -. x) in
-  let target_y = (player1#position#get.y +. float(Cst.player_height) /. 2. -. y) in
-  src#velocity#set  (Vector.mult 3. (Vector.normalize Vector.{x = target_x ; y = target_y}))
+  src#velocity#set  (Vector.mult 2. (Vector.normalize Vector.{x = target_x ; y = 0.}))
 
 let create_shooter (pos_x, pos_y, velocity, texture, width, height, mass) =
   let e = new enemy () in
@@ -90,7 +92,7 @@ let create_boss (pos_x, pos_y, velocity, texture, width, height, mass) =
     friction_y = 1.;
     default_forces = Some(Cst.g);
     resolve = (fun (v:Vector.t) (reacter:tag) -> resolve v e reacter);
-    tag = Enemy_tag {is_on_floor = false}
+    tag = Boss_tag
   };
   e#action#set (fun () -> act_boss e);
   e#max_life#set 1000.;
@@ -107,4 +109,4 @@ let enemy_random_pos () =
   Gfx.debug "%d %d\n%!" x y;
   enemy (float x) (float y)
 
-let boss () = create_boss (300., 300., Vector.{x=0. ; y=0.}, (Texture.red), 80, 80, 10.)
+let boss () = create_boss (300.,float (Cst.vwall_height - Cst.hwall_height - 60), Vector.{x=0. ; y=0.}, !(Texture.boss_txt), 60, 60, 10.)

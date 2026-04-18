@@ -45,6 +45,7 @@ let turret_txt_reverted = ref (Color (Gfx.color 0 255 0 255))
 let enemy_bullet_txt = ref (Color (Gfx.color 0 255 0 255))
 let plateform_txt = ref (Color (Gfx.color 0 255 0 255))
 let bg_txt = ref (Color (Gfx.color 0 255 0 255))
+let boss_txt = ref (Color (Gfx.color 0 255 0 255))
 
 
 
@@ -80,7 +81,8 @@ let load_txt ctx =
 
   turret_txt := Image (Gfx.get_resource (Gfx.load_image ctx "resources/enemy_assets/turret.png"));
   turret_txt_reverted := Image (Gfx.get_resource (Gfx.load_image ctx "resources/enemy_assets/turret_reverted.png"));
-  enemy_bullet_txt := Image (Gfx.get_resource (Gfx.load_image ctx "resources/enemy_assets/shot.png"))
+  enemy_bullet_txt := Image (Gfx.get_resource (Gfx.load_image ctx "resources/enemy_assets/shot.png"));
+  boss_txt := Image (Gfx.get_resource (Gfx.load_image ctx "resources/enemy_assets/boss.png"))
   
 
 let draw ctx dst pos box src=

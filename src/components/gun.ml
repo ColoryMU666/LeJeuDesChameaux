@@ -87,7 +87,7 @@ let fire_glock () =
   let values = Block.{ Block.default_set_values with
     pos_x = x;
     pos_y = y;
-    velocity = Vector.(mult 5. (normalize {x = target_x ; y = target_y}));
+    velocity = Vector.(mult 8. (normalize {x = target_x ; y = target_y}));
     texture = if target_x < 0. then !(Texture.glock_bullet_txt_reverted) else !(Texture.glock_bullet_txt);
     width = 10;
     height = 10;
@@ -155,11 +155,11 @@ let handle_fire (gun : gun) =
   else
     ()
 
-let create_laser () =
+let create_laser (spawn_location : Vector.t) =
   let g = new gun () in
   Block.set_block g {Block.default_set_values with
-    pos_x = 200.;
-    pos_y = 100.;
+    pos_x = spawn_location.x;
+    pos_y = spawn_location.y;
     texture = !(Texture.laser_txt);
     width = 61;
     height = 32;
@@ -173,11 +173,11 @@ let create_laser () =
   Interact_system.(register (g :> t));
   g 
 
-let create_glock () =
+let create_glock (spawn_location : Vector.t) =
   let g = new gun () in
   Block.set_block g {Block.default_set_values with
-    pos_x = 200.;
-    pos_y = 100.;
+    pos_x = spawn_location.x;
+    pos_y = spawn_location.y;
     texture = !(Texture.glock_txt);
     width = 30;
     height = 20;
@@ -186,16 +186,16 @@ let create_glock () =
   };
   g#shoot#set (fun () -> handle_fire g);
   g#gun_id#set 0;
-  g#fire_rate#set 500.;
+  g#fire_rate#set 100.;
   g#interact_resolver#set (fun () -> interact_resolver g);
   Interact_system.(register (g :> t));
   g
 
-let create_shotgun () =
+let create_shotgun (spawn_location : Vector.t) =
   let g = new gun () in
   Block.set_block g {Block.default_set_values with
-    pos_x = 200.;
-    pos_y = 100.;
+    pos_x = spawn_location.x;
+    pos_y = spawn_location.y;
     texture = !(Texture.shotgun_txt);
     width = 49;
     height = 16;
@@ -209,11 +209,11 @@ let create_shotgun () =
   Interact_system.(register (g :> t));
   g
 
-let create_rl () =
+let create_rl (spawn_location : Vector.t) =
   let g = new gun () in
   Block.set_block g {Block.default_set_values with
-    pos_x = 200.;
-    pos_y = 100.;
+    pos_x = spawn_location.x;
+    pos_y = spawn_location.y;
     texture = !(Texture.rl_txt) (*Texture.cyan*);
     width = 59;
     height = 11;
@@ -226,3 +226,24 @@ let create_rl () =
   g#interact_resolver#set (fun () -> interact_resolver g);
   Interact_system.(register (g :> t));
   g
+
+let spawn_random_gun spawn_location =
+  let Global.{dungeon ; _} = Global.get () in
+  let rand = Random.float 0.99 in
+  if rand <= 0.19 then
+    ()
+  else if rand <= 0.54 then
+    let tmp = create_shotgun spawn_location in
+    match dungeon#current_room#get with
+    | None -> ()
+    | Some r -> r#temporary_objects#set ((tmp :> deletable) :: r#temporary_objects#get)
+  else if rand <= 0.79 then
+    let tmp = create_rl spawn_location in
+    match dungeon#current_room#get with
+    | None -> ()
+    | Some r -> r#temporary_objects#set ((tmp :> deletable) :: r#temporary_objects#get)
+  else
+    let tmp = create_laser spawn_location in
+    match dungeon#current_room#get with
+    | None -> ()
+    | Some r -> r#temporary_objects#set ((tmp :> deletable) :: r#temporary_objects#get)
