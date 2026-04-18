@@ -52,44 +52,6 @@ let light_txt = ref (Color (Gfx.color 255 255 255 255))
 let crown_txt = ref (Color (Gfx.color 255 255 0 255))
 
 let neon_font : Gfx.font = Gfx.load_font "resources/NeonSans_Font_084/NeonSans.ttf" "" 200
-
-
-
-let load_txt ctx =
-  
-  glock_txt := Image (Gfx.get_resource (Gfx.load_image ctx "resources/gun_assets/individual_sprites/Guns/Glock - P80 [64x48].png"));
-  glock_bullet_txt := Image (Gfx.get_resource (Gfx.load_image ctx "resources/gun_assets/individual_sprites/Bullets & Ammo/Glock - P80/Bullet.png"));
-  glock_bullet_txt_reverted := Image (Gfx.get_resource (Gfx.load_image ctx "resources/gun_assets/individual_sprites/Bullets & Ammo/Glock - P80/Bullet_reverted.png"));
-
-  rl_txt := Image (Gfx.get_resource (Gfx.load_image ctx "resources/gun_assets/individual_sprites/Guns/Bazooka - M20 [192x32].png"));
-  rl_rocket_txt := Image (Gfx.get_resource (Gfx.load_image ctx "resources/gun_assets/individual_sprites/Bullets & Ammo/Bazooka - M20 - Copy/M20 Rocket.png"));
-  rl_rocket_txt_reverted := Image (Gfx.get_resource (Gfx.load_image ctx "resources/gun_assets/individual_sprites/Bullets & Ammo/Bazooka - M20 - Copy/M20 Rocket_reverted.png"));
-  explosion_txt := Image (Gfx.get_resource (Gfx.load_image ctx "resources/explosions/orange_explosion.png"));
-
-  laser_txt := Image (Gfx.get_resource (Gfx.load_image ctx "resources/gun_assets/individual_sprites/Guns/Laser - L3000.png"));
-  laser_laser_txt := Image (Gfx.get_resource (Gfx.load_image ctx "resources/gun_assets/individual_sprites/Bullets & Ammo/Laser - L3000/laser.png"));
-
-  shotgun_txt := Image (Gfx.get_resource (Gfx.load_image ctx "resources/gun_assets/individual_sprites/Guns/shotgun.png"));
-  shotgun_pelet_txt := Image (Gfx.get_resource (Gfx.load_image ctx "resources/gun_assets/individual_sprites/Bullets & Ammo/Shotgun/Shotgun_pellet.png"));
-  shotgun_pelet_txt_reverted := Image (Gfx.get_resource (Gfx.load_image ctx "resources/gun_assets/individual_sprites/Bullets & Ammo/Shotgun/Shotgun_pellet_reverted.png"));
-
-  player_txt := Image (Gfx.get_resource (Gfx.load_image ctx "resources/player_assets/player_noweapon.png"));
-  player_txt_reverted := Image (Gfx.get_resource (Gfx.load_image ctx "resources/player_assets/player_noweapon_reverted.png"));
-
-  left_wall_txt := Image (Gfx.get_resource (Gfx.load_image ctx "resources/terrain/left_wall.png"));
-  right_wall_txt := Image (Gfx.get_resource (Gfx.load_image ctx "resources/terrain/right_wall.png"));
-  floor_txt := Image (Gfx.get_resource (Gfx.load_image ctx "resources/terrain/floor.png"));
-  ceiling_txt := Image (Gfx.get_resource (Gfx.load_image ctx "resources/terrain/ceiling.png"));
-  plateform_txt := Image (Gfx.get_resource (Gfx.load_image ctx "resources/terrain/plateform.png"));
-  bg_txt := Image (Gfx.get_resource (Gfx.load_image ctx "resources/terrain/BG.png"));
-
-  lighted_door_txt := Image (Gfx.get_resource (Gfx.load_image ctx "resources/terrain/lighted_door.png"));
-  unlighted_door_txt := Image (Gfx.get_resource (Gfx.load_image ctx "resources/terrain/unlighted_door.png"));
-
-  turret_txt := Image (Gfx.get_resource (Gfx.load_image ctx "resources/enemy_assets/turret.png"));
-  turret_txt_reverted := Image (Gfx.get_resource (Gfx.load_image ctx "resources/enemy_assets/turret_reverted.png"));
-  enemy_bullet_txt := Image (Gfx.get_resource (Gfx.load_image ctx "resources/enemy_assets/shot.png"));
-  boss_txt := Image (Gfx.get_resource (Gfx.load_image ctx "resources/enemy_assets/boss.png"))
   
 
 let load_ressources_correctly ctx =

@@ -14,7 +14,9 @@ let resolve (v : Vector.t) (enemy : enemy) (reacter : tag) =
     Room_loader.remove_current_room (enemy :> deletable);
     (match enemy#tag#get with
     | Boss_tag -> Global.set { (Global.get ()) with state = Player_won []}
-    | Enemy_tag _ -> Gun.spawn_random_gun enemy#position#get;
+    | Enemy_tag _ -> if enemy#can_drop_loot#get then
+                      (enemy#can_drop_loot#set false;
+                      Gun.spawn_random_gun enemy#position#get);
     | _ -> ());
     enemy#tokill#set true
   end;

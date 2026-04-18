@@ -97,6 +97,50 @@ let boss_room_right visited_neighbours =
   };
   res
 
+let start_room_left visited_neighbours =
+  let res = new room () in
+  res#walls#set (Block.walls ());
+  res#doors#set {
+    up = None;
+    left = Some (create_door 100. (float(Cst.hwall2_y)) small_door_size Left visited_neighbours.left);
+    down = None;
+    right = None;
+  };
+  res
+
+let start_room_up visited_neighbours =
+  let res = new room () in
+  res#walls#set (Block.walls ());
+  res#doors#set {
+    up = Some (create_door 100. (float(Cst.hwall2_y)) small_door_size Up visited_neighbours.up);
+    left = None;
+    down = None;
+    right = None;
+  };
+  res
+
+let start_room_down visited_neighbours =
+  let res = new room () in
+  res#walls#set (Block.walls ());
+  res#doors#set {
+    up = None;
+    left = None;
+    down = Some (create_door 100. (float(Cst.hwall2_y)) small_door_size Down visited_neighbours.down);
+    right = None;
+  };
+  res
+
+let start_room_right visited_neighbours =
+  let res = new room () in
+  res#walls#set (Block.walls ());
+  res#doors#set {
+    up = None;
+    left = None;
+    down = None;
+    right = Some (create_door 700. (float(Cst.hwall2_y)) small_door_size Right visited_neighbours.right);
+  };
+  res
+  
 let room_left_right visited_neighbours =
   let res = new room () in
   res#walls#set (Block.walls ());

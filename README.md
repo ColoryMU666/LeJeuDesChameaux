@@ -82,6 +82,7 @@ Huge thanks to :
 - MisterDII for their Smooth Shotgun Animations pack which we used to make our shotgun sprite. You can fin their work here : [Smooth Shotgun Animations by MisterDII](https://misterdll.itch.io/shotgun)
 - dinhaz for their Laser Gun asset which we used to mak our laser gun.  You can fin their work here : [Laser Gun #1 by dinhaz](https://dinhaz.itch.io/laser-gun-1)
 - RustyBulletGames for their Colored Explosions Asset Pack which we used to make our rocket launcher rocket's explosion. You can find their work here : [Colored Explosion Asset Pack by RustyBulletGames](https://rustybulletgames.itch.io/colored-explosions-asset-pack)
+- GGBotNet for their NEON SANS Font which we use to write text in the native build version. You can find their work here : [NEON SANS Font by GGBotNet](https://ggbot.itch.io/neon-sans-font)
 
 The rest of the textures where made by ourselves.
 

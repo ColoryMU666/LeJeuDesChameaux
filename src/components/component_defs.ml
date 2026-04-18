@@ -152,6 +152,12 @@ class text () =
     method text_color = c
   end
 
+class can_drop_loot () =
+  let r = Component.init true in
+  object
+    method can_drop_loot = r
+  end
+
 (** Archetype *)
 class type physics =
   object 
@@ -287,6 +293,7 @@ class enemy () =
     inherit block ()
     inherit life ()
     inherit action ()
+    inherit can_drop_loot ()
   end
 
 type direction =
