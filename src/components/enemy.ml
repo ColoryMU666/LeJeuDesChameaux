@@ -13,7 +13,7 @@ let resolve (v : Vector.t) (enemy : enemy) (reacter : tag) =
   if enemy#life#get <= Float.zero then begin
     Room_loader.remove_current_room (enemy :> deletable);
     (match enemy#tag#get with
-    | Boss_tag -> Global.game_won := true
+    | Boss_tag -> Global.set { (Global.get ()) with state = Player_won }
     | Enemy_tag _ -> Gun.spawn_random_gun enemy#position#get;
     | _ -> ());
     enemy#tokill#set true

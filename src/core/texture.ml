@@ -46,6 +46,9 @@ let enemy_bullet_txt = ref (Color (Gfx.color 0 255 0 255))
 let plateform_txt = ref (Color (Gfx.color 0 255 0 255))
 let bg_txt = ref (Color (Gfx.color 0 255 0 255))
 let boss_txt = ref (Color (Gfx.color 0 255 0 255))
+let button_txt = ref (Color (Gfx.color 255 0 0 255))
+
+let neon_font : Gfx.font = Gfx.load_font "resources/NeonSans_Font_084/NeonSans.ttf" "" 100
 
 
 

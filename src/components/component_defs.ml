@@ -144,6 +144,14 @@ class interact_resolver () =
     method interact_resolver = r
   end
 
+class text () =
+  let r = Component.init "" in
+  let c = Component.init (Gfx.color 0 0 0 255) in
+  object
+    method text = r
+    method text_color = c
+  end
+
 (** Archetype *)
 class type physics =
   object 
@@ -348,6 +356,7 @@ class dungeon () =
   let start_room_pos = Component.init (0, 0) in
   let boss_room_pos = Component.init (0, 0) in
   object
+    inherit Entity.t ()
     method layout = layout
     method visited = visited
     method current_room = curent
@@ -355,4 +364,15 @@ class dungeon () =
     method start_room_pos = start_room_pos
     method boss_room_pos = boss_room_pos
     method change_room = change_room
+  end
+
+class button () =
+  object
+    inherit Entity.t ()
+    inherit interact_resolver ()
+    inherit box ()
+    inherit position ()
+    inherit texture ()
+    inherit text ()
+    inherit tokill ()
   end

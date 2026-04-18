@@ -4,7 +4,7 @@ open Component_defs
 
 type t = killable
 
-let init _ = Gfx.debug "Life_bar system initialised\n%!"
+let init _ = Gfx.debug "Draw_life_bar system initialised\n%!"
 
 let black = Gfx.color 0 0 0 255
 let green = Gfx.color 0 255 0 255

@@ -10,7 +10,7 @@ let resolve (v : Vector.t) (player : player) (reacter : tag) =
   | Boss_tag -> player#life#set (player#life#get -. 5.)
   | _ -> ());
   if player#life#get <= 0. then begin
-    Global.game_lost := true;
+    Global.set { (Global.get ()) with state = Player_died [] };
     player#tokill#set true
   end;
   Gfx.debug "The player has been hit : %f/%f\n%!" player#life#get player#max_life#get

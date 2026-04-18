@@ -116,6 +116,4 @@ let update dt el =
             color)
           
     ) row
-  ) rooms;
-
-  Gfx.commit ctx
+  ) rooms

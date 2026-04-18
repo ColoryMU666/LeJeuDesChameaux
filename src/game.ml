@@ -11,7 +11,8 @@ let init dt =
   Some ()
 
 let update dt =
-  match (Global.get ()).state with
+  let g = Global.get () in
+  match g.state with
   | Playing -> begin
     let real_delta = (dt -. !last_dt) in
     Timer_system.update real_delta;
@@ -31,10 +32,43 @@ let update dt =
     Draw_system.update delta;
     Draw_lifebar_system.update delta;
     Draw_map_system.update delta;
+    Gfx.commit g.ctx;
     None
   end
+  | Player_died bl ->
+    (match bl with
+    | [] ->
+      Gfx.debug "loading death menu...%!";
+      let buttons = Button.create_death_menu_buttons () in
+      Global.set {g with state = Player_died buttons };
+      Gfx.debug " ok\n%!";
+    | _ -> ());
+    let real_delta = (dt -. !last_dt) in
+    Timer_system.update real_delta;
+    let delta = real_delta /. 25. in
+    last_dt := dt;
+    let () = Camera.stop_camera () in
+    let () = Input.handle_input () in
+    let () = Camera.move () in
+    Click_system.update delta;
+    Enemy_manager_system.update delta;
+    Move_system.update delta;
+    Collision_system.update delta;
+    Room_loader_system.update delta;
+    Clear_system.update delta;
+    Draw_background_system.update delta;
+    Draw_system.update delta;
+    Draw_lifebar_system.update delta;
+    Draw_map_system.update delta;
+    Draw_death_menu_system.update delta;
+    Gfx.commit g.ctx;
+    None
+  | Player_won -> 
+    None
   | Pause ->
     None
+  | Quit_game ->
+    Some ()
 
 let (let@) f k = f k
 
@@ -52,7 +86,7 @@ let run () =
   let _walls = Block.walls () in
   let main_camera = Camera.create () in
   let player1 = Player.create_player () in
-  let dungeon = Dungeon.create_dungeon 2 in
+  let dungeon = Dungeon.create_dungeon 5 in
   let state = Global.Playing in
   let global = Global.{
     window;
