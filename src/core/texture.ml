@@ -53,6 +53,7 @@ let neon_font : Gfx.font = Gfx.load_font "resources/NeonSans_Font_084/NeonSans.t
 
 
 let load_txt ctx =
+  
   glock_txt := Image (Gfx.get_resource (Gfx.load_image ctx "resources/gun_assets/individual_sprites/Guns/Glock - P80 [64x48].png"));
   glock_bullet_txt := Image (Gfx.get_resource (Gfx.load_image ctx "resources/gun_assets/individual_sprites/Bullets & Ammo/Glock - P80/Bullet.png"));
   glock_bullet_txt_reverted := Image (Gfx.get_resource (Gfx.load_image ctx "resources/gun_assets/individual_sprites/Bullets & Ammo/Glock - P80/Bullet_reverted.png"));
@@ -87,6 +88,166 @@ let load_txt ctx =
   enemy_bullet_txt := Image (Gfx.get_resource (Gfx.load_image ctx "resources/enemy_assets/shot.png"));
   boss_txt := Image (Gfx.get_resource (Gfx.load_image ctx "resources/enemy_assets/boss.png"))
   
+
+let load_ressources_correctly ctx =
+  let player_rs = ref (Gfx.load_image ctx "resources/player_assets/player_noweapon.png") in
+  Gfx.main_loop
+  (fun dt -> Gfx.get_resource_opt !player_rs)
+  (fun player_txt_tmp -> 
+    let player_reverted_rs = ref (Gfx.load_image ctx "resources/player_assets/player_noweapon_reverted.png") in
+    Gfx.main_loop
+    (fun dt -> Gfx.get_resource_opt !player_reverted_rs)
+    (fun player_txt_reverted_tmp -> 
+      let glock_txt_rs = ref (Gfx.load_image ctx "resources/gun_assets/individual_sprites/Guns/Glock - P80 [64x48].png") in
+      Gfx.main_loop
+      (fun dt -> Gfx.get_resource_opt !glock_txt_rs)
+      (fun glock_txt_tmp -> 
+        let glock_bullet_txt_rs = ref (Gfx.load_image ctx "resources/gun_assets/individual_sprites/Bullets & Ammo/Glock - P80/Bullet.png") in
+        Gfx.main_loop
+        (fun dt -> Gfx.get_resource_opt !glock_bullet_txt_rs)
+        (fun glock_bullet_txt_tmp -> 
+          let glock_bullet_txt_reverted_rs = ref (Gfx.load_image ctx "resources/gun_assets/individual_sprites/Bullets & Ammo/Glock - P80/Bullet_reverted.png") in
+          Gfx.main_loop
+          (fun dt -> Gfx.get_resource_opt !glock_bullet_txt_reverted_rs)
+          (fun glock_bullet_txt_reverted_tmp ->
+            let rl_txt_rs = ref (Gfx.load_image ctx "resources/gun_assets/individual_sprites/Guns/Bazooka - M20 [192x32].png") in
+            Gfx.main_loop
+            (fun dt -> Gfx.get_resource_opt !rl_txt_rs)
+            (fun rl_txt_tmp ->
+              let rl_rocket_txt_rs = ref (Gfx.load_image ctx "resources/gun_assets/individual_sprites/Bullets & Ammo/Bazooka - M20 - Copy/M20 Rocket.png") in
+              Gfx.main_loop
+              (fun dt -> Gfx.get_resource_opt !rl_rocket_txt_rs)
+              (fun rl_rocket_txt_tmp ->
+                let rl_rocket_txt_reverted_rs = ref (Gfx.load_image ctx "resources/gun_assets/individual_sprites/Bullets & Ammo/Bazooka - M20 - Copy/M20 Rocket_reverted.png") in
+                Gfx.main_loop
+                (fun dt -> Gfx.get_resource_opt !rl_rocket_txt_reverted_rs)
+                (fun rl_rocket_txt_reverted_tmp ->
+                  let explosion_txt_rs = ref (Gfx.load_image ctx "resources/explosions/orange_explosion.png") in
+                  Gfx.main_loop
+                  (fun dt -> Gfx.get_resource_opt !explosion_txt_rs)
+                  (fun explosion_txt_tmp ->
+                    let laser_txt_rs = ref (Gfx.load_image ctx "resources/gun_assets/individual_sprites/Guns/Laser - L3000.png") in
+                    Gfx.main_loop
+                    (fun dt -> Gfx.get_resource_opt !laser_txt_rs)
+                    (fun laser_txt_tmp ->
+                      let laser_laser_txt_rs = ref (Gfx.load_image ctx "resources/gun_assets/individual_sprites/Bullets & Ammo/Laser - L3000/laser.png") in
+                      Gfx.main_loop
+                      (fun dt -> Gfx.get_resource_opt !laser_laser_txt_rs)
+                      (fun laser_laser_txt_tmp ->
+                        let shotgun_txt_rs = ref (Gfx.load_image ctx "resources/gun_assets/individual_sprites/Guns/shotgun.png") in
+                        Gfx.main_loop
+                        (fun dt -> Gfx.get_resource_opt !shotgun_txt_rs)
+                        (fun shotgun_txt_tmp ->
+                          let shotgun_pelet_txt_rs = ref (Gfx.load_image ctx "resources/gun_assets/individual_sprites/Bullets & Ammo/Shotgun/Shotgun_pellet.png") in
+                          Gfx.main_loop
+                          (fun dt -> Gfx.get_resource_opt !shotgun_pelet_txt_rs)
+                          (fun shotgun_pelet_txt_tmp ->
+                            let shotgun_pelet_txt_reverted_rs = ref (Gfx.load_image ctx "resources/gun_assets/individual_sprites/Bullets & Ammo/Shotgun/Shotgun_pellet_reverted.png") in
+                            Gfx.main_loop
+                            (fun dt -> Gfx.get_resource_opt !shotgun_pelet_txt_reverted_rs)
+                            (fun shotgun_pelet_txt_reverted_tmp ->
+                              let left_wall_txt_rs = ref (Gfx.load_image ctx "resources/terrain/left_wall.png") in
+                              Gfx.main_loop
+                              (fun dt -> Gfx.get_resource_opt !left_wall_txt_rs)
+                              (fun left_wall_txt_tmp ->
+                                let right_wall_txt_rs = ref (Gfx.load_image ctx "resources/terrain/right_wall.png") in
+                                Gfx.main_loop
+                                (fun dt -> Gfx.get_resource_opt !right_wall_txt_rs)
+                                (fun right_wall_txt_tmp ->
+                                  let floor_txt_rs = ref (Gfx.load_image ctx "resources/terrain/floor.png") in
+                                  Gfx.main_loop
+                                  (fun dt -> Gfx.get_resource_opt !floor_txt_rs)
+                                  (fun floor_txt_tmp ->
+                                    let ceiling_txt_rs = ref (Gfx.load_image ctx "resources/terrain/ceiling.png") in
+                                    Gfx.main_loop
+                                    (fun dt -> Gfx.get_resource_opt !ceiling_txt_rs)
+                                    (fun ceiling_txt_tmp ->
+                                      let plateform_txt_rs = ref (Gfx.load_image ctx "resources/terrain/plateform.png") in
+                                      Gfx.main_loop
+                                      (fun dt -> Gfx.get_resource_opt !plateform_txt_rs)
+                                      (fun plateform_txt_tmp ->
+                                        let bg_txt_rs = ref (Gfx.load_image ctx "resources/terrain/BG.png") in
+                                        Gfx.main_loop
+                                        (fun dt -> Gfx.get_resource_opt !bg_txt_rs)
+                                        (fun bg_txt_tmp ->
+                                          let lighted_door_txt_rs = ref (Gfx.load_image ctx "resources/terrain/lighted_door.png") in
+                                          Gfx.main_loop
+                                          (fun dt -> Gfx.get_resource_opt !lighted_door_txt_rs)
+                                          (fun lighted_door_txt_tmp ->
+                                            let unlighted_door_txt_rs = ref (Gfx.load_image ctx "resources/terrain/unlighted_door.png") in
+                                            Gfx.main_loop
+                                            (fun dt -> Gfx.get_resource_opt !unlighted_door_txt_rs)
+                                            (fun unlighted_door_txt_tmp ->
+                                              let turret_txt_rs = ref (Gfx.load_image ctx "resources/enemy_assets/turret.png") in
+                                              Gfx.main_loop
+                                              (fun dt -> Gfx.get_resource_opt !turret_txt_rs)
+                                              (fun turret_txt_tmp ->
+                                                let turret_txt_reverted_rs = ref (Gfx.load_image ctx "resources/enemy_assets/turret_reverted.png") in
+                                                Gfx.main_loop
+                                                (fun dt -> Gfx.get_resource_opt !turret_txt_reverted_rs)
+                                                (fun turret_txt_reverted_tmp ->
+                                                  let enemy_bullet_txt_rs = ref (Gfx.load_image ctx "resources/enemy_assets/shot.png") in
+                                                  Gfx.main_loop
+                                                  (fun dt -> Gfx.get_resource_opt !enemy_bullet_txt_rs)
+                                                  (fun enemy_bullet_txt_tmp ->
+                                                    let boss_txt_rs = ref (Gfx.load_image ctx "resources/enemy_assets/boss.png") in
+                                                    Gfx.main_loop
+                                                    (fun dt -> Gfx.get_resource_opt !boss_txt_rs)
+                                                    (fun boss_txt_tmp ->
+                                                      player_txt := Image player_txt_tmp;
+                                                      player_txt_reverted := Image player_txt_reverted_tmp;
+                                                      glock_txt := Image glock_txt_tmp;
+                                                      glock_bullet_txt := Image glock_bullet_txt_tmp;
+                                                      glock_bullet_txt_reverted := Image glock_bullet_txt_reverted_tmp;
+                                                      rl_txt := Image rl_txt_tmp;
+                                                      rl_rocket_txt := Image rl_rocket_txt_tmp;
+                                                      rl_rocket_txt_reverted := Image rl_rocket_txt_reverted_tmp;
+                                                      explosion_txt := Image explosion_txt_tmp;
+                                                      laser_txt := Image laser_txt_tmp;
+                                                      laser_laser_txt := Image laser_laser_txt_tmp;
+                                                      shotgun_txt := Image shotgun_txt_tmp;
+                                                      shotgun_pelet_txt := Image shotgun_pelet_txt_tmp;
+                                                      shotgun_pelet_txt_reverted := Image shotgun_pelet_txt_reverted_tmp;
+                                                      left_wall_txt := Image left_wall_txt_tmp;
+                                                      right_wall_txt := Image right_wall_txt_tmp;
+                                                      floor_txt := Image floor_txt_tmp;
+                                                      ceiling_txt := Image ceiling_txt_tmp;
+                                                      plateform_txt := Image plateform_txt_tmp;
+                                                      bg_txt := Image bg_txt_tmp;
+                                                      lighted_door_txt := Image lighted_door_txt_tmp;
+                                                      unlighted_door_txt := Image unlighted_door_txt_tmp;
+                                                      turret_txt := Image turret_txt_tmp;
+                                                      turret_txt_reverted := Image turret_txt_reverted_tmp;
+                                                      enemy_bullet_txt := Image enemy_bullet_txt_tmp;
+                                                      boss_txt := Image boss_txt_tmp
+                                                    )
+                                                  )
+                                                )
+                                              )
+                                            )
+                                          )
+                                        )
+                                      )
+                                    )
+                                  )
+                                )
+                              )
+                            )
+                          )
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  
+
 
 let draw ctx dst pos box src=
   let x = int_of_float pos.Vector.x in
