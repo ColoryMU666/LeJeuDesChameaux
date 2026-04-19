@@ -31,8 +31,8 @@ let create (pos_x, pos_y, velocity, texture, width, height, mass) =
     resolve = (fun (v:Vector.t) (reacter:tag) -> resolve v p reacter);
     tag = Player_tag {is_on_floor = false}
   };
-  p#curent_gun#set (Some (Gun.create_glock Vector.zero));
-  (match p#curent_gun#get with
+  p#current_gun#set (Some (Gun.create_glock Vector.zero));
+  (match p#current_gun#get with
   | Some g -> g#tokill#set true
   | _ -> ());
   Draw_lifebar_system.(register (p:>t));

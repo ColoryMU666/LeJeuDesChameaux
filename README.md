@@ -11,7 +11,7 @@ Neon PFA is a roguelike game made for a university project where you have to tra
 
 ## Important notice for our teachers
 
-If you are one of the teachers who will be marking this project, please find our repport at the root of our project in the file named **FILENAME**
+If you are one of the teachers who will be marking this project, please find our repport at the root of our project in the file named **Rapport_projet_pfa_Matthieu_Urios_Hector_Bonhoure.pdf**
 
 ## Installation
 

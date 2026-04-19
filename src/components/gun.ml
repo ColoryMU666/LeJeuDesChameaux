@@ -38,7 +38,7 @@ let resolve_rl (v : Vector.t) (ammo : ammunition) (reacter : tag) (room : room) 
 let interact_resolver (gun : gun) =
   Gfx.debug "interaction avec gun d'id %d\n%!" gun#gun_id#get;
   let Global.{player1; _} = Global.get () in
-  (match player1#curent_gun#get with
+  (match player1#current_gun#get with
   | Some g -> (if !Global.is_facing_left then
                 let dim = g#box#get in
                 g#position#set (Vector.add player1#position#get Vector.{ x = -1. -. (float dim.width) ; y = 0.})
@@ -52,7 +52,7 @@ let interact_resolver (gun : gun) =
    Interact_system.(register (g :> t));
    Room_loader.add_current_room (g :> deletable)
   | _ -> ());
-  player1#curent_gun#set (Some(gun));
+  player1#current_gun#set (Some(gun));
   gun#tokill#set true;
   Room_loader.remove_current_room (gun :> deletable)
 

@@ -154,12 +154,12 @@ let create_path tab path_size start =
   let size = Array.length tab in
   let h = Hashtbl.create 4 in
   
-  let rec main_path n curent links = 
-    let i, j = curent in
+  let rec main_path n current links = 
+    let i, j = current in
     tab.(i).(j) <- true;
 
     if n = path_size then
-      curent, links
+      current, links
     else begin
       Hashtbl.clear h;
       if i > 0 && not tab.(i - 1).(j) then Hashtbl.add h Up ();
@@ -169,14 +169,14 @@ let create_path tab path_size start =
 
       let nb_dir = Hashtbl.length h in
       if nb_dir = 0 then
-        curent, links
+        current, links
       else begin
         let dir = List.nth (Hashtbl.fold (fun dir _ acc -> dir :: acc) h []) (Random.int nb_dir) in
         match dir with
-        | Up    -> main_path (n + 1) (i - 1, j) ((curent, (i - 1, j)) :: links)
-        | Left  -> main_path (n + 1) (i, j - 1) ((curent, (i, j - 1)) :: links)
-        | Down  -> main_path (n + 1) (i + 1, j) ((curent, (i + 1, j)) :: links)
-        | Right -> main_path (n + 1) (i, j + 1) ((curent, (i, j + 1)) :: links);
+        | Up    -> main_path (n + 1) (i - 1, j) ((current, (i - 1, j)) :: links)
+        | Left  -> main_path (n + 1) (i, j - 1) ((current, (i, j - 1)) :: links)
+        | Down  -> main_path (n + 1) (i + 1, j) ((current, (i + 1, j)) :: links)
+        | Right -> main_path (n + 1) (i, j + 1) ((current, (i, j + 1)) :: links);
       end
     end
   in

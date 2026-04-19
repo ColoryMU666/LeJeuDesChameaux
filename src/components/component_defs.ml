@@ -6,18 +6,12 @@ class position () =
     method position = r
   end
 
-class dposition () =
-  let r = Component.init Vector.zero in
-  object 
-    method dposition = r
-  end
 
 class velocity () =
   let r = Component.init Vector.zero in
   object
     method velocity = r
   end
-
 
 class can_move () =
   let r = Component.init true in
@@ -285,7 +279,7 @@ class player () =
     inherit can_move ()
     inherit can_shoot ()
     inherit fire_rate ()
-    method curent_gun = r;
+    method current_gun = r;
   end
 
 class enemy () =
@@ -357,7 +351,7 @@ type dungeon_layout = {
 class dungeon () =
   let layout = Component.init ({rooms = [||] ; links = []} : dungeon_layout) in
   let visited = Component.init ([||] : bool array array) in
-  let curent = Component.init (None : room option) in
+  let current = Component.init (None : room option) in
   let change_room = Component.init (None : direction option) in
   let current_room_pos = Component.init (0, 0) in
   let start_room_pos = Component.init (0, 0) in
@@ -366,7 +360,7 @@ class dungeon () =
     inherit Entity.t ()
     method layout = layout
     method visited = visited
-    method current_room = curent
+    method current_room = current
     method current_room_pos = current_room_pos
     method start_room_pos = start_room_pos
     method boss_room_pos = boss_room_pos

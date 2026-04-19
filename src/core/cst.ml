@@ -32,4 +32,4 @@ let camera_offset = Vector.{
     y = Float.round(float(window_height) *. 0.65)
 }
 
-let dungeon_size = 5
+let dungeon_size = 7
